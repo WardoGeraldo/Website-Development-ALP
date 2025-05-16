@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
@@ -60,3 +61,11 @@ Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.c
 
 // Logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+
+// Show the edit form for a specific product
+Route::get('/admin/product/{id}/edit', [AdminController::class, 'edit'])->name('admin.product.edit');
+
+// Route to handle the form submission (update product)
+Route::post('/admin/product/{id}', [AdminController::class, 'update'])->name('admin.product.update');

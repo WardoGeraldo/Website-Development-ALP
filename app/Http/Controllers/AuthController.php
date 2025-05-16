@@ -14,27 +14,37 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login_auth(Request $request){
+public function login_auth(Request $request)
+{
+    // Validate input email and password
+    $validated = $request->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-         // Validasi input email dan password
-        $validated = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+    // Manual authentication for user and admin
+    if (
+        ($validated['email'] == 'user@user.com' && $validated['password'] == 'user') ||
+        ($validated['email'] == 'admin@admin.com' && $validated['password'] == 'admin')
+    ) {
+        // Set session user email
+        session(['user' => $validated['email']]);
 
-        // Cek kredensial
-        if ($validated['email'] == 'user@user.com' && $validated['password'] == 'user') { //MANUAL
-            // Set session untuk user yang login
-            session(['user' => $validated['email']]);
-
-            // Redirect ke halaman home setelah login berhasil
-            return redirect()->route('home');
+        // Set role session variable
+        if ($validated['email'] == 'admin@admin.com') {
+            session(['role' => 'admin']);
+            // Redirect admin to admin dashboard
+            return redirect()->route('admin.dashboard');
         } else {
-            // Jika login gagal, tampilkan pesan error
-            return redirect()->route('login.show')->with('error', 'Invalid email or password.');
+            session(['role' => 'user']);
+            // Redirect normal user to home page
+            return redirect()->route('home');
         }
-
-        // $credentials = $request->validate([
+    } else {
+        // Login failed, redirect back with error message
+        return redirect()->route('login.show')->with('error', 'Invalid email or password.');
+    }
+     // $credentials = $request->validate([
         //     'email' => 'required|email:dns',
         //     'password' => 'required',
         // ]);
@@ -48,7 +58,7 @@ class AuthController extends Controller
         // return back()->with([
         //     'error' => 'The provided credentials do not match our records.'
         // ]);
-    }
+}
 
     public function auth_register(Request $request)
     {
