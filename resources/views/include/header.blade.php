@@ -39,7 +39,7 @@
                     </li>
                 @endif
                 <li class="nav-item me-3">
-                    <a class="nav-link" href="#"><i class="far fa-heart"></i></a>
+                    <a class="nav-link" href="{{ route('wishlist.show') }}"><i class="far fa-heart"></i></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('cart.index') }}"><i class="fas fa-shopping-bag"></i></a>

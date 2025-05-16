@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,8 @@ Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.
 
 // Route to handle the checkout
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
+Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
 
 // Logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
