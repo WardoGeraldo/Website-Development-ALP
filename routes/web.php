@@ -87,3 +87,8 @@ Route::get('/admin/sales', [SalesController::class, 'index'])->name('admin.sales
 // Route to Invoice page
 Route::get('/admin/invoice/{sales_id}', [InvoiceController::class, 'index'])->name('admin.invoice.index');
 
+// Route for User List
+Route::get('/admin/users', [AdminController::class, 'userList'])->name('admin.userlist');
+
+// Route for User Details
+Route::get('/admin/user/{id}', [AdminController::class, 'userDetails'])->name('admin.user.details');

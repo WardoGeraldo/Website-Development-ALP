@@ -8,13 +8,39 @@ use Illuminate\Support\Facades\File;
 class AdminController extends Controller
 {
     protected $products;
+    protected $users;  // Add users array
 
 
 
     public function __construct()
     {
-        // Initialize products array here, now you can call $this->getFirstImage()
-        $this->products = [
+        // Initialize products and users array here
+        $this->products = $this->getDummyProducts();
+        $this->users = $this->getDummyUsers();  // Initialize users
+    }
+
+    /**
+     * Method to return the list of products (admin dashboard).
+     */
+    public function index()
+    {
+        return view('admin.productlist', ['products' => $this->products]);
+    }
+
+    /**
+     * Method to return the list of users (admin user list).
+     */
+    public function userList()
+    {
+        return view('admin.user-list', ['users' => $this->users]);
+    }
+
+    /**
+     * Helper method to get dummy products data.
+     */
+    private function getDummyProducts()
+    {
+        return [
             1 => [
                 'id' => 1,
                 'name' => 'Oversized Tee',
@@ -56,9 +82,44 @@ class AdminController extends Controller
         ];
     }
 
-    public function index()
+    /**
+     * Helper method to get dummy users data.
+     */
+    private function getDummyUsers()
     {
-        return view('admin.productlist', ['products' => $this->products]);
+        return [
+            1 => [
+                'id' => 1,
+                'name' => 'John Doe',
+                'address' => '123 Main St, City, Country',
+                'phone' => '123-456-7890',
+                'email' => 'john@gmail.com',
+                'gender' => 'Male',
+                'dob' => '1990-05-15',
+                'role' => 'Customer',
+            ],
+            2 => [
+                'id' => 2,
+                'name' => 'Kevin',
+                'address' => '456 Main St, City, Country',
+                'phone' => '0899-1829-2020',
+                'email' => 'kevin@gmail.com',
+                'gender' => 'Male',
+                'dob' => '1992-07-20',
+                'role' => 'Customer',
+            ],
+            3 => [
+                'id' => 3,
+                'name' => 'Sarah',
+                'address' => '789 Main St, City, Country',
+                'phone' => '0812-3456-7890',
+                'email' => 'sarah@gmail.com',
+                'gender' => 'Female',
+                'dob' => '1994-03-18',
+                'role' => 'Admin',
+            ],
+
+        ];
     }
 
     public function create()
@@ -118,6 +179,19 @@ class AdminController extends Controller
 
         // Return an edit view with the product data
         return view('admin.edit-product', compact('product'));
+    }
+
+    public function userDetails($id)
+    {
+        // Check if user exists in dummy data
+        if (!isset($this->users[$id])) {
+            abort(404, 'User not found');
+        }
+
+        $user = $this->users[$id];
+
+        // Return a view with user data
+        return view('admin.user-details', compact('user'));
     }
 
     // Method to update product data
