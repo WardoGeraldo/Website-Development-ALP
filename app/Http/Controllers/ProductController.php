@@ -57,9 +57,9 @@ class ProductController extends Controller
             ],
             4 => [
                 'id' => 4,
-                'name' => 'Monochrome Cap',
-                'price' => 149000,
-                'description' => 'A simple, yet stylish cap to complement your outfit.',
+                'name' => 'Grey Baggy jeans',
+                'price' => 449000,
+                'description' => 'A simple, yet stylish baggy jeans.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(4),
             ],
@@ -70,6 +70,14 @@ class ProductController extends Controller
                 'description' => 'A fire, and stylish cap to extravaganze your outfit.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(5),
+            ],
+            6 => [
+                'id' => 6,
+                'name' => 'Monochrome Cap',
+                'price' => 149000,
+                'description' => 'A simple, yet stylish cap to complement your outfit.',
+                'category' => 'accessories',
+                'image' => $this->getFirstImage(6),
             ],
         ];
     }

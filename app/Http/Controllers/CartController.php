@@ -14,11 +14,12 @@ class CartController extends Controller
     public function index(Request $request)
     {
         // Check if the cart exists in the session, otherwise set it with dummy data
-        if (!session()->has('cart')) {
+        if (!session()->has('cart') || empty(session()->get('cart'))) {            
             $cart = [
                 1 => ['name' => 'Oversized Tee', 'price' => 299000, 'quantity' => 1],
                 2 => ['name' => 'Slim Fit Pants', 'price' => 399000, 'quantity' => 2],
-                3 => ['name' => 'Monochrome Cap', 'price' => 149000, 'quantity' => 1]
+                3 => ['name' => 'Monochrome Cap', 'price' => 149000, 'quantity' => 1],
+                4 => ['name' => 'Wisdom Cap', 'price' => 149000, 'quantity' => 1]
             ];
             session()->put('cart', $cart); // Store cart in session
         } else {
@@ -26,8 +27,7 @@ class CartController extends Controller
         }
 
         // Debugging: Dump the cart data stored in the session
-        // dd(session()->get('cart'));
-
+        // dd($cart);
         return view('cart', ['cart' => $cart]);
     }
 
@@ -59,11 +59,17 @@ class CartController extends Controller
         session()->put('cart', $cart);
         return redirect()->back()->with('success', 'Cart updated successfully.');
     }
-
-    // Simulate the checkout process
+    
     public function checkout(Request $request)
     {
-        session()->forget('cart'); // Simulate checkout by clearing the cart
-        return redirect()->route('cart.index')->with('success', 'Checkout successful! Your cart has been cleared.');
+        $selected = $request->input('selected', []);
+        $cart = session()->get('cart', []);
+
+        foreach ($selected as $id) {
+            unset($cart[$id]); // Remove only selected items
+        }
+
+        session()->put('cart', $cart); // Save updated cart
+        return redirect()->route('cart.index')->with('success', 'Checkout successful! Selected items removed.');
     }
 }

@@ -13,6 +13,7 @@
     @include('include.header')
     <div class="container-fluid" style="min-width:100%; margin:0 auto;" >
         @yield('content')
+        @yield('scripts')
     </div>
     @include('include.footer')
 </body>

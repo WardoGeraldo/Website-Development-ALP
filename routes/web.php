@@ -57,7 +57,7 @@ Route::post('/cart/update', [CartController::class, 'bulkUpdate'])->name('cart.b
 Route::post('/cart/update/{id}', [CartController::class, 'update'])->name('cart.update');
 
 // Route to remove an item from the cart
-Route::post('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.remove');
 
 // Route to handle the checkout
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');

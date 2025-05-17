@@ -81,6 +81,7 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        height: 100%;
     }
 
     .product-card:hover {
@@ -93,18 +94,18 @@
     }
 
     .product-card img {
+        object-fit: contain;
+        height: 250px;
         width: 100%;
-        height: auto;
-        display: block;
+        background-color: #f9f9f9; /* Optional: fill empty space */
     }
 
     .product-info {
         padding: 1rem;
         display: flex;
         flex-direction: column;
-        align-items: center;
         justify-content: space-between;
-        height: 130px;
+        flex-grow: 1;
     }
 
     .product-info h4 {
@@ -119,9 +120,10 @@
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
+        margin-top: 0.5rem;
         width: 100%;
-        margin-top: auto;
     }
+
 
     .product-info span {
         font-size: 0.95rem;
@@ -162,6 +164,7 @@
         z-index: 999;
         transition: 0.3s;
     }
+
 </style>
 
 <!-- Dark Mode Button -->

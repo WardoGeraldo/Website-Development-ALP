@@ -154,9 +154,32 @@
         color: #b33a3a;
     }
 
+    .back-button {
+        display: block;
+        margin-top: 15px;
+        color: #666;
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 500;
+        font-size: 20px;
+    }
+
+    .back-button-top {
+        position: absolute;
+        top: 200px;
+        left: 550px;
+        color: #666;
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 500;
+        font-size: 20px;
+    }
 </style>
 
 <div class="wishlist-header">
+    <div class="back-button-top" onclick="window.location.href='{{ route('store.show') }}'">
+        <b>← Back To Store</b>
+    </div>
     <h1>
         Your Wishlist
         <img src="{{ asset('heartIcon.webp') }}" alt="heart" class="heart-icon">
