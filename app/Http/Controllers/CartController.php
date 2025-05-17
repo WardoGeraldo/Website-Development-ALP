@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Request;
+use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
@@ -16,9 +16,9 @@ class CartController extends Controller
         // Check if the cart exists in the session, otherwise set it with dummy data
         if (!session()->has('cart')) {
             $cart = [
-                1 => ['name' => 'Minimalist Dress', 'price' => 499000, 'quantity' => 1],
-                2 => ['name' => 'Blouse Elegan', 'price' => 399000, 'quantity' => 2],
-                3 => ['name' => 'Tunik Casual', 'price' => 349000, 'quantity' => 1]
+                1 => ['name' => 'Oversized Tee', 'price' => 299000, 'quantity' => 1],
+                2 => ['name' => 'Slim Fit Pants', 'price' => 399000, 'quantity' => 2],
+                3 => ['name' => 'Monochrome Cap', 'price' => 149000, 'quantity' => 1]
             ];
             session()->put('cart', $cart); // Store cart in session
         } else {
@@ -46,19 +46,18 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('error', 'Item not found.');
     }
 
-    public function bulkUpdate(Request $request, $id)
-    {
-    $quantities = $request->input('quantities', []);
-    $cart = session()->get('cart', []);
+    public function bulkUpdate(Request $request)
+{
+        $quantities = $request->input('quantities', []);
+        $cart = session()->get('cart', []);
 
-    foreach ($quantities as $id => $qty) {
-        if (isset($cart[$id])) {
-            $cart[$id]['quantity'] = max(1, (int) $qty); // safe fallback
+        foreach ($quantities as $id => $qty) {
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity'] = max(1, (int) $qty); // safe fallback
+            }
         }
-    }
-
-    session()->put('cart', $cart);
-    return redirect()->back()->with('success', 'Cart updated successfully.');
+        session()->put('cart', $cart);
+        return redirect()->back()->with('success', 'Cart updated successfully.');
     }
 
     // Simulate the checkout process

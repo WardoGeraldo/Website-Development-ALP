@@ -2,6 +2,11 @@
     <div class="container">
         <div class="row">
 
+            <!-- Quote (Left) -->
+            <div class="col-md-3 mb-4">
+                <h5 class="fw-bold mb-3">Veravia.<br>The agency for<br>impatient brands<sup>®</sup></h5>
+            </div>
+
             <!-- Column 1 -->
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Tentang Kami</h5>
@@ -31,13 +36,6 @@
                     <a href="#"><i class="fab fa-twitter fa-lg text-dark"></i></a>
                     <a href="#"><i class="fab fa-youtube fa-lg text-dark"></i></a>
                 </div>
-            </div>
-
-            <!-- Column 4 -->
-            <div class="col-md-3 mb-4">
-                <h5 class="fw-bold mb-3">Download Aplikasi</h5>
-                <a href="#"><img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" height="40"></a><br><br>
-                <a href="#"><img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Store" height="40"></a>
             </div>
         </div>
 

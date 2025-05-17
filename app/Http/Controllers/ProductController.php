@@ -28,7 +28,7 @@ class ProductController extends Controller
     }
 
     // Kumpulan produk dengan image langsung dalam array
-    private function getProductsWithImages()
+    protected function getProductsWithImages()
     {
         return [
             1 => [
@@ -75,7 +75,7 @@ class ProductController extends Controller
     }
 
     // Helper method untuk ambil gambar pertama dari folder produk
-    private function getFirstImage($productId)
+    protected function getFirstImage($productId)
     {
         $path = public_path("images/products/{$productId}");
 

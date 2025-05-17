@@ -104,14 +104,23 @@
             <option value="red">Red</option>
         </select>
 
-        <!-- Quantity Input -->
-        <input type="number" value="1" min="1" max="10" step="1">
+        <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        min="1"
+        max="100"
+        step="1"
+        placeholder="Quantity"
+        oninput="this.value = Math.min(this.value, 100)"
+        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
+        />
 
         <!-- Add to Cart Button -->
         <button onclick="alert('Added to cart: {{ $product['name'] }}')">Add to Cart</button>
 
         <!-- Add to Wishlist -->
-        <span class="wishlist-button" onclick="alert('Added to wishlist')">Add to Wishlist</span>
+        <span class="wishlist-button" onclick="alert('Added to wishlist')"> Add to Wishlist <i class="far fa-heart"></i></span>
     </div>
 </div>
 
