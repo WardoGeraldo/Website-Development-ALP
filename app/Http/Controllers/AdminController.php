@@ -55,7 +55,7 @@ class AdminController extends Controller
 
     public function index()
     {
-        return view('admin.dashboard', ['products' => $this->products]);
+        return view('admin.productlist', ['products' => $this->products]);
     }
 
     public function edit($id)

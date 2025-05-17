@@ -5,7 +5,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\SalesController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\WishlistController;
@@ -72,3 +74,10 @@ Route::get('/admin/product/{id}/edit', [AdminController::class, 'edit'])->name('
 
 // Route to handle the form submission (update product)
 Route::post('/admin/product/{id}', [AdminController::class, 'update'])->name('admin.product.update');
+
+// Route to admin's sales list
+Route::get('/admin/sales', [SalesController::class, 'index'])->name('admin.sales.index');
+
+// Route to Invoice page
+Route::get('/admin/invoice/{sales_id}', [InvoiceController::class, 'index'])->name('admin.invoice.index');
+
