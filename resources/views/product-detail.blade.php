@@ -72,55 +72,76 @@
         margin-top: 15px;
         color: #666;
         cursor: pointer;
+        font-size: 16px;
         text-decoration: underline;
     }
+
+    .back-button {
+        display: block;
+        margin-top: 15px;
+        color: #666;
+        cursor: pointer;
+        text-decoration: underline;
+    }
+
+    .back-button-top {
+        position: absolute;
+        top: 20px;
+        left: 40px;
+        color: #666;
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: 500;
+        font-size: 20px;
+    }
+
 </style>
 
-<div class="product-details" data-aos="fade-up">
-    <div class="product-image">
-        <img src="{{ $product['image'] }}" 
-             alt="{{ $product['name'] }}" 
-             class="img-fluid"
-             onerror="this.onerror=null; this.src='{{ asset('images/default.png') }}';">
+<div class="container py-5 position-relative">
+
+    <!-- Back Button -->
+    <div class="back-button-top" onclick="window.location.href='{{ route('store.show') }}'">
+        ← Back To Store
     </div>
 
-    <div class="product-info">
-        <h1>{{ $product['name'] }}</h1>
-        <p class="description">{{ $product['description'] }}</p>
-        <p class="price">Rp{{ number_format($product['price'], 0, ',', '.') }}</p>
+    <div class="product-details" data-aos="fade-up">
+        <div class="product-image">
+            <img src="{{ $product['image'] }}" 
+                 alt="{{ $product['name'] }}" 
+                 class="img-fluid"
+                 onerror="this.onerror=null; this.src='{{ asset('fotoBaju.jpg') }}';">
+        </div>
 
-        <!-- Size and Color Selection -->
-        <select>
-            <option value="size">Select Size</option>
-            <option value="s">Small</option>
-            <option value="m">Medium</option>
-            <option value="l">Large</option>
-        </select>
+        <div class="product-info">
+            <h1>{{ $product['name'] }}</h1>
+            <p class="description">{{ $product['description'] }}</p>
+            <p class="price">Rp{{ number_format($product['price'], 0, ',', '.') }}</p>
 
-        <select>
-            <option value="color">Select Color</option>
-            <option value="black">Black</option>
-            <option value="white">White</option>
-            <option value="red">Red</option>
-        </select>
+            <!-- Size and Color Selection -->
+            <select>
+                <option value="size">Select Size</option>
+                <option value="s">Small</option>
+                <option value="m">Medium</option>
+                <option value="l">Large</option>
+            </select>
 
-        <input
-        type="number"
-        id="quantity"
-        name="quantity"
-        min="1"
-        max="100"
-        step="1"
-        placeholder="Quantity"
-        oninput="this.value = Math.min(this.value, 100)"
-        class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"
-        />
+            <select>
+                <option value="color">Select Color</option>
+                <option value="black">Black</option>
+                <option value="white">White</option>
+                <option value="red">Red</option>
+            </select>
 
-        <!-- Add to Cart Button -->
-        <button onclick="alert('Added to cart: {{ $product['name'] }}')">Add to Cart</button>
+            <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" placeholder="Quantity"
+                oninput="this.value = Math.min(this.value, 100)"
+                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
 
-        <!-- Add to Wishlist -->
-        <span class="wishlist-button" onclick="alert('Added to wishlist')"> Add to Wishlist <i class="far fa-heart"></i></span>
+            <button onclick="alert('Added to cart: {{ $product['name'] }}')">Add to Cart</button>
+
+            <span class="wishlist-button" onclick="alert('Added to wishlist')">
+                Add to Wishlist <i class="far fa-heart"></i>
+            </span>
+        </div>
     </div>
 </div>
 
