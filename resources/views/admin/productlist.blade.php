@@ -6,40 +6,55 @@
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
 <style>
-    /* Copy your existing styles from the store page here for consistency */
+    /* Body & Dark Mode */
     body {
         background-color: #fff;
         font-family: 'Inter', sans-serif;
+        color: #333;
         transition: background 0.3s ease, color 0.3s ease;
     }
     body.dark-mode {
         background-color: #121212;
         color: #f5f5f5;
     }
+
+    /* Dark Mode Button */
+    .dark-mode-toggle {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #111;
+        color: white;
+        border: none;
+        padding: 0.75rem 1rem;
+        border-radius: 25px;
+        cursor: pointer;
+        z-index: 999;
+        font-size: 1.2rem;
+        transition: background-color 0.3s;
+    }
+
+    /* Header */
     .store-header {
         text-align: center;
-        padding: 3rem 1rem 1rem;
+        margin-top: 60px;
+        margin-bottom: 30px;
     }
     .store-header h1 {
-        font-size: 2.5rem;
-        letter-spacing: 2px;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
+        font-size: 3rem;
+        font-weight: 700;
+        color: #111;
     }
-    .store-header p {
-        font-size: 1rem;
-        color: #777;
-        max-width: 480px;
-        margin: 0 auto 2rem auto;
-    }
+
+    /* Add New Product Button */
     .btn-add-product {
         display: block;
-        margin: 0 auto 2rem auto;
-        padding: 0.75rem 1.5rem;
-        background-color: #000;
+        margin: 20px auto;
+        padding: 0.75rem 2rem;
+        background-color: #111;
         color: white;
         font-weight: 600;
-        border-radius: 25px;
+        border-radius: 50px;
         cursor: pointer;
         border: none;
         font-size: 1rem;
@@ -48,129 +63,157 @@
     .btn-add-product:hover {
         background-color: #e76767;
     }
+
+    /* Product Grid */
     .product-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* Auto fit for all screen sizes */
         gap: 1.5rem;
-        padding: 1rem 1.5rem 4rem;
         max-width: 1200px;
-        margin: auto;
+        margin: 0 auto;
+        padding: 20px;
     }
+
     .product-card {
         background: #fff;
         border-radius: 1rem;
         overflow: hidden;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
         transition: 0.3s;
         text-align: center;
+        padding: 15px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        align-items: center;
     }
+
     .product-card:hover {
         transform: translateY(-4px);
+        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
     }
+
     body.dark-mode .product-card {
         background: #1c1c1c;
         color: #fff;
     }
+
     .product-card img {
         width: 100%;
         height: auto;
-        display: block;
+        border-radius: 1rem;
+        object-fit: cover;
     }
+
     .product-info {
         padding: 1rem;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: space-between;
-        height: 130px;
+        gap: 1rem;
     }
+
     .product-info h4 {
-        margin-bottom: 0.25rem;
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 500;
-        text-align: center;
+        color: #444;
+        margin-bottom: 1rem;
     }
+
+    body.dark-mode .product-info h4 {
+        color: #ddd;
+    }
+
     .product-price-cart {
         display: flex;
         justify-content: space-between;
         align-items: center;
         gap: 1rem;
         width: 100%;
-        margin-top: auto;
     }
-    .product-info span {
-        font-size: 0.95rem;
-        font-weight: 500;
-        color: #444;
-    }
-    body.dark-mode .product-info span {
-        color: #ddd;
-    }
-    .btn-cart, .btn-edit {
+
+    /* Edit and View Buttons */
+    .btn-edit, .btn-view {
         padding: 0.5rem 1rem;
-        background: black;
+        background: #111;
         color: white;
         border: none;
-        border-radius: 8px;
+        border-radius: 25px;
         cursor: pointer;
         font-size: 0.9rem;
-        white-space: nowrap;
-        transition: background 0.2s;
+        width: 45%;  /* Shrinking the buttons */
+        transition: background 0.3s;
     }
-    .btn-cart:hover, .btn-edit:hover {
+
+    .btn-edit:hover, .btn-view:hover {
         background: #e76767;
     }
-    .btn-edit {
-        background-color: #555;
+
+    .btn-view {
+        background-color: #007bff;
     }
-    .btn-edit:hover {
-        background-color: #cc4c4c;
+
+    /* Dark Mode Styling */
+    body.dark-mode .product-card {
+        background-color: #333;
+        color: #f5f5f5;x
     }
-    .dark-mode-toggle {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: #000;
-        color: white;
-        border: none;
-        padding: 0.5rem 1rem;
-        border-radius: 20px;
-        cursor: pointer;
-        z-index: 999;
-        transition: 0.3s;
+
+    /* Responsive for smaller screens */
+    @media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        }
+        .store-header h1 {
+            font-size: 2rem;
+        }
+        .btn-edit, .btn-view {
+            font-size: 0.8rem;
+            padding: 0.5rem 1rem;
+        }
+    }
+
+    /* Responsive for mobile screens */
+    @media (max-width: 480px) {
+        .product-card {
+            padding: 10px;
+        }
+        .btn-add-product {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+        }
     }
 </style>
 
 <!-- Dark Mode Button -->
 <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
 
-<!-- Header -->
-<div class="store-header">
-    <h1>Admin Dashboard</h1>
-    <p>Manage your products here.</p>
-</div>
+<div class="container">
+    <div class="store-header">
+        <h1>Admin Dashboard</h1>
+        <p>Manage your products here.</p>
+    </div>
 
-<!-- Add New Product Button -->
-<button class="btn-add-product" onclick="alert('Feature to add new product coming soon!')">+ Add New Product</button>
+    <!-- Add New Product Button -->
+    <button class="btn-add-product" onclick="location.href='{{ route('admin.product.create') }}'">+ Add New Product</button>
 
-<!-- Product Grid -->
-<div class="product-grid" id="productGrid">
-    @foreach($products as $product)
-        <div class="product-card" data-category="{{ $product['category'] }}" data-aos="fade-up">
-            <a href="{{ route('product.show', ['id' => $product['id']]) }}">
+    <!-- Product Grid -->
+    <div class="product-grid">
+        @foreach($products as $product)
+            <div class="product-card" data-aos="fade-up">
                 <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}">
-            </a>
-            <div class="product-info">
-                <h4>{{ $product['name'] }}</h4>
-                <div class="product-price-cart">
-                    <span>Rp{{ number_format($product['price'], 0, ',', '.') }}</span>
-                    <button class="btn-edit" onclick="location.href='{{ route('admin.product.edit', ['id' => $product['id']]) }}'">Edit</button>                </div>
+                <div class="product-info">
+                    <h4>{{ $product['name'] }}</h4>
+                    <div class="product-price-cart">
+                        <span>Rp{{ number_format($product['price'], 0, ',', '.') }}</span>
+                        <button class="btn-edit" onclick="location.href='{{ route('admin.product.edit', ['id' => $product['id']]) }}'">Edit</button>
+                        <button class="btn-view" onclick="location.href='{{ route('product.show', ['id' => $product['id']]) }}'">View</button>
+                    </div>
+                </div>
             </div>
-        </div>
-    @endforeach
+        @endforeach
+    </div>
 </div>
 
 <script>
@@ -180,4 +223,5 @@
         document.body.classList.toggle('dark-mode');
     }
 </script>
+
 @endsection

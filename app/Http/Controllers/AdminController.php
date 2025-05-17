@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -7,6 +8,8 @@ use Illuminate\Support\Facades\File;
 class AdminController extends Controller
 {
     protected $products;
+
+
 
     public function __construct()
     {
@@ -58,36 +61,94 @@ class AdminController extends Controller
         return view('admin.productlist', ['products' => $this->products]);
     }
 
+    public function create()
+    {
+        // Return the view with an empty product data
+        return view('admin.create-product');
+    }
+
+    // Method to handle the form submission for adding a new product
+    public function store(Request $request)
+    {
+        // Simulate adding a new product to the dummy data
+        $newProductId = count($this->products) + 1; // Generate a new ID
+
+        // Store the new product data (in a real app, you'd use a database)
+        $this->products[$newProductId] = [
+            'id' => $newProductId,
+            'name' => $request->name,
+            'price' => $request->price,
+            'category' => $request->category,
+            'description' => $request->description,
+            'image' => $this->storeImage($request->file('image'), $newProductId),
+        ];
+
+        // Redirect back with a success message
+        return redirect()->route('admin.product.create')->with('success', 'Product added successfully!');
+    }
+
+    // Helper function to store the image
+    private function storeImage($image, $productId)
+    {
+        // Save image in a folder based on the product ID (using a folder for each product)
+        if ($image) {
+            $path = public_path("images/products/{$productId}");
+            if (!File::exists($path)) {
+                File::makeDirectory($path, 0777, true);
+            }
+
+            // Save the image
+            $imagePath = $image->storeAs("images/products/{$productId}", $image->getClientOriginalName(), 'public');
+            return asset('storage/' . $imagePath);
+        }
+
+        // Return a default image if no image is uploaded
+        return asset('images/default.jpg');
+    }
+
+
     public function edit($id)
     {
-    // Check if product exists in dummy data
-    if (!isset($this->products[$id])) {
-        abort(404, 'Product not found');
+        // Check if product exists in dummy data
+        if (!isset($this->products[$id])) {
+            abort(404, 'Product not found');
+        }
+
+        $product = $this->products[$id];
+
+        // Return an edit view with the product data
+        return view('admin.edit-product', compact('product'));
     }
 
-    $product = $this->products[$id];
-
-    // Return an edit view with the product data
-    return view('admin.edit-product', compact('product'));
-    }
-
+    // Method to update product data
     public function update(Request $request, $id)
     {
-    // For now, since products are dummy data, just pretend to update and redirect
+        // Validate inputs
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'category' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
 
-    // Validate inputs (optional)
-    $validated = $request->validate([
-        'name' => 'required|string',
-        'price' => 'required|numeric',
-        'category' => 'required|string',
-        'description' => 'nullable|string',
-    ]);
+        // Update product data
+        if (isset($this->products[$id])) {
+            $this->products[$id]['name'] = $request->name;
+            $this->products[$id]['price'] = $request->price;
+            $this->products[$id]['category'] = $request->category;
+            $this->products[$id]['description'] = $request->description;
 
-    // Here, you would update your product data in DB or array (not implemented now)
+            // Optionally handle image update as well
+            if ($request->hasFile('image')) {
+                $this->products[$id]['image'] = $this->storeImage($request->file('image'), $id);
+            }
 
-    // Redirect back to admin dashboard with a success message
-    return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully (simulated).');
+            return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
+        }
+
+        return redirect()->route('admin.dashboard')->with('error', 'Product not found');
     }
+
 
     // Helper method untuk ambil gambar pertama dari folder produk
     private function getFirstImage($productId)
