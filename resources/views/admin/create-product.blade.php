@@ -6,13 +6,13 @@
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
 <style>
+    /* Body & Dark Mode */
     body {
         background-color: #fff;
         font-family: 'Inter', sans-serif;
         color: #333;
         transition: background 0.3s ease, color 0.3s ease;
     }
-
     body.dark-mode {
         background-color: #121212;
         color: #f5f5f5;
@@ -40,87 +40,101 @@
         margin-top: 60px;
         margin-bottom: 30px;
     }
-
     .store-header h1 {
-        font-size: 3rem;
-        font-weight: 700;
+        font-size: 2.5rem;
+        font-weight: 600;
         color: #111;
     }
 
-    /* Form Styling */
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        font-weight: bold;
-    }
-
-    .form-control {
-        border-radius: 10px;
-        padding: 0.75rem;
-        width: 100%;
-        border: 1px solid #ccc;
-    }
-
-    .form-control:focus {
-        outline: none;
-        border-color: #007bff;
-    }
-
-    /* Button Styling */
-    .btn-submit {
+    /* Add New Product Button */
+    .btn-add-product {
         display: block;
-        width: 100%;
+        margin: 20px auto;
+        padding: 0.75rem 2rem;
         background-color: #111;
         color: white;
-        padding: 1rem;
-        border-radius: 25px;
-        border: none;
-        font-size: 1.2rem;
+        font-weight: 600;
+        border-radius: 50px;
         cursor: pointer;
-        transition: background-color 0.3s;
+        border: none;
+        font-size: 1rem;
+        transition: background 0.3s;
     }
-
-    .btn-submit:hover {
+    .btn-add-product:hover {
         background-color: #e76767;
     }
 
-    /* Image Preview */
-    .image-preview {
+    /* Form Container */
+    .form-container {
         width: 100%;
-        height: auto;
-        border-radius: 10px;
-        margin-top: 10px;
-        max-width: 100%; /* Make sure image fits within container */
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        background: #fff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        font-size: 1rem;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #444;
+        margin-bottom: 5px;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        transition: border-color 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    .form-group textarea {
+        resize: vertical;
+        min-height: 120px;
+    }
+
+    .image-preview {
+        max-width: 100%;
+        max-height: 200px;
         object-fit: cover;
+        margin-top: 15px;
+        border-radius: 8px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
     }
 
-    /* Success Message Styling */
-    .alert {
+    .btn-submit {
+        padding: 1rem 2rem;
+        background-color: #111;
+        color: white;
+        font-weight: 600;
+        border-radius: 50px;
+        border: none;
+        font-size: 1rem;
+        cursor: pointer;
+        width: 100%;
         margin-top: 20px;
+        transition: background-color 0.3s;
     }
-
-    /* Responsiveness */
-    @media (max-width: 768px) {
-        .store-header h1 {
-            font-size: 2.5rem;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .form-control {
-            padding: 0.5rem;
-        }
-
-        .btn-submit {
-            padding: 1rem;
-            font-size: 1rem;
-        }
+    .btn-submit:hover {
+        background-color: #e76767;
     }
 
 </style>
@@ -136,56 +150,62 @@
     <!-- Display Success Message -->
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
+        <script>
+            // Show the success alert
+            alert('{{ session('success') }}');
+            
+            // Redirect to admin dashboard after alert
+            setTimeout(function() {
+                window.location.href = "{{ route('admin.dashboard') }}"; // Redirect to admin dashboard
+            }, 1500); // Delay for 1.5 seconds to allow the alert to be visible
+        </script>
     @endif
 
-    <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
-        @csrf
+    <!-- Form Container -->
+    <div class="form-container">
+        <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
 
-        <!-- Product Name -->
-        <div class="form-group">
-            <label for="name">Product Name</label>
-            <input type="text" name="name" id="name" class="form-control" required>
-        </div>
+            <!-- Product Name -->
+            <div class="form-group">
+                <label for="name">Product Name</label>
+                <input type="text" name="name" id="name" class="form-control" required>
+            </div>
 
-        <!-- Price -->
-        <div class="form-group">
-            <label for="price">Price</label>
-            <input type="number" name="price" id="price" class="form-control" required>
-        </div>
+            <!-- Price -->
+            <div class="form-group">
+                <label for="price">Price</label>
+                <input type="text" name="price" id="price" class="form-control" placeholder="Rp 0" required>
+            </div>
 
-        <!-- Category -->
-        <div class="form-group">
-            <label for="category">Category</label>
-            <input type="text" name="category" id="category" class="form-control" required>
-        </div>
+            <!-- Category -->
+            <div class="form-group">
+                <label for="category">Category</label>
+                <input type="text" name="category" id="category" class="form-control" required>
+            </div>
 
-        <!-- Description -->
-        <div class="form-group">
-            <label for="description">Description</label>
-            <textarea name="description" id="description" class="form-control"></textarea>
-        </div>
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea name="description" id="description" class="form-control"></textarea>
+            </div>
 
-        <!-- Product Image -->
-        <div class="form-group">
-            <label for="image">Product Image</label>
-            <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
-            <img id="imagePreview" class="image-preview" src="#" alt="Image Preview" style="display: none;">
-        </div>
+            <!-- Product Image -->
+            <div class="form-group">
+                <label for="image">Product Image</label>
+                <input type="file" name="image" id="image" class="form-control" accept="image/*" required>
+                <img id="imagePreview" class="image-preview" src="#" alt="Image Preview" style="display: none;">
+            </div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="btn-submit">Add Product</button>
-    </form>
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit">Add Product</button>
+        </form>
+    </div>
 </div>
 
-<!-- Success Alert -->
-@if(session('success'))
-    <script>
-        alert('Successfully created the product!');
-        window.location.href = "{{ route('admin.dashboard') }}";
-    </script>
-@endif
-
 <script>
+    AOS.init();
+
     // Toggle Dark Mode
     function toggleDarkMode() {
         document.body.classList.toggle('dark-mode');
@@ -203,6 +223,14 @@
             reader.readAsDataURL(file);
         }
     });
+
+    // Format the price input to include commas
+    document.getElementById('price').addEventListener('input', function(e) {
+        let value = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, ','); // Add commas for thousands
+        e.target.value = `Rp ${value}`;
+    });
 </script>
 
 @endsection
+
