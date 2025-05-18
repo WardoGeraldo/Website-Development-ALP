@@ -68,6 +68,8 @@ Route::get('/cart/checkout/detail', [CartController::class, 'checkoutDetail'])->
 
 Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
 
+Route::get('/order-history', [CartController::class, 'orderHistory'])->name('order.history');
+
 // Logout
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 

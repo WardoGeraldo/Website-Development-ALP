@@ -169,8 +169,25 @@ class CartController extends Controller
 
         $finalTotal = $total - $discountAmount;
 
+        $orderHistory = session()->get('order_history', []);
+
+        $orderHistory[] = [
+            'timestamp' => now()->toDateTimeString(),
+            'orders' => $orders,
+            'total' => $total,
+            'discount' => $discountAmount,
+            'final_total' => $finalTotal,
+            'promo' => $promoCode,
+        ];
+
+        session()->put('order_history', $orderHistory);
         return view('checkout-detail', compact(
             'user', 'orders', 'total', 'discountRate', 'discountAmount', 'finalTotal', 'promoCode'
         ));
+    }
+    public function orderHistory()
+    {
+        $orders = session()->get('order_history', []);
+        return view('orders-history', compact('orders'));
     }
 }

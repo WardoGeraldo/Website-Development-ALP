@@ -61,7 +61,7 @@
             <a href="#" class="text-dark text-decoration-none">Sports</a>
             <a href="#" class="text-dark text-decoration-none">Dress</a>
             <a href="#" class="text-dark text-decoration-none">Home & Lifestyle</a> --}}
-            <a href="#" class="text-dark text-decoration-none">My Orders</a>
+            <a href="{{ route('order.history') }}" class="text-dark text-decoration-none">My Orders</a>
             <a href="#" class="text-dark text-decoration-none">Contact</a>
             <a href="{{ route('support.show') }}" class="text-dark text-decoration-none">Support</a>
 
