@@ -92,3 +92,10 @@ Route::get('/admin/users', [AdminController::class, 'userList'])->name('admin.us
 
 // Route for User Details
 Route::get('/admin/user/{id}', [AdminController::class, 'userDetails'])->name('admin.user.details');
+
+// Route for showing Promos
+Route::get('/admin/promos', [AdminController::class, 'promoList'])->name('admin.promo.list');
+Route::get('/admin/promo/create', [AdminController::class, 'createPromo'])->name('admin.promo.create');
+
+// Promo Details page
+Route::get('/admin/promo/{id}', [AdminController::class, 'showPromoDetails'])->name('admin.promo.details');

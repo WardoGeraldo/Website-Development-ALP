@@ -73,7 +73,7 @@
             <a href="{{ route('admin.dashboard') }}" class="text-dark text-decoration-none">Products List</a>
             <a href="{{ route('admin.userlist') }}" class="text-dark text-decoration-none">Users List</a>
             <a href="{{ route('admin.sales.index') }}" class="text-dark text-decoration-none">Sales List</a>
-            <a href="{{ route('support.show') }}" class="text-dark text-decoration-none">Promo List</a>
+            <a href="{{ route('admin.promo.list') }}" class="text-dark text-decoration-none">Promo List</a>
         </div>
     </nav>
 @endif
