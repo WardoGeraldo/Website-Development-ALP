@@ -162,22 +162,13 @@
         text-decoration: underline;
         font-weight: 500;
         font-size: 20px;
+        padding-right: 750px;
     }
 
-    .back-button-top {
-        position: absolute;
-        top: 200px;
-        left: 550px;
-        color: #666;
-        cursor: pointer;
-        text-decoration: underline;
-        font-weight: 500;
-        font-size: 20px;
-    }
 </style>
 
 <div class="wishlist-header">
-    <div class="back-button-top" onclick="window.location.href='{{ route('store.show') }}'">
+    <div class="back-button" onclick="window.location.href='{{ route('store.show') }}'">
         <b>← Back To Store</b>
     </div>
     <h1>

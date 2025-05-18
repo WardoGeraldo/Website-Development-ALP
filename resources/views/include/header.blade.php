@@ -56,11 +56,12 @@
         <div class="container py-2 d-flex gap-4 fw-semibold small">
             <a href="{{ route('home') }}" class="text-dark text-decoration-none">Home</a>
             <a href="{{ route('store.show') }}" class="text-dark text-decoration-none">Store</a>
-            <a href="#" class="text-dark text-decoration-none">T-Shirt</a>
+            {{-- <a href="#" class="text-dark text-decoration-none">T-Shirt</a>
             <a href="#" class="text-dark text-decoration-none">Shirt</a>
             <a href="#" class="text-dark text-decoration-none">Sports</a>
             <a href="#" class="text-dark text-decoration-none">Dress</a>
-            <a href="#" class="text-dark text-decoration-none">Home & Lifestyle</a>
+            <a href="#" class="text-dark text-decoration-none">Home & Lifestyle</a> --}}
+            <a href="#" class="text-dark text-decoration-none">My Orders</a>
             <a href="#" class="text-dark text-decoration-none">Contact</a>
             <a href="{{ route('support.show') }}" class="text-dark text-decoration-none">Support</a>
 

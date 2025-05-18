@@ -63,13 +63,15 @@
     }
 
     .product-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
         gap: 1.5rem;
         padding: 1rem 1.5rem 4rem;
         max-width: 1200px;
         margin: auto;
     }
+
 
     .product-card {
         background: #fff;
@@ -181,13 +183,14 @@
     <button onclick="filterProducts('all')" class="active">All</button>
     <button onclick="filterProducts('top')">Top</button>
     <button onclick="filterProducts('bottom')">Bottom</button>
+    <button onclick="filterProducts('bag')">Bag</button>
     <button onclick="filterProducts('accessories')">Accessories</button>
 </div>
 
 <!-- Product Grid -->
 <div class="product-grid" id="productGrid">
     @foreach($products as $product)
-        <div class="product-card" data-category="{{ $product['category'] }}" data-aos="fade-up">
+        <div class="product-card" data-category="{{ $product['category'] }}" data-aos="fade-up" data-aos-duration="700" data-aos-once="false">
             <a href="{{ route('product.show', ['id' => $product['id']]) }}">
                 <img src="{{ $product['image'] }}" alt="{{ $product['name'] }}">
             </a>
@@ -210,17 +213,31 @@
     }
 
     function filterProducts(category) {
-        document.querySelectorAll('.filter-bar button').forEach(btn => btn.classList.remove('active'));
-        event.target.classList.add('active');
+    document.querySelectorAll('.filter-bar button').forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
 
-        const searchValue = document.getElementById('searchInput')?.value?.toLowerCase() || '';
-        const cards = document.querySelectorAll('.product-card');
+    const searchValue = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+    const cards = document.querySelectorAll('.product-card');
 
-        cards.forEach(card => {
-            const matchesCategory = category === 'all' || card.dataset.category === category;
-            const matchesSearch = card.querySelector('h4').innerText.toLowerCase().includes(searchValue);
-            card.style.display = (matchesCategory && matchesSearch) ? 'block' : 'none';
-        });
-    }
+    cards.forEach(card => {
+        const matchesCategory = category === 'all' || card.dataset.category === category;
+        const matchesSearch = card.querySelector('h4').innerText.toLowerCase().includes(searchValue);
+
+        if (matchesCategory && matchesSearch) {
+            card.style.display = 'block';
+
+            // Reset AOS animation for visible cards only
+            card.classList.remove('aos-animate');
+            void card.offsetWidth;
+            card.classList.add('aos-animate');
+        } else {
+            card.style.display = 'none';
+        }
+    });
+
+    // Must come after all DOM changes
+    AOS.refresh();
+}
+
 </script>
 @endsection

@@ -62,6 +62,10 @@ Route::get('/cart/remove/{id}', [CartController::class, 'remove'])->name('cart.r
 // Route to handle the checkout
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
 
+Route::post('/cart/apply-promo', [CartController::class, 'applyPromo'])->name('cart.applyPromo');
+
+Route::get('/cart/checkout/detail', [CartController::class, 'checkoutDetail'])->name('cart.checkoutDetail');
+
 Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
 
 // Logout

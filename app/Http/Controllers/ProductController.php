@@ -60,7 +60,7 @@ class ProductController extends Controller
                 'name' => 'Grey Baggy jeans',
                 'price' => 449000,
                 'description' => 'A simple, yet stylish baggy jeans.',
-                'category' => 'accessories',
+                'category' => 'bottom',
                 'image' => $this->getFirstImage(4),
             ],
             5 => [
@@ -78,6 +78,14 @@ class ProductController extends Controller
                 'description' => 'A simple, yet stylish cap to complement your outfit.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(6),
+            ],
+            7 => [
+                'id' => 7,
+                'name' => 'Yellow Leather Bag',
+                'price' => 1149000,
+                'description' => 'A simple, yet real leathered bag with a sunkissed flavor color.',
+                'category' => 'bag',
+                'image' => $this->getFirstImage(7),
             ],
         ];
     }
@@ -104,6 +112,6 @@ class ProductController extends Controller
 
     public function getAllProducts()
     {
-    return $this->getProductsWithImages();
+        return $this->getProductsWithImages();
     }
 }
