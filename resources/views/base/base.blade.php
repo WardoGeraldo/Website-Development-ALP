@@ -14,6 +14,42 @@
         integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>My Store</title>
+    <style>
+        body {
+            background-color: #fff;
+            color: #333;
+            font-family: 'Inter', sans-serif;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        body.dark-mode {
+            background-color: #121212;
+            color: #f5f5f5;
+        }
+
+        /* Dark Mode Toggle Button Styles */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #111;
+            color: white;
+            border: none;
+            padding: 0.75rem 1.2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            z-index: 9999;
+            font-size: 1.3rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+            user-select: none;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            background-color: #e76767;
+            box-shadow: 0 6px 12px rgba(231, 103, 103, 0.7);
+        }
+    </style>
 </head>
 <script>
     // On page load, check localStorage for dark mode setting
@@ -38,12 +74,38 @@
 </script>
 
 <body>
+    <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+
     @include('include.header')
     <div class="container-fluid" style="min-width:100%; margin:0 auto;">
         @yield('content')
         @yield('scripts')
     </div>
     @include('include.footer')
+
+    <!-- Place the dark mode toggle script here -->
+    <script>
+      const toggleButton = document.querySelector('.dark-mode-toggle');
+
+      // Load mode from localStorage on page load
+      if(localStorage.getItem('darkMode') === 'enabled'){
+          document.body.classList.add('dark-mode');
+          toggleButton.textContent = '☀️'; // sun icon
+      }
+
+      toggleButton.addEventListener('click', () => {
+          document.body.classList.toggle('dark-mode');
+
+          if(document.body.classList.contains('dark-mode')){
+              localStorage.setItem('darkMode', 'enabled');
+              toggleButton.textContent = '☀️';
+          } else {
+              localStorage.setItem('darkMode', 'disabled');
+              toggleButton.textContent = '🌙';
+          }
+      });
+    </script>
 </body>
+
 
 </html>

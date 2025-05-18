@@ -113,8 +113,6 @@
         }
     </style>
 
-    <!-- Dark Mode Button -->
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
 
     <div class="container">
         <div class="store-header">

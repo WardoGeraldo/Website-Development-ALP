@@ -48,6 +48,10 @@
             color: #111;
         }
 
+        body.dark-mode .store-header h1 {
+            color: #f5f5f5;
+        }
+
         /* Users Table */
         .user-table {
             width: 100%;
@@ -56,6 +60,12 @@
             background-color: #fff;
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .user-table {
+            background-color: #222;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
 
         .user-table th,
@@ -63,6 +73,7 @@
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
+            transition: color 0.3s ease, border-color 0.3s ease;
         }
 
         .user-table th {
@@ -76,6 +87,19 @@
 
         .user-table tr:hover {
             background-color: #f7f7f7;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .user-table th {
+            color: #ccc;
+        }
+
+        body.dark-mode .user-table td {
+            color: #bbb;
+        }
+
+        body.dark-mode .user-table tr:hover {
+            background-color: #333;
         }
 
         /* Button Styling */
@@ -94,9 +118,6 @@
             background-color: #e76767;
         }
     </style>
-
-    <!-- Dark Mode Button -->
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
 
     <div class="container">
         <div class="store-header">
@@ -132,9 +153,23 @@
     <script>
         AOS.init();
 
-        // Toggle Dark Mode
+        // Toggle Dark Mode with persistence
         function toggleDarkMode() {
             document.body.classList.toggle('dark-mode');
+
+            // Save preference
+            if (document.body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+            } else {
+                localStorage.removeItem('darkMode');
+            }
         }
+
+        // Load saved preference on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+            }
+        });
     </script>
 @endsection

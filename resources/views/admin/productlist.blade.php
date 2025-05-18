@@ -246,8 +246,7 @@
         }
     </style>
 
-    <!-- Dark Mode Button -->
-    <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+
 
     <div class="container">
         <div class="store-header">
