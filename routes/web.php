@@ -101,7 +101,15 @@ Route::get('/admin/user/{id}', [AdminController::class, 'userDetails'])->name('a
 
 // Route for showing Promos
 Route::get('/admin/promos', [AdminController::class, 'promoList'])->name('admin.promo.list');
+
+// Route for create promos
 Route::get('/admin/promo/create', [AdminController::class, 'createPromo'])->name('admin.promo.create');
 
+// handle POST submission in promo
+Route::post('/admin/promo/store', [AdminController::class, 'storePromo'])->name('admin.promo.store'); 
+
 // Promo Details page
-Route::get('/admin/promo/{id}', [AdminController::class, 'showPromoDetails'])->name('admin.promo.details');
+Route::get('/admin/promo/{id}/edit', [AdminController::class, 'showPromoDetails'])->name('admin.promo.details');
+
+// Route for promo update
+Route::put('/admin/promo/{id}', [AdminController::class, 'updatePromo'])->name('admin.promo.update');

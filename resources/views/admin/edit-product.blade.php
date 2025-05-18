@@ -1,152 +1,207 @@
 @extends('base.base')
 
 @section('content')
-<style>
-    .edit-product-container {
-        max-width: 600px;
-        margin: 3rem auto;
-        padding: 2rem;
-        border-radius: 10px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-        background-color: #fff;
-        font-family: 'Inter', sans-serif;
-        color: #333;
-    }
+    <style>
+        .edit-product-container {
+            max-width: 600px;
+            margin: 3rem auto;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            font-family: 'Inter', sans-serif;
+            color: #333;
+        }
 
-    .edit-product-container.dark-mode {
-        background-color: #1c1c1c;
-        color: #f5f5f5;
-        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
-    }
+        .edit-product-container.dark-mode {
+            background-color: #1c1c1c;
+            color: #f5f5f5;
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+        }
 
-    .edit-product-container h1 {
-        font-weight: 600;
-        font-size: 1.8rem;
-        margin-bottom: 1.5rem;
-        text-align: center;
-    }
+        .edit-product-container h1 {
+            font-weight: 600;
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
 
-    form label {
-        display: block;
-        margin-bottom: 0.5rem;
-        font-weight: 600;
-        font-size: 1rem;
-    }
+        form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 1rem;
+        }
 
-    form input[type="text"],
-    form input[type="number"],
-    form textarea {
-        width: 100%;
-        padding: 0.6rem 1rem;
-        margin-bottom: 1.5rem;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 1rem;
-        transition: border-color 0.3s ease;
-    }
+        form input[type="text"],
+        form input[type="number"],
+        form input[type="file"],
+        form textarea {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
 
-    form input[type="text"]:focus,
-    form input[type="number"]:focus,
-    form textarea:focus {
-        border-color: #000;
-        outline: none;
-    }
+        form input[type="text"]:focus,
+        form input[type="number"]:focus,
+        form input[type="file"]:focus,
+        form textarea:focus {
+            border-color: #000;
+            outline: none;
+        }
 
-    form textarea {
-        min-height: 100px;
-        resize: vertical;
-    }
+        form textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
 
-    .btn-save {
-        display: block;
-        width: 100%;
-        padding: 0.75rem 1rem;
-        background-color: #000;
-        color: white;
-        font-weight: 700;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        font-size: 1.1rem;
-        transition: background-color 0.3s ease;
-    }
+        .btn-save {
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            background-color: #000;
+            color: white;
+            font-weight: 700;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: background-color 0.3s ease;
+        }
 
-    .btn-save:hover {
-        background-color: #e76767;
-    }
+        .btn-save:hover {
+            background-color: #e76767;
+        }
 
-    .back-link {
-        display: block;
-        margin-top: 1.5rem;
-        text-align: center;
-        color: #444;
-        font-weight: 500;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
+        .back-link {
+            display: block;
+            margin-top: 1.5rem;
+            text-align: center;
+            color: #444;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
 
-    .back-link:hover {
-        color: #000;
-    }
+        .back-link:hover {
+            color: #000;
+        }
 
-    /* Dark mode styles */
-    body.dark-mode .edit-product-container {
-        background-color: #1c1c1c;
-        color: #ddd;
-        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
-    }
+        /* Dark mode styles */
+        body.dark-mode .edit-product-container {
+            background-color: #1c1c1c;
+            color: #ddd;
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+        }
 
-    body.dark-mode form input[type="text"],
-    body.dark-mode form input[type="number"],
-    body.dark-mode form textarea {
-        background-color: #333;
-        border-color: #555;
-        color: #ddd;
-    }
+        body.dark-mode form input,
+        body.dark-mode form textarea {
+            background-color: #333;
+            border-color: #555;
+            color: #ddd;
+        }
 
-    body.dark-mode form input[type="text"]:focus,
-    body.dark-mode form input[type="number"]:focus,
-    body.dark-mode form textarea:focus {
-        border-color: #e76767;
-    }
+        body.dark-mode form input:focus,
+        body.dark-mode form textarea:focus {
+            border-color: #e76767;
+        }
 
-    body.dark-mode .back-link {
-        color: #bbb;
-    }
+        body.dark-mode .back-link {
+            color: #bbb;
+        }
 
-    body.dark-mode .back-link:hover {
-        color: #fff;
-    }
-</style>
+        body.dark-mode .back-link:hover {
+            color: #fff;
+        }
 
-<div class="edit-product-container" id="editProductContainer">
-    <h1>Edit Product: {{ $product['name'] }}</h1>
+        /* Image preview styling */
+        .current-image,
+        .image-preview {
+            display: block;
+            max-width: 250px;
+            max-height: 250px;
+            margin: 0 auto 1.5rem auto;
+            border-radius: 12px;
+            object-fit: contain;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
 
-   <form action="#" method="POST" id="editProductForm">
-    @csrf
-    <!-- your inputs -->
-    <label for="name">Name:</label>
-    <input type="text" id="name" name="name" value="{{ $product['name'] }}" required>
+    <div class="edit-product-container" id="editProductContainer">
+        <h1>Edit Product: {{ $product['name'] }}</h1>
 
-    <label for="price">Price:</label>
-    <input type="number" id="price" name="price" value="{{ $product['price'] }}" required>
+        <!-- Current product image -->
+        <img src="{{ $product['image'] }}" alt="Current Image" class="current-image" id="currentImage">
 
-    <label for="category">Category:</label>
-    <input type="text" id="category" name="category" value="{{ $product['category'] }}" required>
+        <!-- File input -->
+        <label for="image">Change Image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
 
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="4">{{ $product['description'] ?? '' }}</textarea>
+        <script>
+            document.getElementById('image').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const currentImage = document.getElementById('currentImage');
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        currentImage.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        </script>
 
-    <button type="submit" class="btn-save">Save Changes</button>
-</form>
-<a href="{{ route('admin.dashboard') }}" class="back-link">← Back to Dashboard</a>
+        <form action="{{ route('admin.product.update', ['id' => $product['id']]) }}" method="POST"
+            enctype="multipart/form-data" id="editProductForm">
+            @csrf
+            @method('POST') {{-- Change to PUT if your route expects PUT --}}
 
-<script>
-    document.getElementById('editProductForm').addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form submission
-        alert('Product updated successfully!');
-        // Optionally: redirect after alert, e.g.:
-        // window.location.href = "{{ route('admin.dashboard') }}";
-    });
-</script>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ $product['name'] }}" required>
+
+            <label for="price">Price:</label>
+            <input type="number" id="price" name="price" value="{{ $product['price'] }}" required>
+
+            <label for="category">Category:</label>
+            <input type="text" id="category" name="category" value="{{ $product['category'] }}" required>
+
+            <label for="description">Description:</label>
+            <textarea id="description" name="description" rows="4">{{ $product['description'] ?? '' }}</textarea>
+
+
+            <button type="submit" class="btn-save">Save Changes</button>
+        </form>
+
+        <a href="{{ route('admin.dashboard') }}" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    @if (session('success'))
+        <script>
+            alert('{{ session('success') }}');
+            window.location.href = "{{ route('admin.dashboard') }}";
+        </script>
+    @endif
+
+    <script>
+        // Preview new image when selected
+        document.getElementById('image').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const preview = document.getElementById('imagePreview');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+                preview.src = '#';
+            }
+        });
+    </script>
 @endsection

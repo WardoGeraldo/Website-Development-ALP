@@ -41,43 +41,61 @@ class AdminController extends Controller
     private function getDummyProducts()
     {
         return [
-            1 => [
+             1 => [
                 'id' => 1,
                 'name' => 'Oversized Tee',
                 'price' => 299000,
-                'image' => $this->getFirstImage(1),
+                'description' => 'A stylish oversized tee for casual wear.',
                 'category' => 'top',
+                'image' => $this->getFirstImage(1),
             ],
             2 => [
                 'id' => 2,
                 'name' => 'Minimalist Hoodie',
                 'price' => 499000,
-                'image' => $this->getFirstImage(2),
+                'description' => 'Comfortable and sleek hoodie for a modern look.',
                 'category' => 'top',
+                'image' => $this->getFirstImage(2),
             ],
             3 => [
                 'id' => 3,
                 'name' => 'Slim Fit Pants',
                 'price' => 399000,
                 'description' => 'Perfect for a smart casual look.',
+                'category' => 'bottom',
                 'image' => $this->getFirstImage(3),
-                'category' => 'bottom'
             ],
             4 => [
                 'id' => 4,
-                'name' => 'Monochrome Cap',
-                'price' => 149000,
-                'description' => 'A simple, yet stylish cap to complement your outfit.',
+                'name' => 'Grey Baggy jeans',
+                'price' => 449000,
+                'description' => 'A simple, yet stylish baggy jeans.',
+                'category' => 'bottom',
                 'image' => $this->getFirstImage(4),
-                'category' => 'accessories'
             ],
             5 => [
                 'id' => 5,
                 'name' => 'Wisdom Cap',
                 'price' => 169000,
                 'description' => 'A fire, and stylish cap to extravaganze your outfit.',
+                'category' => 'accessories',
                 'image' => $this->getFirstImage(5),
-                'category' => 'accessories'
+            ],
+            6 => [
+                'id' => 6,
+                'name' => 'Monochrome Cap',
+                'price' => 149000,
+                'description' => 'A simple, yet stylish cap to complement your outfit.',
+                'category' => 'accessories',
+                'image' => $this->getFirstImage(6),
+            ],
+            7 => [
+                'id' => 7,
+                'name' => 'Yellow Leather Bag',
+                'price' => 1149000,
+                'description' => 'A simple, yet real leathered bag with a sunkissed flavor color.',
+                'category' => 'bag',
+                'image' => $this->getFirstImage(7),
             ],
         ];
     }
@@ -282,45 +300,84 @@ class AdminController extends Controller
     }
 
     public function showPromoDetails($id)
-{
-    // Dummy promo data (same as promoList)
-    $promos = [
-        1 => [
-            'id' => 1,
-            'title' => 'Spring Sale',
-            'description' => 'Get up to 30% off on spring collection!',
-            'start_date' => '2025-04-01',
-            'end_date' => '2025-04-30',
-            'promo_code' => 'SPRING30',
-            'discount' => '30%',
-        ],
-        2 => [
-            'id' => 2,
-            'title' => 'Black Friday Special',
-            'description' => 'Flat 50% off on all items.',
-            'start_date' => '2025-11-25',
-            'end_date' => '2025-11-29',
-            'promo_code' => 'BLACKFRI50',
-            'discount' => '50%',
-        ],
-        3 => [
-            'id' => 3,
-            'title' => 'New Year Promo',
-            'description' => 'Celebrate the new year with 20% off.',
-            'start_date' => '2025-12-28',
-            'end_date' => '2026-01-05',
-            'promo_code' => 'NEWYEAR20',
-            'discount' => '20%',
-        ],
-    ];
+    {
+        // Dummy promo data (same as promoList)
+        $promos = [
+            1 => [
+                'id' => 1,
+                'title' => 'Spring Sale',
+                'description' => 'Get up to 30% off on spring collection!',
+                'start_date' => '2025-04-01',
+                'end_date' => '2025-04-30',
+                'promo_code' => 'SPRING30',
+                'discount' => '30%',
+            ],
+            2 => [
+                'id' => 2,
+                'title' => 'Black Friday Special',
+                'description' => 'Flat 50% off on all items.',
+                'start_date' => '2025-11-25',
+                'end_date' => '2025-11-29',
+                'promo_code' => 'BLACKFRI50',
+                'discount' => '50%',
+            ],
+            3 => [
+                'id' => 3,
+                'title' => 'New Year Promo',
+                'description' => 'Celebrate the new year with 20% off.',
+                'start_date' => '2025-12-28',
+                'end_date' => '2026-01-05',
+                'promo_code' => 'NEWYEAR20',
+                'discount' => '20%',
+            ],
+        ];
 
-    if (!isset($promos[$id])) {
-        abort(404, 'Promo not found');
+
+        if (!isset($promos[$id])) {
+            abort(404, 'Promo not found');
+        }
+
+        $promo = $promos[$id];
+
+        return view('admin.promo-details', compact('promo'));
     }
 
-    $promo = $promos[$id];
+    // Update promo handler
+    public function updatePromo(Request $request, $id)
+    {
+        $request->validate([
+            'promo_code' => 'required|string|max:20',
+            'description' => 'required|string',
+            'discount' => 'required|numeric|min:1|max:100',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
 
-    return view('admin.promo-details', compact('promo'));
-}
+        // Your dummy data update logic here (simulate)
+        // Then redirect with success message
+        return redirect()->route('admin.promo.list')->with('success', 'Promo updated successfully!');
+    }
 
+    public function createPromo()
+    {
+        // Show the form to create a new promo
+        return view('admin.create-promo');
+    }
+
+    public function storePromo(Request $request)
+    {
+        // Validate input
+        $request->validate([
+            'promo_code' => 'required|string',
+            'description' => 'required|string',
+            'discount' => 'required|numeric|min:1|max:100',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after_or_equal:start_date',
+        ]);
+
+        // Simulate saving promo: in real app save to DB, here just redirect
+
+        // Redirect back to promo list with success message
+        return redirect()->route('admin.promo.list')->with('success', 'Promo created successfully!');
+    }
 }
