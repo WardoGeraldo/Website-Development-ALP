@@ -178,6 +178,16 @@
         color: #fff !important;
     }
 
+    body.dark-mode .btn-outline-dark {
+        border-color: #fff !important;
+        color: #fff !important;
+    }
+
+    body.dark-mode .btn-outline-dark:hover {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
 
     /* === PROMO BANNER === */
     .promo-banner {
@@ -260,6 +270,41 @@
     @keyframes scroll-left {
         0% { transform: translateX(100%); }
         100% { transform: translateX(-100%); }
+    }
+
+    /* Style footer text in dark mode */
+    body.dark-mode footer,
+    body.dark-mode .footer,
+    body.dark-mode .bg-light footer,
+    body.dark-mode .bg-light .footer {
+        color: #fff !important;
+    }
+
+    body.dark-mode footer a,
+    body.dark-mode .footer a {
+        color: #ccc !important;
+    }
+
+    body.dark-mode footer a:hover,
+    body.dark-mode .footer a:hover {
+        color: #fff !important;
+    }
+
+    /* Change social media icon colors in dark mode */
+    body.dark-mode .footer i,
+    body.dark-mode footer i,
+    body.dark-mode .footer svg,
+    body.dark-mode footer svg {
+        color: #fff !important;
+        fill: #fff !important;
+    }
+
+    body.dark-mode .footer i:hover,
+    body.dark-mode footer i:hover,
+    body.dark-mode .footer svg:hover,
+    body.dark-mode footer svg:hover {
+        color: #f7b800 !important; /* Optional hover color */
+        fill: #f7b800 !important;
     }
 </style>
 
