@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -380,4 +381,12 @@ class AdminController extends Controller
         // Redirect back to promo list with success message
         return redirect()->route('admin.promo.list')->with('success', 'Promo created successfully!');
     }
+
+    public function destroy($id)
+{
+    $product = Product::findOrFail($id);
+    $product->delete();
+
+    return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
+}
 }
