@@ -245,7 +245,7 @@
         <div class="top-bar">
             <button class="btn-add" onclick="location.href='{{ route('admin.product.create') }}'">+ Add</button>
             <div class="search-container ms-auto">
-                <input type="search" placeholder="Search" />
+                <input type="search" id="productSearch" placeholder="Search" />
             </div>
         </div>
 
@@ -309,28 +309,28 @@
     @endif
 
     <script>
-        AOS.init();
-
         document.addEventListener('DOMContentLoaded', () => {
-            const toggleButton = document.querySelector('.dark-mode-toggle');
-            if (!toggleButton) return; // Safety check
+            const searchInput = document.getElementById('productSearch');
+            console.log('Search input:', searchInput);
 
-            // Load saved dark mode preference
-            if (localStorage.getItem('darkMode') === 'enabled') {
-                document.body.classList.add('dark-mode');
-                toggleButton.textContent = '☀️'; // Sun icon
-            }
+            const table = document.querySelector('.product-list-container table tbody');
+            console.log('Table tbody:', table);
 
-            toggleButton.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
+            if (!searchInput || !table) return;
 
-                if (document.body.classList.contains('dark-mode')) {
-                    localStorage.setItem('darkMode', 'enabled');
-                    toggleButton.textContent = '☀️'; // Sun icon for dark mode
-                } else {
-                    localStorage.setItem('darkMode', 'disabled');
-                    toggleButton.textContent = '🌙'; // Moon icon for light mode
-                }
+            const rows = table.querySelectorAll('tr');
+            console.log('Number of rows:', rows.length);
+
+            searchInput.addEventListener('input', function() {
+                const filter = this.value.toLowerCase();
+                console.log('Filter:', filter);
+
+                rows.forEach(row => {
+                    const cells = row.querySelectorAll('td');
+                    const match = Array.from(cells).some(td => td.textContent.toLowerCase()
+                        .includes(filter));
+                    row.style.display = match ? '' : 'none';
+                });
             });
         });
     </script>
