@@ -59,7 +59,7 @@
             <a href="{{ route('home') }}" class="text-dark text-decoration-none">Home</a>
             <a href="{{ route('store.show') }}" class="text-dark text-decoration-none">Store</a>
             <a href="{{ route('order.history') }}" class="text-dark text-decoration-none">My Orders</a>
-            <a href="#" class="text-dark text-decoration-none">Contact</a>
+            <a href="{{ route('contact.show') }}" class="text-dark text-decoration-none">Contact</a>
             <a href="{{ route('support.show') }}" class="text-dark text-decoration-none">Support</a>
         </div>
     </nav>
