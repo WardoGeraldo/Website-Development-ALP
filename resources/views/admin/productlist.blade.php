@@ -203,52 +203,6 @@
             cursor: pointer;
         }
 
-        /* Badges */
-        .badge {
-            font-size: 0.75rem;
-            font-weight: 600;
-            padding: 4px 9px;
-            margin-right: 5px;
-            border-radius: 12px;
-            user-select: none;
-            text-transform: capitalize;
-        }
-
-        .badge-pending {
-            background-color: #fbbf24;
-            color: #78350f;
-        }
-
-        .badge-active {
-            background-color: #4ade80;
-            color: #166534;
-        }
-
-        .badge-inactive {
-            background-color: #cbd5e1;
-            color: #475569;
-        }
-
-        .badge-create {
-            background-color: #60a5fa;
-            color: white;
-        }
-
-        .badge-read {
-            background-color: #93c5fd;
-            color: #1e40af;
-        }
-
-        .badge-edit {
-            background-color: #f87171;
-            color: white;
-        }
-
-        .badge-delete {
-            background-color: #ef4444;
-            color: white;
-        }
-
         /* Action icons */
         .action-icon {
             color: #6b7280;
@@ -287,8 +241,6 @@
         }
     </style>
 
-
-
     <div class="product-list-container">
         <div class="top-bar">
             <button class="btn-add" onclick="location.href='{{ route('admin.product.create') }}'">+ Add</button>
@@ -305,7 +257,6 @@
                     <th>Name</th>
                     <th>Price</th>
                     <th>Status</th>
-                    <th>Permissions</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -324,29 +275,17 @@
                             </div>
                         </td>
                         <td>
-                            @if (isset($product['permissions']))
-                                @foreach ($product['permissions'] as $perm)
-                                    @php
-                                        $permClass = match (strtolower($perm)) {
-                                            'pending' => 'badge-pending',
-                                            'active' => 'badge-active',
-                                            'inactive' => 'badge-inactive',
-                                            'create' => 'badge-create',
-                                            'read' => 'badge-read',
-                                            'edit' => 'badge-edit',
-                                            'delete' => 'badge-delete',
-                                            default => 'badge-secondary',
-                                        };
-                                    @endphp
-                                    <span class="badge {{ $permClass }}">{{ $perm }}</span>
-                                @endforeach
-                            @endif
-                        </td>
-                        <td>
                             <i class="bi bi-pencil action-icon" title="Edit"
                                 onclick="location.href='{{ route('admin.product.edit', ['id' => $product['id']]) }}'"></i>
-                            <i class="bi bi-trash action-icon" title="Delete"
-                                onclick="if(confirm('Are you sure you want to delete?')) location.href='{{ route('admin.product.delete', ['id' => $product['id']]) }}'"></i>
+                            <form action="{{ route('admin.product.delete', ['id' => $product['id']]) }}" method="POST"
+                                style="display:inline;">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" onclick="return confirm('Are you sure you want to delete?')"
+                                    class="btn btn-link p-0 m-0">
+                                    <i class="bi bi-trash action-icon" title="Delete"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 @endforeach
@@ -355,15 +294,6 @@
 
         <div class="table-footer">
             <div>Showing {{ count($products) }} entries</div>
-            <div>
-                <!-- Pagination placeholder -->
-                <button class="btn btn-sm btn-light">1</button>
-                <button class="btn btn-sm btn-light">2</button>
-                <button class="btn btn-sm btn-light">3</button>
-                <button class="btn btn-sm btn-light">4</button>
-                <button class="btn btn-sm btn-light">11</button>
-                <button class="btn btn-sm btn-light">12</button>
-            </div>
         </div>
     </div>
 

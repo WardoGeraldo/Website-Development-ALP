@@ -384,9 +384,16 @@ class AdminController extends Controller
 
     public function destroy($id)
 {
-    $product = Product::findOrFail($id);
-    $product->delete();
+    if (!isset($this->products[$id])) {
+        abort(404, 'Product not found');
+    }
+
+    // Simulate deletion by unsetting the product from the dummy array
+    unset($this->products[$id]);
+
+    // Since this is dummy data, the deletion won't persist unless you handle persistence differently
 
     return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
 }
+
 }
