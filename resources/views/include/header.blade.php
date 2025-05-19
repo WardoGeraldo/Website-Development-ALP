@@ -67,6 +67,7 @@
 @elseif(session('role') == 'admin')
     <nav class="bg-white border-bottom">
         <div class="container py-2 d-flex gap-4 fw-semibold small">
+            <a href="{{ route('admin.dash') }}" class="text-dark text-decoration-none">Dashboard</a>
             <a href="{{ route('admin.dashboard') }}" class="text-dark text-decoration-none">Products List</a>
             <a href="{{ route('admin.userlist') }}" class="text-dark text-decoration-none">Users List</a>
             <a href="{{ route('admin.sales.index') }}" class="text-dark text-decoration-none">Sales List</a>

@@ -124,3 +124,6 @@ Route::get('/admin/promo/{id}/edit', [AdminController::class, 'showPromoDetails'
 
 // Route for promo update
 Route::put('/admin/promo/{id}', [AdminController::class, 'updatePromo'])->name('admin.promo.update');
+
+// Route for Admin Dashboard
+Route::get('/admin/dashboard', [AdminController::class, 'dashboardView'])->name('admin.dash');

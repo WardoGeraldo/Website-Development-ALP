@@ -414,4 +414,40 @@ class AdminController extends Controller
 
         return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
     }
+
+   public function dashboardView()
+{
+    // Dummy data, ganti sesuai logikamu nanti
+    $totalProducts = 100;
+    $totalUsers = 50;
+    $totalSales = 120000000;
+    $totalPromos = 4;
+
+    $todayRevenue = 1250000;
+    $weekRevenue = 8400000;
+
+    $topProducts = [
+        ['name' => 'Oversized Tee', 'sold' => 40, 'stock' => ['s'=>10, 'm'=>20, 'l'=>5, 'xxl'=>5]],
+        ['name' => 'Minimalist Hoodie', 'sold' => 32, 'stock' => ['s'=>5, 'm'=>15, 'l'=>8, 'xxl'=>4]],
+    ];
+
+    $topCustomers = [
+        ['name' => 'Nadya Zahra', 'email' => 'nadya@example.com', 'orders' => 8, 'totalSpent' => 1250000],
+        ['name' => 'Dewi Lestari', 'email' => 'dewi@example.com', 'orders' => 7, 'totalSpent' => 900000],
+        ['name' => 'Intan Maharani', 'email' => 'dewi@example.com', 'orders' => 8,'totalSpent' => 880000],
+    ];
+
+    $salesMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
+    $salesData = [2000000, 2500000, 1800000, 3000000, 3500000];
+
+    $categoryLabels = ['Top', 'Bottom', 'Accessories'];
+    $categoryData = [40, 30, 30];
+
+    return view('admin.dashboard', compact(
+        'totalProducts', 'totalUsers', 'totalSales', 'totalPromos',
+        'todayRevenue', 'weekRevenue', 'topProducts', 'topCustomers',
+        'salesMonths', 'salesData', 'categoryLabels', 'categoryData'
+    ));
+}
+
 }
