@@ -74,38 +74,48 @@
 </script>
 
 <body>
-    <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    @if(!isset($__env->getSections()['hide_header_footer']))
+        <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+    @endif
 
-    @include('include.header')
+    @if(!isset($__env->getSections()['hide_header_footer']))
+        @include('include.header')
+    @endif
+
     <div class="container-fluid" style="min-width:100%; margin:0 auto;">
         @yield('content')
         @yield('scripts')
     </div>
-    @include('include.footer')
+
+    @if(!isset($__env->getSections()['hide_header_footer']))
+        @include('include.footer')
+    @endif
 
     <!-- Place the dark mode toggle script here -->
     <script>
       const toggleButton = document.querySelector('.dark-mode-toggle');
-
-      // Load mode from localStorage on page load
-      if(localStorage.getItem('darkMode') === 'enabled'){
-          document.body.classList.add('dark-mode');
-          toggleButton.textContent = '☀️'; // sun icon
-      }
-
-      toggleButton.addEventListener('click', () => {
-          document.body.classList.toggle('dark-mode');
-
-          if(document.body.classList.contains('dark-mode')){
-              localStorage.setItem('darkMode', 'enabled');
-              toggleButton.textContent = '☀️';
-          } else {
-              localStorage.setItem('darkMode', 'disabled');
-              toggleButton.textContent = '🌙';
+      
+      // Only run this script if the button exists
+      if(toggleButton) {
+          // Load mode from localStorage on page load
+          if(localStorage.getItem('darkMode') === 'enabled'){
+              document.body.classList.add('dark-mode');
+              toggleButton.textContent = '☀️'; // sun icon
           }
-      });
+
+          toggleButton.addEventListener('click', () => {
+              document.body.classList.toggle('dark-mode');
+
+              if(document.body.classList.contains('dark-mode')){
+                  localStorage.setItem('darkMode', 'enabled');
+                  toggleButton.textContent = '☀️';
+              } else {
+                  localStorage.setItem('darkMode', 'disabled');
+                  toggleButton.textContent = '🌙';
+              }
+          });
+      }
     </script>
 </body>
-
 
 </html>
