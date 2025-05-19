@@ -1,6 +1,4 @@
-
 @extends('base.base')
-
 @section('content')
     <link
         href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
@@ -284,7 +282,7 @@
         }
 
         .carousel-image.active {
-            opacity: 1;
+            opacity: 0;
             transform: scale(1);
         }
 
@@ -877,7 +875,7 @@
                     <div class="form-group password-group" id="passwordContainer">
                         <input type="password" id="passwordInput" name="password"
                             class="form-input @error('password') is-invalid @enderror" placeholder=" " required>
-                        <label for="passwordInput">Password</label>
+                        {{-- <label for="passwordInput">Password</label> --}}
                         <div class="form-validation-icon valid" id="passwordValidIcon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
