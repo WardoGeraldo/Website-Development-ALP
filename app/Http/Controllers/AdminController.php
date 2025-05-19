@@ -42,13 +42,14 @@ class AdminController extends Controller
     private function getDummyProducts()
     {
         return [
-             1 => [
+            1 => [
                 'id' => 1,
                 'name' => 'Oversized Tee',
                 'price' => 299000,
                 'description' => 'A stylish oversized tee for casual wear.',
                 'category' => 'top',
                 'image' => $this->getFirstImage(1),
+                'stock' => ['s' => 10, 'm' => 15, 'l' => 7, 'xxl' => 3],  // <- Add this
             ],
             2 => [
                 'id' => 2,
@@ -57,6 +58,7 @@ class AdminController extends Controller
                 'description' => 'Comfortable and sleek hoodie for a modern look.',
                 'category' => 'top',
                 'image' => $this->getFirstImage(2),
+                'stock' => ['s' => 5, 'm' => 8, 'l' => 12, 'xxl' => 2],
             ],
             3 => [
                 'id' => 3,
@@ -65,6 +67,8 @@ class AdminController extends Controller
                 'description' => 'Perfect for a smart casual look.',
                 'category' => 'bottom',
                 'image' => $this->getFirstImage(3),
+                'stock' => ['s' => 5, 'm' => 8, 'l' => 12, 'xxl' => 2],
+
             ],
             4 => [
                 'id' => 4,
@@ -73,6 +77,8 @@ class AdminController extends Controller
                 'description' => 'A simple, yet stylish baggy jeans.',
                 'category' => 'bottom',
                 'image' => $this->getFirstImage(4),
+                'stock' => ['s' => 5, 'm' => 8, 'l' => 12, 'xxl' => 2],
+
             ],
             5 => [
                 'id' => 5,
@@ -81,6 +87,8 @@ class AdminController extends Controller
                 'description' => 'A fire, and stylish cap to extravaganze your outfit.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(5),
+                'stock' => ['s' => 5, 'm' => 8, 'l' => 12, 'xxl' => 2],
+
             ],
             6 => [
                 'id' => 6,
@@ -89,6 +97,8 @@ class AdminController extends Controller
                 'description' => 'A simple, yet stylish cap to complement your outfit.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(6),
+                'stock' => ['s' => 5, 'm' => 8, 'l' => 12, 'xxl' => 2],
+
             ],
             7 => [
                 'id' => 7,
@@ -97,6 +107,8 @@ class AdminController extends Controller
                 'description' => 'A simple, yet real leathered bag with a sunkissed flavor color.',
                 'category' => 'bag',
                 'image' => $this->getFirstImage(7),
+                'stock' => ['s' => 5, 'm' => 8, 'l' => 12, 'xxl' => 2],
+
             ],
         ];
     }
@@ -216,31 +228,38 @@ class AdminController extends Controller
     // Method to update product data
     public function update(Request $request, $id)
     {
-        // Validate inputs
         $validated = $request->validate([
             'name' => 'required|string',
             'price' => 'required|numeric',
             'category' => 'required|string',
             'description' => 'nullable|string',
+            'stock' => 'required|array',
+            'stock.s' => 'required|integer|min:0',
+            'stock.m' => 'required|integer|min:0',
+            'stock.l' => 'required|integer|min:0',
+            'stock.xxl' => 'required|integer|min:0',
         ]);
 
-        // Update product data
         if (isset($this->products[$id])) {
             $this->products[$id]['name'] = $request->name;
             $this->products[$id]['price'] = $request->price;
             $this->products[$id]['category'] = $request->category;
             $this->products[$id]['description'] = $request->description;
+            $this->products[$id]['stock'] = $request->stock;
 
-            // Optionally handle image update as well
             if ($request->hasFile('image')) {
                 $this->products[$id]['image'] = $this->storeImage($request->file('image'), $id);
             }
+
+            // Save updated products back to session
+            session(['products' => $this->products]);
 
             return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
         }
 
         return redirect()->route('admin.dashboard')->with('error', 'Product not found');
     }
+
 
 
     // Helper method untuk ambil gambar pertama dari folder produk
@@ -383,17 +402,16 @@ class AdminController extends Controller
     }
 
     public function destroy($id)
-{
-    if (!isset($this->products[$id])) {
-        abort(404, 'Product not found');
+    {
+        if (!isset($this->products[$id])) {
+            abort(404, 'Product not found');
+        }
+
+        // Simulate deletion by unsetting the product from the dummy array
+        unset($this->products[$id]);
+
+        // Since this is dummy data, the deletion won't persist unless you handle persistence differently
+
+        return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
     }
-
-    // Simulate deletion by unsetting the product from the dummy array
-    unset($this->products[$id]);
-
-    // Since this is dummy data, the deletion won't persist unless you handle persistence differently
-
-    return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
-}
-
 }

@@ -256,7 +256,7 @@
                     <th>Image</th>
                     <th>Name</th>
                     <th>Price</th>
-                    <th>Status</th>
+                    <th>Total Stock</th>
                     <th>Action</th>
                 </tr>
             </thead>
@@ -269,10 +269,13 @@
                         <td>{{ $product['name'] }}</td>
                         <td>{{ number_format($product['price'], 0, ',', '.') }} </td>
                         <td>
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="statusSwitch{{ $product['id'] }}"
-                                    @if (isset($product['status']) && $product['status']) checked @endif>
-                            </div>
+                            @php
+                                $totalStock = 0;
+                                if (isset($product['stock'])) {
+                                    $totalStock = array_sum($product['stock']);
+                                }
+                            @endphp
+                            {{ $totalStock }}
                         </td>
                         <td>
                             <i class="bi bi-pencil action-icon" title="Edit"

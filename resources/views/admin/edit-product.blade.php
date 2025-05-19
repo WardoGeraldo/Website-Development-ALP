@@ -172,6 +172,21 @@
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4">{{ $product['description'] ?? '' }}</textarea>
 
+            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+                @php
+                    $sizes = ['s', 'm', 'l', 'xxl'];
+                @endphp
+
+                @foreach ($sizes as $size)
+                    <div style="flex: 1;">
+                        <label for="stock_{{ $size }}"
+                            style="text-transform: uppercase;">{{ $size }}</label>
+                        <input type="number" id="stock_{{ $size }}" name="stock[{{ $size }}]"
+                            min="0" value="{{ $product['stock'][$size] ?? 0 }}" required>
+                    </div>
+                @endforeach
+            </div> <!-- THIS WAS MISSING -->
+
 
             <button type="submit" class="btn-save">Save Changes</button>
         </form>
