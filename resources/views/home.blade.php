@@ -5,62 +5,24 @@
 <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 
 <style>
-    /* General Animation */
-    @keyframes slideInRight {
-        from {
-            opacity: 0;
-            transform: translateX(150px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
+    body {
+        background-color: #fff;
+        color: #000;
+        transition: background-color 0.5s ease, color 0.5s ease;
     }
 
-    @keyframes slideOutRight {
-        from {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(150px);
-        }
+    body.dark-mode {
+        background-color: #121212;
+        color: #f5f5f5;
     }
 
-    @keyframes slideInLeft {
-        from {
-            opacity: 0;
-            transform: translateX(-150px);
-        }
-        to {
-            opacity: 1;
-            transform: translateX(0);
-        }
-    }
 
-    @keyframes slideOutLeft {
-        from {
-            opacity: 1;
-            transform: translateX(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateX(-150px);
-        }
-    }
-
-    @keyframes zoomInOut {
-        from {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.1);
-        }
-        to {
-            transform: scale(1);
-        }
-    }
+    /* === ANIMASI === */
+    @keyframes slideInRight { from { opacity: 0; transform: translateX(150px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideOutRight { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(150px); } }
+    @keyframes slideInLeft { from { opacity: 0; transform: translateX(-150px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes slideOutLeft { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-150px); } }
+    @keyframes zoomInOut { from { transform: scale(1); } 50% { transform: scale(1.1); } to { transform: scale(1); } }
 
     .fade-in-out {
         animation: slideOutRight 0.8s ease-out, slideInRight 1.2s ease-in forwards;
@@ -70,16 +32,21 @@
         animation: slideOutLeft 0.8s ease-out, slideInLeft 1.2s ease-in forwards;
     }
 
+    /* === HERO SECTION === */
     .hero-section {
         position: relative;
         height: 100vh;
         display: flex;
         align-items: center;
         justify-content: center;
-        color: #fff;
         text-align: center;
         overflow: hidden;
         background: #000;
+        color: #fff;
+    }
+
+    body.dark-mode .hero-section {
+        background: #111;
     }
 
     .hero-video {
@@ -104,7 +71,6 @@
     .hero-text {
         z-index: 2;
         max-width: 700px;
-        animation: fadeInUp 1.5s ease-out;
     }
 
     .hero-text h1 {
@@ -140,9 +106,22 @@
         transform: scale(1.1);
     }
 
-    /* Card Hover Effects */
+    body.dark-mode .hero-text .btn {
+        background-color: #f5f5f5;
+        color: #121212;
+    }
+
+    body.dark-mode .hero-text .btn:hover {
+        background-color: #e76767;
+        color: #fff;
+    }
+
+    /* === CARD === */
     .card {
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background: #fff;
+        color: #000;
+        border-radius: 1rem;
     }
 
     .card:hover {
@@ -150,11 +129,21 @@
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.2);
     }
 
-    /* Card Fade-in Effects */
+    body.dark-mode .card {
+        background: #1e1e1e;
+        color: #f5f5f5;
+        box-shadow: 0 30px 60px rgba(255, 255, 255, 0.1);
+    }
+
     .card-body {
         animation: fade-in-out 1s ease-in-out;
     }
 
+    body.dark-mode .text-muted {
+        color: #ccc !important;
+    }
+
+    /* === SECTION TITLE === */
     .section-title {
         font-size: 3rem;
         font-weight: 800;
@@ -167,6 +156,30 @@
         color: #666;
     }
 
+    body.dark-mode .section-subtitle {
+        color: #aaa;
+    }
+
+    body.dark-mode .text-muted {
+        color: #aaa;
+    }
+
+    body.dark-mode .bg-light {
+    background-color: #000 !important;
+    color: #fff !important;
+    }
+
+    body.dark-mode .bg-light .text-muted {
+        color: #ccc !important;
+    }
+
+    body.dark-mode .bg-light h3,
+    body.dark-mode .bg-light p {
+        color: #fff !important;
+    }
+
+
+    /* === PROMO BANNER === */
     .promo-banner {
         position: relative;
         overflow: hidden;
@@ -213,7 +226,7 @@
         text-transform: uppercase;
     }
 
-    /* Hover Effect for Product Images */
+    /* === IMAGE HOVER === */
     .card-img-top {
         transition: transform 0.3s ease;
     }
@@ -222,40 +235,34 @@
         transform: scale(1.05);
     }
 
-    /* Running Logo Animation */
+    /* === LOGO MARQUEE === */
     .logo-marquee {
-        position: fixed; /* Fixed at the bottom */
+        position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
-        background-color: #000; /* Background color */
+        background-color: #000;
         padding: 10px 0;
         overflow: hidden;
         z-index: 9999;
     }
 
-    /* Wrapper for the logos */
     .logo-container {
         display: flex;
-        animation: scroll-left 20s linear infinite; /* Adjust speed as needed */
+        animation: scroll-left 20s linear infinite;
     }
 
-    /* Styling for logos */
     .logo-container img {
-        height: 50px; /* Adjust size of logos */
-        margin-right: 50px; /* Adjust space between logos */
+        height: 50px;
+        margin-right: 50px;
     }
 
-    /* Keyframe for logo scrolling */
     @keyframes scroll-left {
-        0% {
-            transform: translateX(100%);
-        }
-        100% {
-            transform: translateX(-100%);
-        }
+        0% { transform: translateX(100%); }
+        100% { transform: translateX(-100%); }
     }
 </style>
+
 
 <!-- Hero Section -->
 <div class="hero-section">
