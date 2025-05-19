@@ -50,6 +50,7 @@ Route::get('/contact', [ContactController::class, 'index'])->name('contact.show'
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
 
+Route::get('/size-chart', function () {return view('size-chart');})->name('size.chart');
 
 //  Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 

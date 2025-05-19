@@ -58,6 +58,7 @@
         <div class="container py-2 d-flex gap-4 fw-semibold small">
             <a href="{{ route('home') }}" class="text-dark text-decoration-none">Home</a>
             <a href="{{ route('store.show') }}" class="text-dark text-decoration-none">Store</a>
+            <a href="{{ route('size.chart') }}" class="text-dark text-decoration-none">Size Chart</a>
             <a href="{{ route('order.history') }}" class="text-dark text-decoration-none">My Orders</a>
             <a href="{{ route('contact.show') }}" class="text-dark text-decoration-none">Contact</a>
             <a href="{{ route('support.show') }}" class="text-dark text-decoration-none">Support</a>

@@ -38,6 +38,7 @@ class ProductController extends Controller
                 'description' => 'A stylish oversized tee for casual wear.',
                 'category' => 'top',
                 'image' => $this->getFirstImage(1),
+                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
             ],
             2 => [
                 'id' => 2,
@@ -46,6 +47,7 @@ class ProductController extends Controller
                 'description' => 'Comfortable and sleek hoodie for a modern look.',
                 'category' => 'top',
                 'image' => $this->getFirstImage(2),
+                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
             ],
             3 => [
                 'id' => 3,
@@ -54,6 +56,7 @@ class ProductController extends Controller
                 'description' => 'Perfect for a smart casual look.',
                 'category' => 'bottom',
                 'image' => $this->getFirstImage(3),
+                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
             ],
             4 => [
                 'id' => 4,
@@ -62,6 +65,7 @@ class ProductController extends Controller
                 'description' => 'A simple, yet stylish baggy jeans.',
                 'category' => 'bottom',
                 'image' => $this->getFirstImage(4),
+                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
             ],
             5 => [
                 'id' => 5,
@@ -70,6 +74,7 @@ class ProductController extends Controller
                 'description' => 'A fire, and stylish cap to extravaganze your outfit.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(5),
+                'sizes' => ['One Size Fits All'],
             ],
             6 => [
                 'id' => 6,
@@ -78,6 +83,7 @@ class ProductController extends Controller
                 'description' => 'A simple, yet stylish cap to complement your outfit.',
                 'category' => 'accessories',
                 'image' => $this->getFirstImage(6),
+                'sizes' => ['One Size Fits All'],
             ],
             7 => [
                 'id' => 7,
@@ -86,6 +92,7 @@ class ProductController extends Controller
                 'description' => 'A simple, yet real leathered bag with a sunkissed flavor color.',
                 'category' => 'bag',
                 'image' => $this->getFirstImage(7),
+                'sizes' => ['One Size'],
             ],
         ];
     }

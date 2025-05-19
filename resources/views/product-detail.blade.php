@@ -66,6 +66,18 @@
     .product-info button:hover {
         background-color: #333;
     }
+    .size-chart-link {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 14px;
+        color: #333;
+        text-decoration: underline;
+        transition: color 0.3s ease;
+    }
+
+    .size-chart-link:hover {
+        color: #000;
+    }
 
     .wishlist-button {
         display: inline-block;
@@ -118,19 +130,27 @@
             <p class="price">Rp{{ number_format($product['price'], 0, ',', '.') }}</p>
 
             <!-- Size and Color Selection -->
-            <select>
-                <option value="size">Select Size</option>
-                <option value="s">Small</option>
-                <option value="m">Medium</option>
-                <option value="l">Large</option>
-            </select>
+            <!-- Size Selection -->
+            @if (!empty($product['sizes']))
+                <div>
+                    <select>
+                        <option value="">Select Size</option>
+                        @foreach ($product['sizes'] as $size)
+                            <option value="{{ strtolower($size) }}">{{ $size }}</option>
+                        @endforeach
+                    </select>
+                    <a href="{{ route('size.chart') }}" target="_blank" class="size-chart-link">🔍 View Size Chart</a>
+                </div>
+            @endif
 
-            <select>
+
+
+            {{-- <select>
                 <option value="color">Select Color</option>
                 <option value="black">Black</option>
                 <option value="white">White</option>
                 <option value="red">Red</option>
-            </select>
+            </select> --}}
 
             <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" placeholder="Quantity"
                 oninput="this.value = Math.min(this.value, 100)"
