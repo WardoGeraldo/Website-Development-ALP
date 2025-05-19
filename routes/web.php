@@ -81,8 +81,10 @@ Route::get('/admin/product/{id}/edit', [AdminController::class, 'edit'])->name('
 // Route to handle the form submission (update product)
 Route::post('/admin/product/{id}', [AdminController::class, 'update'])->name('admin.product.update');
 
+
+
 // Show the form for adding a new product
-Route::get('/admin/product/create', [AdminController::class, 'create'])->name('admin.product.create');
+Route::get('/admin/product/create', [AdminController::class, 'create'])->name('admin.poduct.create');
 
 // Handle the form submission for adding a new product
 Route::post('/admin/product', [AdminController::class, 'store'])->name('admin.product.store');
