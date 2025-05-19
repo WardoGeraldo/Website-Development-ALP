@@ -291,7 +291,7 @@
 
     <div class="product-list-container">
         <div class="top-bar">
-            <button class="btn-add" onclick="location.href='{{ route('admin.product.create') }}'">+ Add</button>
+            <button class="btn-add" onclick="location.href='{{ route('admin.poduct.create') }}'">+ Add</button>
             <div class="search-container ms-auto">
                 <input type="search" placeholder="Search" />
             </div>
