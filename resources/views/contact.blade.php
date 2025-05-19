@@ -8,6 +8,17 @@
 
 <!-- Custom styles -->
 <style>
+
+    .footer-section {
+        padding: 40px 0;
+        background-color: var(--light-gray);
+        margin-top: 40px;
+    }
+    
+    .text-accent {
+        color: var(--accent);
+    }
+
     :root {
         --primary: #ffffff;
         --secondary: #000000;
@@ -28,6 +39,7 @@
         font-family: 'Montserrat', sans-serif;
         overflow-x: hidden;
         cursor: default;
+}
     }
 
     /* Cursor Effects */
@@ -88,7 +100,7 @@
         width: 100%;
         height: 100%;
         background: var(--primary);
-        animation: reveal 2s var(--transition) forwards;
+        animation: reveal 0.34s var(--transition) forwards;
     }
 
     .preloader-text .accent {
@@ -420,7 +432,7 @@
     
     /* Map Section */
     .map-container {
-        height: 530px;
+        height: 540px;
         border-radius: 8px;
         overflow: hidden;
         box-shadow: 0 5px 15px rgba(0,0,0,0.08);
@@ -736,9 +748,6 @@
     </div>
 </div>
 
-<!-- Custom cursor -->
-<div class="cursor"></div>
-<div class="cursor-follower"></div>
 
 <div class="landing-wrapper" data-scroll-container>
     <div class="pattern-overlay"></div>
@@ -854,6 +863,16 @@
             </div>
         </div>
     </section>
+    <footer class="footer-section" data-scroll-section>
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="mb-2">© 2025 VeraVia. All Rights Reserved.</p>
+                <p class="small text-muted">Created with <i class="text-accent">♥</i> in Surabaya</p>
+            </div>
+        </div>
+    </div>
+</footer>
 </div>
 
 <!-- JS Libraries -->
