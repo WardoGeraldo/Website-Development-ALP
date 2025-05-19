@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\SalesController;
 use App\Http\Controllers\StoreController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
@@ -43,6 +44,12 @@ Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.s
 
 // Support
 Route::get('/support', [SupportController::class, 'show'])->name('support.show');
+
+// Contact
+Route::get('/contact', [ContactController::class, 'index'])->name('contact.show');
+Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
+
 
 //  Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
 

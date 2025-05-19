@@ -21,7 +21,7 @@
         --text-accent: #D4AF37;
         --transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    
+
     body, html {
         background-color: var(--primary);
         color: var(--text-primary);
@@ -29,7 +29,7 @@
         overflow-x: hidden;
         cursor: default;
     }
-    
+
     /* Cursor Effects */
     .cursor-follower {
         position: fixed;
@@ -43,7 +43,7 @@
         transform: translate(-50%, -50%);
         mix-blend-mode: difference;
     }
-    
+
     .cursor {
         position: fixed;
         width: 8px;
@@ -54,7 +54,7 @@
         z-index: 9999;
         transform: translate(-50%, -50%);
     }
-    
+
     /* Preloader */
     .preloader {
         position: fixed;
@@ -68,7 +68,7 @@
         align-items: center;
         z-index: 9999;
     }
-    
+
     .preloader-text {
         font-family: 'Cormorant Garamond', serif;
         font-size: 6vw;
@@ -79,7 +79,7 @@
         letter-spacing: 8px;
         position: relative;
     }
-    
+
     .preloader-text::after {
         content: '';
         position: absolute;
@@ -90,23 +90,23 @@
         background: var(--primary);
         animation: reveal 2s var(--transition) forwards;
     }
-    
+
     .preloader-text .accent {
         color: var(--accent);
     }
-    
+
     @keyframes reveal {
         0% { width: 100%; }
         100% { width: 0%; }
     }
-    
+
     /* Main content */
     .landing-wrapper {
         position: relative;
         padding: 0;
         min-height: 100vh;
     }
-    
+
     .pattern-overlay {
         position: fixed;
         top: 0;
@@ -118,10 +118,10 @@
         z-index: 1;
         opacity: 1;
     }
-    
+
     /* Hero Section */
     .hero-section {
-        height: 70vh;
+        height: 50vh;
         width: 100%;
         display: flex;
         align-items: center;
@@ -129,9 +129,8 @@
         position: relative;
         overflow: hidden;
         background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.6)), url('/api/placeholder/1600/900') center/cover no-repeat;
-        /* padding-top is now handled in the next <style> block */
     }
-    
+
     .hero-bg-lines {
         position: absolute;
         top: 0;
@@ -140,14 +139,14 @@
         height: 100%;
         z-index: 1;
     }
-    
+
     .hero-line {
         position: absolute;
         height: 100%;
         width: 1px;
         background: linear-gradient(to bottom, transparent, rgba(212,175,55,0.2), transparent);
     }
-    
+
     .hero-content {
         position: relative;
         z-index: 2;
@@ -158,7 +157,7 @@
         animation: fadeInUp 0.8s var(--transition) forwards;
         animation-delay: 2.2s;
     }
-    
+
     .hero-title {
         font-family: 'Cormorant Garamond', serif;
         font-size: 5rem;
@@ -168,7 +167,7 @@
         color: var(--primary);
         text-shadow: 0 0 20px rgba(0,0,0,0.5);
     }
-    
+
     .hero-subtitle {
         font-size: 1.2rem;
         font-weight: 300;
@@ -176,25 +175,25 @@
         letter-spacing: 3px;
         text-transform: uppercase;
     }
-    
+
     /* Main Content Section */
     .content-section {
-        padding: 7rem 0;
+        padding: 3rem 0; /* ↓ from 7rem */
         position: relative;
         z-index: 2;
         background-color: var(--primary);
     }
-    
+
     .section-title {
         font-family: 'Cormorant Garamond', serif;
         font-size: 2.5rem;
-        margin-bottom: 2rem;
+        margin-bottom: 1.25rem; /* tighter */
         position: relative;
         display: inline-block;
         color: var(--secondary);
         padding-bottom: 0.5rem;
     }
-    
+
     .section-title::after {
         content: '';
         position: absolute;
@@ -204,117 +203,110 @@
         height: 2px;
         background: var(--accent);
     }
-    
+
     .section-subtitle {
         font-family: 'Montserrat', sans-serif;
         font-size: 0.9rem;
         letter-spacing: 3px;
         text-transform: uppercase;
         color: var(--accent);
-        margin-bottom: 1.5rem;
+        margin-bottom: 0.5rem; /* tighter */
     }
-    
-    /* FAQ Section */
-    .faq-container {
-        position: relative;
+
+    /* Contact Info Boxes */
+    .contact-info-wrapper {
         opacity: 0;
         transform: translateY(30px);
         animation: fadeInUp 0.8s var(--transition) forwards;
         animation-delay: 2.4s;
+        gap:1.5rem 0; /* reduce vertical gap */
     }
-    
-    .faq-item {
-        margin-bottom: 1.5rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+    .contact-info-box {
         background-color: var(--light-gray);
         border-radius: 5px;
-        overflow: hidden;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        padding: 2rem; /* ↓ slightly */
+        height: 100%;
         transition: all 0.3s ease;
-    }
-    
-    .faq-item:hover {
-        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-        transform: translateY(-2px);
-    }
-    
-    .faq-question {
-        font-weight: 500;
-        font-size: 1.1rem;
-        padding: 1.2rem 1.5rem;
+        border-bottom: 3px solid transparent;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         position: relative;
-        cursor: pointer;
+        overflow: hidden;
+    }
+    
+    .contact-info-box:hover {
+        transform: translateY(-5px);
+        border-bottom: 3px solid var(--accent);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    }
+    
+    .contact-info-box::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(212,175,55,0.1) 0%, rgba(212,175,55,0) 70%);
+        border-radius: 50%;
+    }
+    
+    .info-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background-color: white;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        transition: all 0.3s;
+        justify-content: center;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .info-icon svg {
+        width: 24px;
+        height: 24px;
+        color: var(--accent);
+    }
+    
+    .info-title {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
         color: var(--text-primary);
     }
     
-    .faq-question:hover {
-        color: var(--accent-dark);
-    }
-    
-    .faq-toggle {
-        width: 24px;
-        height: 24px;
-        position: relative;
-        transition: all 0.3s;
-    }
-    
-    .faq-toggle::before,
-    .faq-toggle::after {
-        content: '';
-        position: absolute;
-        background: var(--accent);
-        transition: all 0.3s;
-    }
-    
-    .faq-toggle::before {
-        width: 100%;
-        height: 2px;
-        top: 50%;
-        left: 0;
-        transform: translateY(-50%);
-    }
-    
-    .faq-toggle::after {
-        width: 2px;
-        height: 100%;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-    
-    .faq-item.active {
-        background-color: white;
-        border-left: 3px solid var(--accent);
-    }
-    
-    .faq-item.active .faq-question {
-        color: var(--accent-dark);
-    }
-    
-    .faq-item.active .faq-toggle::after {
-        transform: translateX(-50%) rotate(90deg);
-        opacity: 0;
-    }
-    
-    .faq-answer {
-        max-height: 0;
-        overflow: hidden;
-        transition: all 0.5s var(--transition);
-        padding: 0 1.5rem;
+    .info-text {
         color: var(--text-secondary);
         font-size: 1rem;
-        opacity: 0;
         line-height: 1.6;
     }
     
-    .faq-item.active .faq-answer {
-        max-height: 300px;
-        padding: 0 1.5rem 1.5rem;
-        opacity: 1;
+    .info-link {
+        color: var(--accent-dark);
+        text-decoration: none;
+        transition: all 0.3s;
+        position: relative;
+    }
+    
+    .info-link::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 1px;
+        background-color: var(--accent);
+        transition: all 0.3s ease;
+    }
+    
+    .info-link:hover {
+        color: var(--accent);
+    }
+    
+    .info-link:hover::after {
+        width: 100%;
     }
     
     /* Contact Form */
@@ -329,6 +321,7 @@
         transform: translateY(30px);
         animation: fadeInUp 0.8s var(--transition) forwards;
         animation-delay: 2.6s;
+        margin-top: 1rem;
     }
     
     .form-container::before {
@@ -423,6 +416,57 @@
     
     .btn-submit:hover::before {
         left: 0;
+    }
+    
+    /* Map Section */
+    .map-container {
+        height: 530px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        border: 1px solid var(--medium-gray);
+        position: relative;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s var(--transition) forwards;
+        animation-delay: 2.8s;
+    }
+    
+    .map-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0,0,0,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1;
+        transition: all 0.3s;
+    }
+    
+    .map-overlay-text {
+        background-color: white;
+        color: var(--text-primary);
+        padding: 1rem 2rem;
+        border-radius: 4px;
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    
+    .map-overlay-text:hover {
+        background-color: var(--accent);
+        color: white;
+    }
+    
+    .map-overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
     }
     
     /* Success Popup */
@@ -616,6 +660,10 @@
         .form-container {
             padding: 2.5rem;
         }
+        
+        .contact-info-box {
+            margin-bottom: 2rem;
+        }
     }
     
     @media (max-width: 768px) {
@@ -623,12 +671,12 @@
             font-size: 3rem;
         }
         
-        .faq-question {
+        .hero-subtitle {
             font-size: 1rem;
         }
         
-        .hero-subtitle {
-            font-size: 1rem;
+        .map-container {
+            margin-top: 3rem;
         }
     }
     
@@ -661,14 +709,12 @@
 
 <!-- ►►► fixed-header spacing ◄◄◄ -->
 <style>
-    /* Change these values if your navbar height changes */
-    :root{ --header-h:72px; }                    /* desktop/tablet */
-    @media (max-width:575.98px){
-        :root{ --header-h:56px; }                /* mobile */
-    }
+    :root{ --header-h:72px; }
+    @media (max-width:575.98px){ :root{ --header-h:56px; } }
     .hero-section{ padding-top: calc(var(--header-h) + 40px); }
 </style>
 <!-- end fixed-header spacing -->
+
 
 <!-- Preloader -->
 <div class="preloader">
@@ -696,191 +742,169 @@
 
 <div class="landing-wrapper" data-scroll-container>
     <div class="pattern-overlay"></div>
-    
+
     <div class="gold-accent gold-accent-1"></div>
     <div class="gold-accent gold-accent-2"></div>
-    
+
     <!-- Main Content -->
     <section class="content-section" data-scroll-section>
         <div class="container">
-            <div class="row g-5">
-                <!-- FAQ Section -->
-                <div class="col-lg-6">
-                    <p class="section-subtitle">Jawaban Untuk Anda</p>
-                    <h2 class="section-title">Pertanyaan yang Sering Diajukan</h2>
-                    
-                    <div class="faq-container">
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Bagaimana cara melacak pesanan saya?</span>
-                                <div class="faq-toggle"></div>
-                            </div>
-                            <div class="faq-answer">
-                                Setelah pembayaran berhasil, Anda akan menerima email dengan nomor pelacakan. Dengan nomor tersebut, Anda dapat memeriksa status pengiriman pada halaman "Lacak Pesanan" di website kami atau langsung melalui website jasa pengiriman yang kami gunakan.
-                            </div>
+            <!-- Contact Info Section -->
+            <div class="row g-4 contact-info-wrapper">
+                <div class="col-md-4">
+                    <div class="contact-info-box">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-map-pin">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
                         </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Apakah saya bisa mengembalikan produk?</span>
-                                <div class="faq-toggle"></div>
-                            </div>
-                            <div class="faq-answer">
-                                Ya, Anda dapat melakukan pengembalian dalam 7 hari setelah menerima barang. Produk harus dalam kondisi asli, belum dipakai, dan dengan kemasan yang utuh. Biaya pengiriman untuk pengembalian ditanggung oleh pembeli kecuali jika ada kesalahan dari pihak kami.
-                            </div>
-                        </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Bagaimana cara menghubungi tim customer service?</span>
-                                <div class="faq-toggle"></div>
-                            </div>
-                            <div class="faq-answer">
-                                Anda dapat menghubungi kami melalui formulir di samping atau email ke support@veravia.id. Tim kami akan merespon dalam waktu 24 jam pada hari kerja. Untuk pertanyaan yang mendesak, Anda juga dapat menghubungi kami melalui WhatsApp di nomor yang tercantum di footer website.
-                            </div>
-                        </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Berapa lama waktu pengiriman?</span>
-                                <div class="faq-toggle"></div>
-                            </div>
-                            <div class="faq-answer">
-                                Waktu pengiriman bergantung pada lokasi Anda. Untuk wilayah Jakarta dan sekitarnya, pengiriman membutuhkan waktu 1-2 hari kerja. Untuk kota-kota besar lainnya, 2-4 hari kerja. Untuk daerah terpencil, dapat membutuhkan waktu 5-7 hari kerja.
-                            </div>
-                        </div>
-                        
-                        <div class="faq-item">
-                            <div class="faq-question">
-                                <span>Metode pembayaran apa saja yang tersedia?</span>
-                                <div class="faq-toggle"></div>
-                            </div>
-                            <div class="faq-answer">
-                                Kami menerima berbagai metode pembayaran termasuk kartu kredit/debit, transfer bank, e-wallet (GoPay, OVO, DANA), dan virtual account. Seluruh transaksi dilindungi oleh sistem keamanan tingkat tinggi untuk menjamin keamanan data Anda.
-                            </div>
-                        </div>
+                        <h3 class="info-title">Alamat Kami</h3>
+                        <p class="info-text">
+                            PJ7J+CRV, CitraLand CBD Boulevard<br>
+                            Made, Sambikerep, Surabaya<br>
+                            East Java 60219
+                            Indonesia
+
+                        </p>
                     </div>
                 </div>
                 
-                <!-- Contact Form -->
-                <div class="col-lg-6">
+                <div class="col-md-4">
+                    <div class="contact-info-box">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="info-title">Kontak Kami</h3>
+                        <p class="info-text">
+                            Telepon: +6285103177002<br>
+                            WhatsApp: +6285179830007<br>
+                            <a href="mailto:veravia.id@gmail.com" class="info-link">veravia.id@gmail.com</a>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="col-md-4">
+                    <div class="contact-info-box">
+                        <div class="info-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-clock">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <polyline points="12 6 12 12 16 14"></polyline>
+                            </svg>
+                        </div>
+                        <h3 class="info-title">Jam Operasional</h3>
+                        <p class="info-text">
+                            Senin - Jumat: 09:00 - 17:00<br>
+                            Sabtu - Minggu: 09:00 - 13:00<br>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mt-3">
+                <div class="col-lg-7">
                     <p class="section-subtitle">Sampaikan Pesan Anda</p>
-                    <h2 class="section-title">Hubungi Kami</h2>
+                    <h2 class="section-title">Pesan atau Pertanyaan</h2>
                     
                     <form class="form-container" id="contactForm">
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="name" placeholder=" " required>
-                            <label for="name" class="form-label">Nama</label>
-                        </div>
-                        
-                        <div class="form-group">
-                            <input type="email" class="form-control" id="email" placeholder=" " required>
-                            <label for="email" class="form-label">Alamat Email</label>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" id="name" placeholder=" " required>
+                                    <label for="name" class="form-label">Nama</label>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <input type="email" class="form-control" id="email" placeholder=" " required>
+                                    <label for="email" class="form-label">Alamat Email</label>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <input type="tel" class="form-control" id="phone" placeholder=" ">
-                            <label for="phone" class="form-label">Nomor Telepon (Opsional)</label>
+                            <label for="phone" class="form-label">Nomor Telepon&nbsp;(opsional)</label>
                         </div>
-                        
+
                         <div class="form-group">
-                            <textarea class="form-control form-textarea" id="message" rows="4" placeholder=" " required></textarea>
+                            <textarea class="form-control form-textarea" id="message" rows="2" placeholder=" " required></textarea>
                             <label for="message" class="form-label">Pesan</label>
                         </div>
-                        
-                        <button type="submit" class="btn-submit">KIRIM</button>
+
+                        <button type="submit" class="btn-submit">Kirim Pesan</button>
                     </form>
+                </div>
+
+                <div class="col-lg-5">
+                    <div class="map-container position-relative">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3957.598861580384!2d112.62947457518293!3d-7.28639789272097!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd7fdfddb10d7c3%3A0x10c33792cd684f92!2sUC%20Ventures!5e0!3m2!1sen!2sid!4v1747620752577!5m2!1sen!2sid"
+                            width="130%" height="170%" style="border:0;" allowfullscreen="" loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+
+                        <div class="map-overlay" id="mapOverlay">
+                            <span class="map-overlay-text">Klik untuk mengaktifkan peta</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 </div>
 
-<!-- Required JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.5/gsap.min.js"></script>
+<!-- JS Libraries -->
 <script src="https://cdn.jsdelivr.net/npm/locomotive-scroll@4.1.4/dist/locomotive-scroll.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
 <script>
-    // Preloader
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            document.querySelector('.preloader').style.opacity = 0;
-            setTimeout(() => {
-                document.querySelector('.preloader').style.display = 'none';
-            }, 1000);
-        }, 2000);
+    /* Custom cursor */
+    const cursor = document.querySelector('.cursor');
+    const follower = document.querySelector('.cursor-follower');
+
+    document.addEventListener('mousemove', (e) => {
+        const { clientX: x, clientY: y } = e;
+        cursor.style.transform = `translate(${x}px, ${y}px)`;
+        follower.style.transform = `translate(${x}px, ${y}px)`;
     });
-    
-    // Custom cursor
-    document.addEventListener('DOMContentLoaded', () => {
-        const cursor = document.querySelector('.cursor');
-        const cursorFollower = document.querySelector('.cursor-follower');
-        
-        document.addEventListener('mousemove', (e) => {
-            gsap.to(cursor, {
-                duration: 0.1,
-                x: e.clientX,
-                y: e.clientY
-            });
-            
-            gsap.to(cursorFollower, {
-                duration: 0.3,
-                x: e.clientX,
-                y: e.clientY
-            });
-        });
-        
-        // Initialize smooth scroll
-        const scroll = new LocomotiveScroll({
-            el: document.querySelector('[data-scroll-container]'),
-            smooth: true,
-            smartphone: { smooth: true },
-            tablet: { smooth: true }
-        });
-        
-        // Fix for FAQ questions
-        const faqItems = document.querySelectorAll('.faq-item');
-        
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            
-            question.addEventListener('click', () => {
-                // Close all other open items
-                faqItems.forEach(otherItem => {
-                    if (otherItem !== item && otherItem.classList.contains('active')) {
-                        otherItem.classList.remove('active');
-                    }
-                });
 
-                // Toggle the clicked item
-                item.classList.toggle('active');
-            });
-        });
+    /* Locomotive Scroll */
+    const scroll = new LocomotiveScroll({
+        el: document.querySelector('[data-scroll-container]'),
+        smooth: true
+    });
 
-        /* -------------------------------------------------
-         * Contact-form submission
-         * ------------------------------------------------- */
-        const contactForm  = document.getElementById('contactForm');
-        const successPopup = document.getElementById('successPopup');
-        const closePopup   = document.getElementById('closePopup');
+    /* Preloader */
+    window.addEventListener('load', () => {
+        document.querySelector('.preloader').classList.add('d-none');
+    });
 
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+    /* Contact Form */
+    const contactForm = document.getElementById('contactForm');
+    const successPopup = document.getElementById('successPopup');
+    const closePopup = document.getElementById('closePopup');
 
-            // ──► replace with real AJAX / fetch call
-            setTimeout(() => {
-                successPopup.classList.add('active');
-                contactForm.reset();
-            }, 500);
-        });
+    contactForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // TODO: replace with actual AJAX
+        setTimeout(() => {
+            successPopup.classList.add('active');
+            contactForm.reset();
+        }, 400);
+    });
 
-        closePopup.addEventListener('click', () => {
-            successPopup.classList.remove('active');
-        });
+    closePopup.addEventListener('click', () => {
+        successPopup.classList.remove('active');
+    });
 
-        // Close popup when clicking outside the dialog
-        successPopup.addEventListener('click', (e) => {
-            if (e.target === successPopup) successPopup.classList.remove('active');
-        });
+    /* Map Overlay */
+    const mapOverlay = document.getElementById('mapOverlay');
+    mapOverlay.addEventListener('click', () => {
+        mapOverlay.classList.add('hidden');
     });
 </script>
 @endsection
+                            
