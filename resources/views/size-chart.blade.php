@@ -10,6 +10,13 @@
         border-radius: 20px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
         font-family: 'Poppins', sans-serif;
+        color: #222;
+    }
+
+    .dark .size-chart-container {
+        background-color: #121212;
+        color: #f0f0f0;
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
     }
 
     .size-chart-container h2 {
@@ -23,7 +30,7 @@
         font-size: 1.75rem;
         font-weight: 600;
         margin: 40px 0 20px;
-        color: #222;
+        color: inherit;
     }
 
     table {
@@ -33,10 +40,21 @@
         overflow: hidden;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
         background-color: white;
+        color: #222;
+    }
+
+    .dark table {
+        background-color: #1e1e1e;
+        color: #eee;
+        box-shadow: 0 3px 10px rgba(255, 255, 255, 0.05);
     }
 
     table thead {
         background-color: #f4f4f4;
+    }
+
+    .dark table thead {
+        background-color: #2a2a2a;
     }
 
     table th,
@@ -47,9 +65,18 @@
         font-size: 15px;
     }
 
+    .dark table th,
+    .dark table td {
+        border-bottom: 1px solid #444;
+    }
+
     table th {
         font-weight: 600;
         color: #333;
+    }
+
+    .dark table th {
+        color: #ccc;
     }
 
     table tr:last-child td {
@@ -66,8 +93,17 @@
         transition: background-color 0.2s ease;
     }
 
+    .dark .back-button {
+        color: #fff;
+        background-color: #2a2a2a;
+    }
+
     .back-button:hover {
         background-color: #e0e0e0;
+    }
+
+    .dark .back-button:hover {
+        background-color: #3a3a3a;
     }
 
     @media (max-width: 768px) {
@@ -90,6 +126,7 @@
         }
     }
 </style>
+
 
 <div class="size-chart-container">
     <a href="{{ route('store.show') }}" class="back-button">← Back to Store</a>
@@ -136,6 +173,28 @@
                 <tr><td>XXL</td><td>96</td><td>118</td><td>102</td></tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="size-chart">
+    <h3>Dress Size Guide</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Size</th>
+                <th>Bust (cm)</th>
+                <th>Waist (cm)</th>
+                <th>Hip (cm)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>XS</td><td>80</td><td>62</td><td>86</td></tr>
+            <tr><td>S</td><td>86</td><td>68</td><td>92</td></tr>
+            <tr><td>M</td><td>92</td><td>74</td><td>98</td></tr>
+            <tr><td>L</td><td>98</td><td>80</td><td>104</td></tr>
+            <tr><td>XL</td><td>104</td><td>86</td><td>110</td></tr>
+            <tr><td>XXL</td><td>110</td><td>92</td><td>116</td></tr>
+        </tbody>
+    </table>
     </div>
 </div>
 @endsection
