@@ -284,7 +284,7 @@
         }
 
         .carousel-image.active {
-            opacity: 1;
+            opacity: 0;
             transform: scale(1);
         }
 
@@ -877,7 +877,7 @@
                     <div class="form-group password-group" id="passwordContainer">
                         <input type="password" id="passwordInput" name="password"
                             class="form-input @error('password') is-invalid @enderror" placeholder=" " required>
-                        <label for="passwordInput">Password</label>
+                        {{-- <label for="passwordInput">Password</label> --}}
                         <div class="form-validation-icon valid" id="passwordValidIcon">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
