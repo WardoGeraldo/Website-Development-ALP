@@ -1,99 +1,342 @@
 @extends('base.base')
 
 @section('content')
-    <!-- AOS Animation -->
-    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <div class="dashboard-container">
+        <!-- Header Section -->
+        <div class="dashboard-header">
+            <h1>Invoice #{{ $sales_id }}</h1>
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
 
-    <style>
-        body {
-            background-color: #fff;
-            font-family: 'Inter', sans-serif;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
-        body.dark-mode {
-            background-color: #121212;
-            color: #f5f5f5;
-        }
-
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: #000;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            z-index: 999;
-            transition: 0.3s;
-        }
-    </style>
-    <!-- Dark Mode Button -->
-    <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
-    <div class="container">
-        <h3 class="my-2">INVOICE #{{ $sales_id }}</h3>
-        <hr>
-        <div class="d-flex justify-content-between">
-        {{-- DETAIL ADDRESS --}}
-            <div>
-                <h5>Customer Detail</h5>
-                <p>Name: {{ $customer['name'] }}</p>
-                <p>Address: {{ $customer['address'] }}</p>
-                <p>Phone: {{ $customer['phone'] }}</p>
-                <p>Email: {{ $customer['email'] }}</p>
-            </div>
-        {{-- DETAIL PAYMENT --}}
-            <div>
-                <h5>Payment Detail</h5>
-                <p>Payment Method: {{ $payment['payment_method'] }}</p>
-                <p>Status: <span class="badge {{ $payment['payment_status'] == 'Paid' ? 'text-bg-success' : 'text-bg-danger' }}">{{ $payment['payment_status'] }} </span></p>
-                <p>Date: {{ $payment['payment_date'] }}</p>
+            <div class="header-controls">
+                <div class="date-display">
+                    <span id="current-date"></span>
+                </div>
             </div>
         </div>
-        <hr>
-        {{-- DETAIL ITEMS --}}
-        <div class="border">
-            <table class="table table-stripped table-hover">
-                <thead>
-                    <th>Product ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Size</th>
-                    <th>Qty</th>
-                    <th>Price</th>
-                    <th>Total</th>
-                </thead>
-                <tbody>
-                    @foreach ($invoice as $i)
+
+        <!-- Customer and Payment Details -->
+        <div class="row">
+            <!-- Customer Details Card -->
+            <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="data-card">
+                    <div class="data-header">
+                        <h2>Customer Details</h2>
+                    </div>
+                    <div class="data-body">
+                        <div class="customer-info">
+                            <p><strong>Name:</strong> {{ $customer['name'] }}</p>
+                            <p><strong>Address:</strong> {{ $customer['address'] }}</p>
+                            <p><strong>Phone:</strong> {{ $customer['phone'] }}</p>
+                            <p><strong>Email:</strong> {{ $customer['email'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details Card -->
+            <div class="col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="data-card">
+                    <div class="data-header">
+                        <h2>Payment Details</h2>
+                    </div>
+                    <div class="data-body">
+                        <div class="payment-info">
+                            <p><strong>Payment Method:</strong> {{ $payment['payment_method'] }}</p>
+                            <p><strong>Status:</strong> 
+                                <span class="status-badge {{ $payment['payment_status'] == 'Paid' ? 'status-paid' : 'status-unpaid' }}">
+                                    {{ $payment['payment_status'] }}
+                                </span>
+                            </p>
+                            <p><strong>Date:</strong> {{ $payment['payment_date'] }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Items Table -->
+        <div class="data-card" data-aos="fade-up" data-aos-delay="300">
+            <div class="data-header">
+                <h2>Invoice Items</h2>
+            </div>
+            <div class="data-body">
+                <table class="luxury-table">
+                    <thead>
                         <tr>
-                            <td>{{ $i['product_id'] }}</td>
-                            <td>{{ $i['name'] }}</td>
-                            <td>{{ $i['description'] }}</td>
-                            <td>{{ $i['size'] }}</td>
-                            <td>{{ $i['qty'] }}</td>
-                            <td>{{ $i['price'] }}</td>
-                            <td>{{ $i['total'] }}</td>
+                            <th>Product ID</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Size</th>
+                            <th>Qty</th>
+                            <th>Price</th>
+                            <th>Total</th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @foreach ($invoice as $i)
+                            <tr>
+                                <td>{{ $i['product_id'] }}</td>
+                                <td>{{ $i['name'] }}</td>
+                                <td>{{ $i['description'] }}</td>
+                                <td>{{ $i['size'] }}</td>
+                                <td>{{ $i['qty'] }}</td>
+                                <td>{{ $i['price'] }}</td>
+                                <td>{{ $i['total'] }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous">
-    </script>
     <script>
+        // Initialize AOS
         AOS.init();
 
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
+        // Set current date
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateDisplay = document.getElementById('current-date');
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            dateDisplay.textContent = now.toLocaleDateString('en-US', options);
+        });
+
+        // Theme management
+        const themeToggleBtn = document.getElementById('theme-toggle');
+
+        // Check for saved theme preference or use system preference
+        const savedTheme = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+
+        // Set initial theme
+        if (initialTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+        }
+
+        // Toggle theme
+        if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-theme');
+                const isDark = document.body.classList.contains('dark-theme');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            });
         }
     </script>
+
+    <style>
+        /* Base Styles with Dark Mode Support */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --bg-color: #F8F9FD;
+            --text-color: #333;
+            --text-secondary: #777;
+            --border-color: rgba(0, 0, 0, 0.05);
+            --card-bg: #fff;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            --accent-color: #896CFF;
+            --accent-light: rgba(137, 108, 255, 0.1);
+            --table-header-bg: rgba(0, 0, 0, 0.02);
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+        }
+
+        .dark-theme {
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --text-secondary: #c5c5c5;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            --accent-color: #a58bff;
+            --accent-light: rgba(137, 108, 255, 0.2);
+            --table-header-bg: rgba(255, 255, 255, 0.05);
+            --success-color: #5cb85c;
+            --danger-color: #d9534f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-color);
+            position: relative;
+        }
+
+        .dashboard-header h1::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #896CFF, #5A3FD9);
+            border-radius: 10px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .date-display {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            gap: 0.5rem;
+        }
+
+        /* Cards & Containers */
+        .data-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+            height: 100%;
+        }
+
+        .data-card:hover {
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(137, 108, 255, 0.2);
+        }
+
+        .data-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .data-header h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        /* Customer & Payment Info */
+        .customer-info p, .payment-info p {
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-color);
+        }
+
+        .status-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-paid {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: var(--success-color);
+        }
+
+        .status-unpaid {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: var(--danger-color);
+        }
+
+        /* Table Styles */
+        .luxury-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .luxury-table thead tr {
+            background-color: var(--table-header-bg);
+            border-radius: 8px;
+        }
+
+        .luxury-table th {
+            text-align: left;
+            padding: 1rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .luxury-table td {
+            padding: 1rem;
+            font-size: 0.95rem;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-color);
+        }
+
+        /* Glassmorphism Cards */
+        .data-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .dark-theme .data-card {
+            background: rgba(30, 30, 30, 0.2);
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .luxury-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
 @endsection
