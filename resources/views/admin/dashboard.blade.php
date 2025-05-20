@@ -6,10 +6,6 @@
     <div class="dashboard-header">
         <h1>Admin Dashboard</h1>
         <div class="header-controls">
-            <button id="theme-toggle" class="theme-toggle-btn">
-                <i class="bi bi-moon-fill dark-icon"></i>
-                <i class="bi bi-sun-fill light-icon"></i>
-            </button>
             <div class="date-display">
                 <i class="bi bi-calendar3"></i>
                 <span id="current-date"></span>
