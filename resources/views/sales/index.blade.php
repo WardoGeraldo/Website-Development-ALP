@@ -78,7 +78,36 @@
     
     // Set initial theme
     if (initialTheme === 'dark') {
-        document.body.classList.add('dark-theme');
+        document.body.classList.add('dark-mode');
+    }
+    
+    // Connect to existing light mode toggle in header
+    document.addEventListener('DOMContentLoaded', function() {
+        // Look for common theme toggle selectors
+        const themeToggles = document.querySelectorAll('.theme-toggle, #theme-toggle, .light-mode-toggle, #light-mode-toggle, .dark-mode-toggle, #dark-mode-toggle');
+        
+        themeToggles.forEach(toggle => {
+            toggle.addEventListener('click', function() {
+                toggleTheme();
+            });
+        });
+        
+        // Global event listener for theme toggle
+        document.addEventListener('themeToggle', function() {
+            toggleTheme();
+        });
+    });
+    
+    // Theme toggle function
+    function toggleTheme() {
+        const isDark = document.body.classList.contains('dark-mode');
+        if (isDark) {
+            document.body.classList.remove('dark-mode');
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.body.classList.add('dark-mode');
+            localStorage.setItem('theme', 'dark');
+        }
     }
 </script>
 <style>
@@ -101,7 +130,7 @@
         --status-default: #9ca3af;
     }
 
-    .dark-theme {
+    body.dark-mode {
         --bg-color: #121212;
         --text-color: #f1f1f1;
         --text-secondary: #c5c5c5;
@@ -299,12 +328,12 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
-    .dark-theme .data-card {
+    body.dark-mode .data-card {
         background: rgba(30, 30, 30, 0.2);
     }
 
     /* Smooth Theme Transitions */
-    body, .dark-theme, .dark-theme * {
+    body, body.dark-mode, body.dark-mode * {
         transition: background-color 0.3s ease, color 0.3s ease;
     }
 
