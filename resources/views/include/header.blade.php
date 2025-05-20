@@ -40,43 +40,6 @@
         color: #f5f5f5;
         border-color: #444;
     }
-    .dark-mode .size-chart-container {
-    background-color: #121212;
-    color: #f0f0f0;
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
-    }
-
-    .dark-mode table {
-        background-color: #1e1e1e;
-        color: #eee;
-    }
-
-    .dark-mode table thead {
-        background-color: #2a2a2a;
-    }
-
-    .dark-mode table th,
-    .dark-mode table td {
-        border-bottom: 1px solid #444;
-    }
-
-    .dark-mode table th {
-        color: #ccc;
-    }
-
-    .dark-mode .back-button {
-        color: #fff;
-        background-color: #2a2a2a;
-    }
-
-    .dark-mode .back-button:hover {
-        background-color: #3a3a3a;
-    }
-
-
-    body.dark-mode .form-control::placeholder {
-        color: #aaa;
-    }
 
     .secondary-nav {
         border-bottom: 1px solid #ddd;
@@ -85,6 +48,30 @@
     body.dark-mode .secondary-nav {
         border-color: #333;
     }
+
+    @media (max-width: 768px) {
+    .search-wrapper {
+        width: 100%;
+    }
+
+    .navbar-collapse {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+        .navbar-nav {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .navbar-nav li {
+            text-align: center;
+        }
+
+        form {
+            width: 100%;
+        }
+    }
 </style>
 
 <nav class="navbar navbar-expand-lg border-bottom shadow-sm py-3">
@@ -92,47 +79,52 @@
         <!-- Logo -->
         <a class="navbar-brand fw-bold fs-3" href="#">VERAVIA</a>
 
-        <!-- Mobile Toggle -->
+        <!-- Dark Mode Toggle -->
+        <button class="btn btn-sm rounded-circle ms-auto me-2 d-lg-none" onclick="toggleDarkMode()"
+            aria-label="Toggle dark mode">
+            ☀️
+        </button>
+
+        <!-- Mobile Toggle Button -->
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain"
             aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarMain">
-            @if(session('role') == 'user')
-                <form class="d-flex mx-auto w-50" onsubmit="filterProductsBySearch(event)">
-                    <input id="searchInput" class="form-control rounded-pill ps-3" type="search"
+        <!-- Collapsible Content -->
+        <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarMain">
+            <!-- Search Bar -->
+            @if (session('role') == 'user')
+                <form class="d-flex w-100 my-2 my-lg-0 search-wrapper" onsubmit="filterProductsBySearch(event)">
+                    <input id="searchInput" class="form-control rounded-pill ps-3 me-2" type="search"
                         placeholder="Cari produk, tren, dan merek." aria-label="Search">
-                    <button class="btn position-absolute end-0 me-2 mt-1" type="submit">
-                        {{-- <i class="fas fa-search"></i> --}}
+                    <button class="btn btn-outline-secondary rounded-circle" type="submit">
+                        <i class="fas fa-search"></i>
                     </button>
                 </form>
             @endif
 
-            <!-- Right Icons -->
-            <ul class="navbar-nav ms-auto align-items-center">
-                @if(session('user'))
+            <!-- Right Side Icons -->
+            <ul class="navbar-nav ms-auto align-items-center mt-3 mt-lg-0">
+                @if (session('user'))
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-user me-1"></i> {{ session('user') }}
-                        </a>
+                        <a class="nav-link" href="#"><i class="fas fa-user me-1"></i> {{ session('user') }}</a>
                     </li>
                     <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                     </li>
                 @else
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ route('login.show') }}">
-                            <i class="fas fa-user me-1"></i> Masuk / Daftar
-                        </a>
+                        <a class="nav-link" href="{{ route('login.show') }}"><i class="fas fa-user me-1"></i> Masuk /
+                            Daftar</a>
                     </li>
                 @endif
 
-                @if(session('role') == 'user')
+                @if (session('role') == 'user')
                     <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('wishlist.show') }}"><i class="far fa-heart"></i></a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('cart.index') }}"><i class="fas fa-shopping-bag"></i></a>
                     </li>
                 @endif
@@ -141,9 +133,11 @@
     </div>
 </nav>
 
-@if(session('role') == 'user')
+
+
+@if (session('role') == 'user')
     <nav class="secondary-nav py-2">
-        <div class="container d-flex gap-4 fw-semibold small">
+        <div class="container d-flex flex-wrap gap-3 fw-semibold small">
             <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
             <a href="{{ route('store.show') }}" class="text-decoration-none">Store</a>
             <a href="{{ route('size.chart') }}" class="text-decoration-none">Size Chart</a>
@@ -154,7 +148,7 @@
     </nav>
 @elseif(session('role') == 'admin')
     <nav class="secondary-nav py-2">
-        <div class="container d-flex gap-4 fw-semibold small">
+        <div class="container d-flex flex-wrap gap-3 fw-semibold small">
             <a href="{{ route('admin.dash') }}" class="text-decoration-none">Dashboard</a>
             <a href="{{ route('admin.dashboard') }}" class="text-decoration-none">Products List</a>
             <a href="{{ route('admin.userlist') }}" class="text-decoration-none">Users List</a>
