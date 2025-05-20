@@ -1,178 +1,171 @@
 @extends('base.base')
-
 @section('content')
 <div class="dashboard-container">
     <!-- Header Section -->
     <div class="dashboard-header">
         <h1>Admin Dashboard</h1>
         <div class="header-controls">
-            <button id="theme-toggle" class="theme-toggle-btn">
-                <i class="bi bi-moon-fill dark-icon"></i>
-                <i class="bi bi-sun-fill light-icon"></i>
-            </button>
             <div class="date-display">
                 <i class="bi bi-calendar3"></i>
                 <span id="current-date"></span>
             </div>
         </div>
     </div>
-
-    <!-- Stats Cards Section -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon">
-                🛒
-            </div>
-            <div class="stat-content">
-                <h3>{{ $totalProducts }}</h3>
-                <p>Products</p>
-            </div>
+<!-- Stats Cards Section -->
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-icon">
+            🛒
         </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                👤
-            </div>
-            <div class="stat-content">
-                <h3>{{ $totalUsers }}</h3>
-                <p>Users</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                💰
-            </div>
-            <div class="stat-content">
-                <h3>Rp {{ number_format($totalSales) }}</h3>
-                <p>Total Sales</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                📈
-            </div>
-            <div class="stat-content">
-                <h3>Rp {{ number_format($todayRevenue) }}</h3>
-                <p>Today's Revenue</p>
-            </div>
-        </div>
-        
-        <div class="stat-card">
-            <div class="stat-icon">
-                💵
-            </div>
-            <div class="stat-content">
-                <h3>Rp {{ number_format($weekRevenue) }}</h3>
-                <p>This Week</p>
-            </div>
+        <div class="stat-content">
+            <h3>{{ $totalProducts }}</h3>
+            <p>Products</p>
         </div>
     </div>
-
-    <!-- Charts Section -->
-    <div class="charts-container">
-        <div class="chart-card">
-            <div class="chart-header">
-                <h2>Sales Trend</h2>
-                <div class="chart-legend">
-                    <span class="legend-indicator"></span>
-                    <span>Monthly</span>
-                </div>
-            </div>
-            <div class="chart-body">
-                <canvas id="salesChart"></canvas>
-            </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            👤
         </div>
-        
-        <div class="chart-card">
-            <div class="chart-header">
-                <h2>Product Categories</h2>
-                <div class="chart-legend">
-                    <span>Distribution</span>
-                </div>
-            </div>
-            <div class="chart-body">
-                <canvas id="categoryChart"></canvas>
-            </div>
+        <div class="stat-content">
+            <h3>{{ $totalUsers }}</h3>
+            <p>Users</p>
         </div>
     </div>
-
-    <!-- Top Products Section -->
-    <div class="data-card">
-        <div class="data-header">
-            <h2>Top Selling Products</h2>
-            <span class="view-all">View All</span>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            💰
         </div>
-        <div class="data-body">
-            <table class="luxury-table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Product</th>
-                        <th>Sold</th>
-                        <th>Stock</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($topProducts as $index => $product)
-                    <tr>
-                        <td><span class="rank-badge">{{ $index + 1 }}</span></td>
-                        <td>{{ $product['name'] }}</td>
-                        <td><span class="highlight">{{ $product['sold'] }}</span></td>
-                        <td>{{ array_sum($product['stock']) }}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+        <div class="stat-content">
+            <h3>Rp {{ number_format($totalSales) }}</h3>
+            <p>Total Sales</p>
         </div>
     </div>
-
-    <!-- Top Customers Section -->
-    <div class="data-card">
-        <div class="data-header">
-            <h2>Top Customers</h2>
-            <span class="view-all">View All</span>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            📈
         </div>
-        <div class="data-body">
-            <ul class="customer-list">
-                @foreach ($topCustomers as $index => $customer)
-                <li class="customer-item">
-                    <div class="customer-info">
-                        <span class="customer-rank">{{ $index + 1 }}</span>
-                        <span class="customer-name">{{ $customer['name'] }}</span>
-                    </div>
-                    <span class="customer-spent">Rp {{ number_format($customer['totalSpent']) }}</span>
-                </li>
-                @endforeach
-            </ul>
+        <div class="stat-content">
+            <h3>Rp {{ number_format($todayRevenue) }}</h3>
+            <p>Today's Revenue</p>
         </div>
     </div>
-
-    <!-- Quick Actions Section -->
-    <div class="actions-container">
-        <h2>Quick Actions</h2>
-        <div class="action-buttons">
-            <a href="{{ route('admin.product.create') }}" class="action-btn">
-                <i class="bi bi-plus-circle"></i>
-                <span>Add Product</span>
-            </a>
-            <a href="{{ route('admin.userlist') }}" class="action-btn">
-                <i class="bi bi-person-lines-fill"></i>
-                <span>Manage Users</span>
-            </a>
-            <a href="{{ route('admin.sales.index') }}" class="action-btn">
-                <i class="bi bi-bar-chart-line"></i>
-                <span>Sales Report</span>
-            </a>
-            <a href="{{ route('admin.promo.list') }}" class="action-btn">
-                <i class="bi bi-tags"></i>
-                <span>Promo Settings</span>
-            </a>
+    
+    <div class="stat-card">
+        <div class="stat-icon">
+            💵
+        </div>
+        <div class="stat-content">
+            <h3>Rp {{ number_format($weekRevenue) }}</h3>
+            <p>This Week</p>
         </div>
     </div>
 </div>
 
+<!-- Charts Section -->
+<div class="charts-container">
+    <div class="chart-card">
+        <div class="chart-header">
+            <h2>Sales Trend</h2>
+            <div class="chart-legend">
+                <span class="legend-indicator"></span>
+                <span>Monthly</span>
+            </div>
+        </div>
+        <div class="chart-body">
+            <canvas id="salesChart"></canvas>
+        </div>
+    </div>
+    
+    <div class="chart-card">
+        <div class="chart-header">
+            <h2>Product Categories</h2>
+            <div class="chart-legend">
+                <span>Distribution</span>
+            </div>
+        </div>
+        <div class="chart-body">
+            <canvas id="categoryChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Top Products Section -->
+<div class="data-card">
+    <div class="data-header">
+        <h2>Top Selling Products</h2>
+        <span class="view-all">View All</span>
+    </div>
+    <div class="data-body">
+        <table class="luxury-table">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Product</th>
+                    <th>Sold</th>
+                    <th>Stock</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($topProducts as $index => $product)
+                <tr>
+                    <td><span class="rank-badge">{{ $index + 1 }}</span></td>
+                    <td>{{ $product['name'] }}</td>
+                    <td><span class="highlight">{{ $product['sold'] }}</span></td>
+                    <td>{{ array_sum($product['stock']) }}</td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Top Customers Section -->
+<div class="data-card">
+    <div class="data-header">
+        <h2>Top Customers</h2>
+        <span class="view-all">View All</span>
+    </div>
+    <div class="data-body">
+        <ul class="customer-list">
+            @foreach ($topCustomers as $index => $customer)
+            <li class="customer-item">
+                <div class="customer-info">
+                    <span class="customer-rank">{{ $index + 1 }}</span>
+                    <span class="customer-name">{{ $customer['name'] }}</span>
+                </div>
+                <span class="customer-spent">Rp {{ number_format($customer['totalSpent']) }}</span>
+            </li>
+            @endforeach
+        </ul>
+    </div>
+</div>
+
+<!-- Quick Actions Section -->
+<div class="actions-container">
+    <h2>Quick Actions</h2>
+    <div class="action-buttons">
+        <a href="{{ route('admin.product.create') }}" class="action-btn">
+            <i class="bi bi-plus-circle"></i>
+            <span>Add Product</span>
+        </a>
+        <a href="{{ route('admin.userlist') }}" class="action-btn">
+            <i class="bi bi-person-lines-fill"></i>
+            <span>Manage Users</span>
+        </a>
+        <a href="{{ route('admin.sales.index') }}" class="action-btn">
+            <i class="bi bi-bar-chart-line"></i>
+            <span>Sales Report</span>
+        </a>
+        <a href="{{ route('admin.promo.list') }}" class="action-btn">
+            <i class="bi bi-tags"></i>
+            <span>Promo Settings</span>
+        </a>
+    </div>
+</div>
+</div>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
@@ -183,169 +176,131 @@
         month: 'long',
         day: 'numeric'
     });
-
-    // Theme management
-    const themeToggleBtn = document.getElementById('theme-toggle');
-    
-    // Check for saved theme preference or use system preference
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-    
-    // Set initial theme
-    if (initialTheme === 'dark') {
-        document.body.classList.add('dark-theme');
-    }
-    
-    // Function to update theme colors for charts
-    function updateChartTheme() {
-        const isDark = document.body.classList.contains('dark-theme');
-        return {
-            gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(200, 200, 200, 0.1)',
-            textColor: isDark ? '#c5c5c5' : '#666',
-            pointBorderColor: isDark ? '#1e1e1e' : '#fff'
-        };
-    }
-    
-    // Toggle theme
-    themeToggleBtn.addEventListener('click', () => {
-        document.body.classList.toggle('dark-theme');
-        const isDark = document.body.classList.contains('dark-theme');
-        localStorage.setItem('theme', isDark ? 'dark' : 'light');
-        
-        // Update chart colors
-        const themeColors = updateChartTheme();
-        
-        // Update sales chart
-        salesChart.options.scales.y.grid.color = themeColors.gridColor;
-        salesChart.options.scales.y.ticks.color = themeColors.textColor;
-        salesChart.options.scales.x.ticks.color = themeColors.textColor;
-        salesChart.data.datasets[0].pointBorderColor = themeColors.pointBorderColor;
-        salesChart.update();
-        
-        // Update category chart
-        categoryChart.options.plugins.legend.labels.color = themeColors.textColor;
-        categoryChart.update();
-    });
-    
-    // Get theme colors
-    const themeColors = updateChartTheme();
-
-    // Sales Chart
-    const salesCtx = document.getElementById('salesChart').getContext('2d');
-    const salesData = {
-        labels: {!! json_encode($salesMonths) !!},
-        datasets: [{
-            label: 'Sales',
-            data: {!! json_encode($salesData) !!},
-            fill: true,
-            borderColor: '#896CFF',
-            backgroundColor: 'rgba(137, 108, 255, 0.1)',
-            tension: 0.4,
-            pointRadius: 6,
-            pointBackgroundColor: '#896CFF',
-            pointBorderColor: themeColors.pointBorderColor,
-            pointBorderWidth: 2
-        }]
+// Function to update theme colors for charts based on the base.blade.php dark mode state
+function updateChartTheme() {
+    const isDark = document.body.classList.contains('dark-mode');
+    return {
+        gridColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(200, 200, 200, 0.1)',
+        textColor: isDark ? '#c5c5c5' : '#666',
+        pointBorderColor: isDark ? '#1e1e1e' : '#fff'
     };
+}
 
-    const salesChart = new Chart(salesCtx, {
-        type: 'line',
-        data: salesData,
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        color: themeColors.gridColor
-                    },
-                    ticks: {
-                        color: themeColors.textColor,
-                        callback: function(value) {
-                            return 'Rp ' + value.toLocaleString();
-                        }
-                    }
+// Get theme colors
+const themeColors = updateChartTheme();
+
+// Sales Chart
+const salesCtx = document.getElementById('salesChart').getContext('2d');
+const salesData = {
+    labels: {!! json_encode($salesMonths) !!},
+    datasets: [{
+        label: 'Sales',
+        data: {!! json_encode($salesData) !!},
+        fill: true,
+        borderColor: '#896CFF',
+        backgroundColor: 'rgba(137, 108, 255, 0.1)',
+        tension: 0.4,
+        pointRadius: 6,
+        pointBackgroundColor: '#896CFF',
+        pointBorderColor: themeColors.pointBorderColor,
+        pointBorderWidth: 2
+    }]
+};
+
+const salesChart = new Chart(salesCtx, {
+    type: 'line',
+    data: salesData,
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                grid: {
+                    color: themeColors.gridColor
                 },
-                x: {
-                    grid: {
-                        display: false
-                    },
-                    ticks: {
-                        color: themeColors.textColor
+                ticks: {
+                    color: themeColors.textColor,
+                    callback: function(value) {
+                        return 'Rp ' + value.toLocaleString();
                     }
+                }
+            },
+            x: {
+                grid: {
+                    display: false
+                },
+                ticks: {
+                    color: themeColors.textColor
                 }
             }
         }
-    });
+    }
+});
 
-    // Category Chart
-    const categoryCtx = document.getElementById('categoryChart').getContext('2d');
-    const categoryData = {
-        labels: {!! json_encode($categoryLabels) !!},
-        datasets: [{
-            label: 'Categories',
-            data: {!! json_encode($categoryData) !!},
-            backgroundColor: ['#896CFF', '#52B69A', '#FFC94D', '#FF7373', '#76B7C7'],
-            borderWidth: 0,
-            borderRadius: 5,
-            spacing: 10,
-            hoverOffset: 15
-        }]
-    };
+// Category Chart
+const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+const categoryData = {
+    labels: {!! json_encode($categoryLabels) !!},
+    datasets: [{
+        label: 'Categories',
+        data: {!! json_encode($categoryData) !!},
+        backgroundColor: ['#896CFF', '#52B69A', '#FFC94D', '#FF7373', '#76B7C7'],
+        borderWidth: 0,
+        borderRadius: 5,
+        spacing: 10,
+        hoverOffset: 15
+    }]
+};
 
-    const categoryChart = new Chart(categoryCtx, {
-        type: 'doughnut',
-        data: categoryData,
-        options: {
-            responsive: true,
-            cutout: '70%',
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: {
-                        boxWidth: 12,
-                        padding: 15,
-                        color: themeColors.textColor
-                    }
+const categoryChart = new Chart(categoryCtx, {
+    type: 'doughnut',
+    data: categoryData,
+    options: {
+        responsive: true,
+        cutout: '70%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    boxWidth: 12,
+                    padding: 15,
+                    color: themeColors.textColor
                 }
             }
         }
+    }
+});
+
+// Listen for dark mode changes from base.blade.php
+const darkModeObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+        if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            // Update chart colors when dark mode changes
+            const updatedColors = updateChartTheme();
+            
+            // Update sales chart
+            salesChart.options.scales.y.grid.color = updatedColors.gridColor;
+            salesChart.options.scales.y.ticks.color = updatedColors.textColor;
+            salesChart.options.scales.x.ticks.color = updatedColors.textColor;
+            salesChart.data.datasets[0].pointBorderColor = updatedColors.pointBorderColor;
+            salesChart.update();
+            
+            // Update category chart
+            categoryChart.options.plugins.legend.labels.color = updatedColors.textColor;
+            categoryChart.update();
+        }
     });
+});
+
+// Start observing the document body for class changes
+darkModeObserver.observe(document.body, { attributes: true });
 </script>
-
 <style>
     /* Base Styles with Dark Mode Support */
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-
-    :root {
-        --bg-color: #F8F9FD;
-        --text-color: #333;
-        --text-secondary: #777;
-        --border-color: rgba(0,0,0,0.05);
-        --card-bg: #fff;
-        --card-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        --card-hover-shadow: 0 8px 25px rgba(0,0,0,0.08);
-        --accent-color: #896CFF;
-        --accent-light: rgba(137, 108, 255, 0.1);
-        --table-header-bg: rgba(0,0,0,0.02);
-    }
-
-    .dark-theme {
-        --bg-color: #121212;
-        --text-color: #f1f1f1;
-        --text-secondary: #c5c5c5;
-        --border-color: rgba(255,255,255,0.1);
-        --card-bg: #1e1e1e;
-        --card-shadow: 0 4px 20px rgba(0,0,0,0.2);
-        --card-hover-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        --accent-color: #a58bff;
-        --accent-light: rgba(137, 108, 255, 0.2);
-        --table-header-bg: rgba(255,255,255,0.05);
-    }
 
     * {
         margin: 0;
@@ -353,12 +308,7 @@
         box-sizing: border-box;
     }
 
-    body {
-        font-family: 'Poppins', sans-serif;
-        background-color: var(--bg-color);
-        color: var(--text-color);
-    }
-
+    /* Basic layout styles */
     .dashboard-container {
         max-width: 1400px;
         margin: 0 auto;
@@ -372,14 +322,22 @@
         align-items: center;
         margin-bottom: 2rem;
         padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode .dashboard-header {
+        border-bottom-color: rgba(255,255,255,0.1);
     }
 
     .dashboard-header h1 {
         font-size: 2rem;
         font-weight: 600;
-        color: var(--text-color);
         position: relative;
+        color: #333;
+    }
+
+    body.dark-mode .dashboard-header h1 {
+        color: #f5f5f5;
     }
 
     .dashboard-header h1::after {
@@ -398,49 +356,17 @@
         align-items: center;
         gap: 1.5rem;
     }
-    
-    .theme-toggle-btn {
-        background: none;
-        border: none;
-        cursor: pointer;
-        font-size: 1.2rem;
-        color: var(--text-color);
-        padding: 0.3rem;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 36px;
-        height: 36px;
-        background-color: var(--accent-light);
-    }
-    
-    .theme-toggle-btn:hover {
-        background-color: var(--accent-light);
-    }
-    
-    .dark-icon {
-        display: none;
-    }
-    
-    .light-icon {
-        display: inline-block;
-    }
-    
-    .dark-theme .dark-icon {
-        display: inline-block;
-    }
-    
-    .dark-theme .light-icon {
-        display: none;
-    }
 
     .date-display {
         display: flex;
         align-items: center;
         font-size: 0.9rem;
-        color: var(--text-secondary);
+        color: #777;
         gap: 0.5rem;
+    }
+
+    body.dark-mode .date-display {
+        color: #c5c5c5;
     }
 
     /* Cards & Containers */
@@ -452,17 +378,31 @@
     }
 
     .stat-card, .chart-card, .data-card {
-        background: var(--card-bg);
+        background: #fff;
         border-radius: 12px;
         padding: 1.5rem;
-        box-shadow: var(--card-shadow);
-        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        border: 1px solid rgba(0,0,0,0.05);
         transition: all 0.3s ease;
     }
 
+    body.dark-mode .stat-card,
+    body.dark-mode .chart-card,
+    body.dark-mode .data-card {
+        background: #1e1e1e;
+        border-color: rgba(255,255,255,0.1);
+        box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
     .stat-card:hover, .chart-card:hover, .data-card:hover {
-        box-shadow: var(--card-hover-shadow);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.08);
         border-color: rgba(137, 108, 255, 0.2);
+    }
+
+    body.dark-mode .stat-card:hover,
+    body.dark-mode .chart-card:hover,
+    body.dark-mode .data-card:hover {
+        box-shadow: 0 8px 25px rgba(0,0,0,0.3);
     }
 
     .stat-card {
@@ -477,21 +417,33 @@
         align-items: center;
         justify-content: center;
         border-radius: 12px;
-        background: var(--accent-light);
+        background: rgba(137, 108, 255, 0.1);
         margin-right: 1rem;
+    }
+
+    body.dark-mode .stat-icon {
+        background: rgba(137, 108, 255, 0.2);
     }
 
     .stat-content h3 {
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 0.2rem;
-        color: var(--text-color);
+        color: #333;
+    }
+
+    body.dark-mode .stat-content h3 {
+        color: #f1f1f1;
     }
 
     .stat-content p {
         font-size: 0.85rem;
-        color: var(--text-secondary);
+        color: #777;
         margin: 0;
+    }
+
+    body.dark-mode .stat-content p {
+        color: #c5c5c5;
     }
 
     /* Charts Container */
@@ -512,21 +464,31 @@
     .chart-header h2, .data-header h2, .actions-container h2 {
         font-size: 1.2rem;
         font-weight: 600;
-        color: var(--text-color);
+        color: #333;
+    }
+
+    body.dark-mode .chart-header h2,
+    body.dark-mode .data-header h2,
+    body.dark-mode .actions-container h2 {
+        color: #f1f1f1;
     }
 
     .chart-legend {
         display: flex;
         align-items: center;
         font-size: 0.85rem;
-        color: var(--text-secondary);
+        color: #777;
+    }
+
+    body.dark-mode .chart-legend {
+        color: #c5c5c5;
     }
 
     .legend-indicator {
         display: inline-block;
         width: 10px;
         height: 10px;
-        background: var(--accent-color);
+        background: #896CFF;
         margin-right: 0.5rem;
         border-radius: 50%;
     }
@@ -538,8 +500,12 @@
 
     .view-all {
         font-size: 0.85rem;
-        color: var(--accent-color);
+        color: #896CFF;
         cursor: pointer;
+    }
+
+    body.dark-mode .view-all {
+        color: #a58bff;
     }
 
     .view-all:hover {
@@ -554,8 +520,12 @@
     }
 
     .luxury-table thead tr {
-        background-color: var(--table-header-bg);
+        background-color: rgba(0,0,0,0.02);
         border-radius: 8px;
+    }
+
+    body.dark-mode .luxury-table thead tr {
+        background-color: rgba(255,255,255,0.05);
     }
 
     .luxury-table th {
@@ -563,14 +533,23 @@
         padding: 1rem;
         font-size: 0.9rem;
         font-weight: 500;
-        color: var(--text-secondary);
+        color: #777;
+    }
+
+    body.dark-mode .luxury-table th {
+        color: #c5c5c5;
     }
 
     .luxury-table td {
         padding: 1rem;
         font-size: 0.95rem;
-        border-bottom: 1px solid var(--border-color);
-        color: var(--text-color);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: #333;
+    }
+
+    body.dark-mode .luxury-table td {
+        color: #f1f1f1;
+        border-bottom-color: rgba(255,255,255,0.1);
     }
 
     .rank-badge, .customer-rank {
@@ -580,15 +559,25 @@
         width: 28px;
         height: 28px;
         border-radius: 50%;
-        background: var(--accent-light);
-        color: var(--accent-color);
+        background: rgba(137, 108, 255, 0.1);
+        color: #896CFF;
         font-weight: 600;
         font-size: 0.85rem;
     }
 
+    body.dark-mode .rank-badge,
+    body.dark-mode .customer-rank {
+        background: rgba(137, 108, 255, 0.2);
+        color: #a58bff;
+    }
+
     .highlight {
         font-weight: 600;
-        color: var(--text-color);
+        color: #333;
+    }
+
+    body.dark-mode .highlight {
+        color: #f1f1f1;
     }
 
     /* Customer List */
@@ -602,7 +591,11 @@
         justify-content: space-between;
         align-items: center;
         padding: 1rem 0;
-        border-bottom: 1px solid var(--border-color);
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    body.dark-mode .customer-item {
+        border-bottom-color: rgba(255,255,255,0.1);
     }
 
     .customer-info {
@@ -616,12 +609,20 @@
 
     .customer-name {
         font-weight: 500;
-        color: var(--text-color);
+        color: #333;
+    }
+
+    body.dark-mode .customer-name {
+        color: #f1f1f1;
     }
 
     .customer-spent {
         font-weight: 600;
-        color: var(--accent-color);
+        color: #896CFF;
+    }
+
+    body.dark-mode .customer-spent {
+        color: #a58bff;
     }
 
     /* Action Buttons */
@@ -638,11 +639,11 @@
     .action-btn {
         display: flex;
         align-items: center;
-        background: var(--card-bg);
-        border: 1px solid var(--border-color);
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.05);
         padding: 0.8rem 1.2rem;
         border-radius: 50px;
-        color: var(--text-color);
+        color: #333;
         text-decoration: none;
         font-size: 0.9rem;
         font-weight: 500;
@@ -650,8 +651,15 @@
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
 
+    body.dark-mode .action-btn {
+        background: #1e1e1e;
+        border-color: rgba(255,255,255,0.1);
+        color: #f1f1f1;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+
     .action-btn:hover {
-        background: var(--accent-color);
+        background: #896CFF;
         color: #fff;
         transform: translateY(-3px);
     }
@@ -660,56 +668,6 @@
         margin-right: 0.5rem;
         font-size: 1.1rem;
     }
-
-    /* Glassmorphism Cards */
-.stat-card, .chart-card, .data-card {
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-.dark-theme .stat-card,
-.dark-theme .chart-card,
-.dark-theme .data-card {
-    background: rgba(30, 30, 30, 0.2);
-}
-
-/* Neumorphism Icon Style */
-.stat-icon {
-    box-shadow: 4px 4px 10px rgba(0,0,0,0.1), -4px -4px 10px rgba(255,255,255,0.6);
-}
-
-/* Smooth Theme Transitions */
-body, .dark-theme, .dark-theme * {
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-/* Rotate Toggle Icon on Theme Change */
-.theme-toggle-btn i {
-    transition: transform 0.3s ease;
-}
-.dark-theme .theme-toggle-btn .bi {
-    transform: rotate(180deg);
-}
-
-/* Animated Stat Counters */
-.counter {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: var(--text-color);
-}
-
-/* Expand Card on Hover */
-.stat-card:hover {
-    transform: scale(1.03);
-}
-
-/* Sticky Header */
-.dashboard-header {
-    position: sticky;
-    top: 0;
-    background: var(--bg-color);
-    z-index: 10;
-}
 
     /* Responsive Adjustments */
     @media (max-width: 1200px) {
