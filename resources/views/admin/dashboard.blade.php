@@ -21,7 +21,7 @@
     <div class="stats-grid">
         <div class="stat-card">
             <div class="stat-icon">
-                <img src="{{ asset('gambarproduk.png') }}" alt="Products" width="35" height="35">
+                🛒
             </div>
             <div class="stat-content">
                 <h3>{{ $totalProducts }}</h3>
@@ -31,7 +31,7 @@
         
         <div class="stat-card">
             <div class="stat-icon">
-                <img src="{{ asset('users.png') }}" alt="Users" width="35" height="35">
+                👤
             </div>
             <div class="stat-content">
                 <h3>{{ $totalUsers }}</h3>
@@ -41,17 +41,17 @@
         
         <div class="stat-card">
             <div class="stat-icon">
-                <img src="{{ asset('dollar.png') }}" alt="Sales" width="35" height="35">
+                💰
             </div>
             <div class="stat-content">
-                <h3>{{ $totalSales }}</h3>
+                <h3>Rp {{ number_format($totalSales) }}</h3>
                 <p>Total Sales</p>
             </div>
         </div>
         
         <div class="stat-card">
             <div class="stat-icon">
-                <img src="{{ asset('revenue.png') }}" alt="Revenue" width="35" height="35">
+                📈
             </div>
             <div class="stat-content">
                 <h3>Rp {{ number_format($todayRevenue) }}</h3>
@@ -61,7 +61,7 @@
         
         <div class="stat-card">
             <div class="stat-icon">
-                <img src="{{ asset('dollar.png') }}" alt="Weekly" width="35" height="35">
+                💵
             </div>
             <div class="stat-content">
                 <h3>Rp {{ number_format($weekRevenue) }}</h3>
@@ -660,6 +660,56 @@
         margin-right: 0.5rem;
         font-size: 1.1rem;
     }
+
+    /* Glassmorphism Cards */
+.stat-card, .chart-card, .data-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.dark-theme .stat-card,
+.dark-theme .chart-card,
+.dark-theme .data-card {
+    background: rgba(30, 30, 30, 0.2);
+}
+
+/* Neumorphism Icon Style */
+.stat-icon {
+    box-shadow: 4px 4px 10px rgba(0,0,0,0.1), -4px -4px 10px rgba(255,255,255,0.6);
+}
+
+/* Smooth Theme Transitions */
+body, .dark-theme, .dark-theme * {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Rotate Toggle Icon on Theme Change */
+.theme-toggle-btn i {
+    transition: transform 0.3s ease;
+}
+.dark-theme .theme-toggle-btn .bi {
+    transform: rotate(180deg);
+}
+
+/* Animated Stat Counters */
+.counter {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* Expand Card on Hover */
+.stat-card:hover {
+    transform: scale(1.03);
+}
+
+/* Sticky Header */
+.dashboard-header {
+    position: sticky;
+    top: 0;
+    background: var(--bg-color);
+    z-index: 10;
+}
 
     /* Responsive Adjustments */
     @media (max-width: 1200px) {
