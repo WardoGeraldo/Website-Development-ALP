@@ -96,7 +96,7 @@
 <div class="data-card">
     <div class="data-header">
         <h2>Top Selling Products</h2>
-        <span class="view-all">View All</span>
+        {{-- <span class="view-all">View All</span> --}}
     </div>
     <div class="data-body">
         <table class="luxury-table">
@@ -126,7 +126,7 @@
 <div class="data-card">
     <div class="data-header">
         <h2>Top Customers</h2>
-        <span class="view-all">View All</span>
+        {{-- <span class="view-all">View All</span> --}}
     </div>
     <div class="data-body">
         <ul class="customer-list">
