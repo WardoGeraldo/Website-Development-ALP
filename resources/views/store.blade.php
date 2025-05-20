@@ -102,7 +102,7 @@
         letter-spacing: 4px;
         font-weight: 600;
         margin-bottom: 0.75rem;
-        color: var(--secondary);
+        color: var(--accent);
     }
 
     .store-header p {
@@ -202,29 +202,35 @@
     }
 
     .product-info {
-        padding: 1.2rem;
+        padding: 1rem;
         display: flex;
         flex-direction: column;
+        height: 120px; /* Fixed height for consistent alignment */
         justify-content: space-between;
-        flex-grow: 1;
         position: relative;
     }
-
     .product-info h4 {
-        margin-bottom: 0.5rem;
+        margin-bottom: 1rem;
         font-family: 'Cormorant Garamond', serif;
         font-size: 1.2rem;
         font-weight: 600;
         text-align: center;
         letter-spacing: 1px;
+        height: 50px; /* Fixed height for product titles */
+        display: -webkit-box;
+        -webkit-line-clamp: 2; /* Limit to 2 lines */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .product-price-cart {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 0.8rem;
+        margin-top: auto; /* Push to bottom of container */
         width: 100%;
+    }
 
 
     .product-card::before {
@@ -270,7 +276,7 @@
     }
 
     .btn-cart {
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 0.6rem;
         background: var(--secondary);
         color: var(--primary);
         border: none;
@@ -284,7 +290,7 @@
         overflow: hidden;
         z-index: 1;
         font-weight: 500;
-    }
+        min-width: 80px; 
 
     .btn-cart::before {
         content: '';
@@ -330,37 +336,6 @@
         transform: rotate(45deg);
     }
     
-    /* Scroll to top button */
-    .scroll-top {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        background: var(--accent);
-        color: var(--secondary);
-        border: none;
-        width: 50px;
-        height: 50px;
-        border-radius: 50%;
-        cursor: pointer;
-        z-index: 999;
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s var(--transition);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-    }
-    
-    .scroll-top.visible {
-        opacity: 1;
-        visibility: visible;
-    }
-    
-    .scroll-top:hover {
-        background: var(--accent-dark);
-    }
     
     /* Loading indicator for product cards */
     .loading-overlay {
@@ -452,9 +427,6 @@
 <!-- Dark Mode Button -->
 <button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
 
-<!-- Scroll to top button -->
-<button class="scroll-top" id="scrollTopBtn">↑</button>
-
 <div class="store-wrapper">
     <div class="pattern-overlay"></div>
     
@@ -496,14 +468,6 @@
             </div>
         @endforeach
     </div>
-    
-    <!-- Footer -->
-    <footer class="store-footer">
-        <div class="container">
-            <p>© 2025 LUXURY STORE. All Rights Reserved.</p>
-            <p>Created with <span class="accent">♥</span> in Indonesia</p>
-        </div>
-    </footer>
 </div>
 
 <script>
@@ -518,7 +482,7 @@
         document.body.classList.toggle('dark-mode');
         const darkModeToggle = document.querySelector('.dark-mode-toggle');
         if (document.body.classList.contains('dark-mode')) {
-            darkModeToggle.innerHTML = '☀️';
+            darkModeToggle.innerHTML = '☀';
         } else {
             darkModeToggle.innerHTML = '🌙';
         }
@@ -532,7 +496,7 @@
         const savedDarkMode = localStorage.getItem('darkMode');
         if (savedDarkMode === 'true') {
             document.body.classList.add('dark-mode');
-            document.querySelector('.dark-mode-toggle').innerHTML = '☀️';
+            document.querySelector('.dark-mode-toggle').innerHTML = '☀';
         }
         
         // Scroll to top button functionality
