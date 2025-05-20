@@ -292,7 +292,7 @@
         font-weight: 500;
         min-width: 80px; 
     }
-    
+
     .btn-cart::before {
         content: '';
         position: absolute;
@@ -468,6 +468,9 @@
                 </div>
             </div>
         @endforeach
+        <div id="noProductsMessage" class="text-center text-light mt-4" style="display: none;">
+            Product not found.
+        </div>
     </div>
 </div>
 
@@ -565,4 +568,36 @@
         }, 800);
     }
 </script>
+
+<script>
+    function filterProductsBySearch(event) {
+        event.preventDefault();
+
+        const searchValue = document.getElementById('searchInput').value.toLowerCase().trim();
+        const productCards = document.querySelectorAll('.product-card');
+        const noProductsMessage = document.getElementById('noProductsMessage');
+
+        let hasVisibleProduct = false;
+
+        productCards.forEach(card => {
+            const productName = card.querySelector('.product-info h4').textContent.toLowerCase();
+            if (productName.includes(searchValue)) {
+                card.style.display = 'block';
+                hasVisibleProduct = true;
+            } else {
+                card.style.display = 'none';
+            }
+        });
+
+        // Show or hide "Product not found" message
+        if (!hasVisibleProduct) {
+            noProductsMessage.style.display = 'block';
+        } else {
+            noProductsMessage.style.display = 'none';
+        }
+    }
+</script>
+
+
+
 @endsection
