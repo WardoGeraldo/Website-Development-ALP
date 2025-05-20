@@ -9,16 +9,19 @@
         background: #fff;
         border-radius: 12px;
         box-shadow: 0 6px 20px rgba(0,0,0,0.1);
-        font-family: 'Inter', sans-serif;
+        font-family: 'Cormorant', serif;
     }
 
     h2 {
         text-align: center;
         margin-bottom: 1.5rem;
+        font-family: 'Cormorant', serif;
+
     }
 
     .user-info, .order-summary, .promo-section {
         margin-bottom: 2rem;
+        font-family: 'Cormorant', serif;
     }
 
     .user-info label,
@@ -26,6 +29,7 @@
         font-weight: 600;
         display: block;
         margin-bottom: 0.5rem;
+        font-family: 'Cormorant', serif;
     }
 
     .user-info input,
@@ -35,6 +39,7 @@
         margin-bottom: 1rem;
         border: 1px solid #ccc;
         border-radius: 8px;
+        font-family: 'Cormorant', serif;
     }
 
     .order-item {
@@ -42,6 +47,7 @@
         justify-content: space-between;
         padding: 0.75rem 0;
         border-bottom: 1px solid #eee;
+        font-family: 'Cormorant', serif;
     }
 
     .order-item:last-child {
@@ -53,6 +59,11 @@
         font-weight: bold;
         text-align: right;
         margin-top: 1rem;
+        font-family: 'Cormorant', serif;
+    }
+
+    .dark-mode .checkout-container {
+        background-color: black;
     }
 </style>
 
