@@ -149,6 +149,8 @@
             --accent-color: #896CFF;
             --accent-light: rgba(137, 108, 255, 0.1);
             --table-header-bg: rgba(0, 0, 0, 0.02);
+            --table-bg: #fff;
+            --table-row-hover: rgba(0, 0, 0, 0.02);
             --success-color: #28a745;
             --danger-color: #dc3545;
         }
@@ -164,6 +166,8 @@
             --accent-color: #a58bff;
             --accent-light: rgba(137, 108, 255, 0.2);
             --table-header-bg: rgba(255, 255, 255, 0.05);
+            --table-bg: #1e1e1e;
+            --table-row-hover: rgba(255, 255, 255, 0.05);
             --success-color: #5cb85c;
             --danger-color: #d9534f;
         }
@@ -287,11 +291,13 @@
         .luxury-table {
             width: 100%;
             border-collapse: collapse;
+            background-color: var(--table-bg);
+            border-radius: 8px;
+            overflow: hidden;
         }
 
         .luxury-table thead tr {
             background-color: var(--table-header-bg);
-            border-radius: 8px;
         }
 
         .luxury-table th {
@@ -307,6 +313,14 @@
             font-size: 0.95rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-color);
+        }
+
+        .luxury-table tbody tr:hover {
+            background-color: var(--table-row-hover);
+        }
+
+        .luxury-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
         /* Glassmorphism Cards */

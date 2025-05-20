@@ -1,24 +1,24 @@
 @extends('base.base')
 
 @section('content')
-<!-- AOS Animation -->
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
 <style>
-    /* Body & Dark Mode */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
     body {
         background-color: #fff;
         font-family: 'Inter', sans-serif;
         color: #333;
-        transition: background 0.3s ease, color 0.3s ease;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
+
     body.dark-mode {
         background-color: #121212;
         color: #f5f5f5;
     }
 
-    /* Dark Mode Button */
     .dark-mode-toggle {
         position: fixed;
         top: 20px;
@@ -34,7 +34,11 @@
         transition: background-color 0.3s;
     }
 
-    /* Header */
+    body.dark-mode .dark-mode-toggle {
+        background: #f5f5f5;
+        color: #121212;
+    }
+
     .store-header {
         text-align: center;
         margin-top: 60px;
@@ -42,75 +46,89 @@
     }
 
     .store-header h1 {
-        font-size: 2.5rem;
         font-weight: 600;
-        color: #111;
     }
 
-    /* Form Container */
     .form-container {
-        max-width: 600px;
-        margin: 0 auto 50px auto;
         padding: 30px;
-        background: #fff;
+        border-radius: 10px;
+        background-color: #fff;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        margin-bottom: 40px;
+    }
+
+    body.dark-mode .form-container {
+        background-color: #1e1e1e;
+        color: #f5f5f5;
+        box-shadow: 0 8px 24px rgba(255, 255, 255, 0.05);
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.3rem;
+    }
+
+    .form-control {
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        font-size: 1rem;
+        padding: 0.75rem;
+        border: 1px solid #ccc;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
-    .form-group {
-        margin-bottom: 20px;
-        display: flex;
-        flex-direction: column;
+    body.dark-mode .form-control {
+        background-color: #2b2b2b;
+        border-color: #444;
+        color: #f5f5f5;
     }
 
-    .form-group label {
-        font-weight: 600;
-        margin-bottom: 6px;
-        color: #444;
-    }
-
-    .form-group input, 
-    .form-group textarea {
-        padding: 10px 15px;
-        font-size: 1rem;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        transition: border-color 0.3s;
-    }
-
-    .form-group input:focus, 
-    .form-group textarea:focus {
-        border-color: #e76767;
-        outline: none;
-    }
-
-    .btn-submit {
-        background-color: #111;
-        color: white;
-        font-weight: 700;
+    .btn-primary {
+        background-color: #4f46e5;
         border: none;
-        border-radius: 50px;
-        padding: 1rem 0;
-        font-size: 1.1rem;
-        cursor: pointer;
-        width: 100%;
-        transition: background-color 0.3s;
-    }
-    .btn-submit:hover {
-        background-color: #e76767;
+        padding: 0.6rem 1.5rem;
+        border-radius: 8px;
+        color: white;
+        font-weight: 600;
+        transition: background-color 0.3s ease;
     }
 
-    /* Validation Errors */
+    .btn-primary:hover {
+        background-color: #4338ca;
+    }
+
+    .btn-back {
+        background-color: #333;
+        color: #fff;
+        padding: 0.6rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        margin-top: 1rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-back:hover {
+        background-color: #e76767;
+        color: white;
+    }
+
+    body.dark-mode .btn-back {
+        background-color: #ddd;
+        color: #121212;
+    }
+
     .error-message {
         color: #cc4c4c;
         font-size: 0.875rem;
         margin-top: 4px;
     }
+
+    body.dark-mode .error-message {
+        color: #ff8a8a;
+    }
 </style>
 
-<!-- Dark Mode Button -->
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+<!-- Dark Mode Toggle -->
+<button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
 
 <div class="container">
     <div class="store-header">
@@ -118,61 +136,76 @@
         <p>Create a new promo code to boost your sales.</p>
     </div>
 
-    <div class="form-container">
-        <form action="{{ route('admin.promo.store') }}" method="POST">
-            @csrf
+    <form action="{{ route('admin.promo.store') }}" method="POST" class="form-container" data-aos="fade-up">
+        @csrf
 
-            <div class="form-group">
-                <label for="promo_code">Promo Code <span style="color:#e76767">*</span></label>
-                <input type="text" name="promo_code" id="promo_code" value="{{ old('promo_code') }}" required maxlength="20" placeholder="Enter promo code">
-                @error('promo_code')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Promo Code <span style="color:#e76767">*</span></label>
+            <input type="text" name="promo_code" class="form-control" value="{{ old('promo_code') }}" required maxlength="20" placeholder="Enter promo code">
+            @error('promo_code')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="form-group">
-                <label for="description">Description <span style="color:#e76767">*</span></label>
-                <textarea name="description" id="description" rows="3" required placeholder="Describe the promo">{{ old('description') }}</textarea>
-                @error('description')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Description <span style="color:#e76767">*</span></label>
+            <textarea name="description" class="form-control" rows="3" required placeholder="Describe the promo">{{ old('description') }}</textarea>
+            @error('description')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="form-group">
-                <label for="discount">Discount (%) <span style="color:#e76767">*</span></label>
-                <input type="number" name="discount" id="discount" value="{{ old('discount') }}" required min="1" max="100" placeholder="e.g. 20">
-                @error('discount')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Discount (%) <span style="color:#e76767">*</span></label>
+            <input type="number" name="discount" class="form-control" value="{{ old('discount') }}" required min="1" max="100" placeholder="e.g. 20">
+            @error('discount')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="form-group">
-                <label for="start_date">Start Date <span style="color:#e76767">*</span></label>
-                <input type="date" name="start_date" id="start_date" value="{{ old('start_date') ?? date('Y-m-d') }}" required>
-                @error('start_date')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="mb-3">
+            <label class="form-label">Start Date <span style="color:#e76767">*</span></label>
+            <input type="date" name="start_date" class="form-control" value="{{ old('start_date') ?? date('Y-m-d') }}" required>
+            @error('start_date')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <div class="form-group">
-                <label for="end_date">End Date <span style="color:#e76767">*</span></label>
-                <input type="date" name="end_date" id="end_date" value="{{ old('end_date') ?? date('Y-m-d', strtotime('+1 month')) }}" required>
-                @error('end_date')
-                    <div class="error-message">{{ $message }}</div>
-                @enderror
-            </div>
+        <div class="mb-3">
+            <label class="form-label">End Date <span style="color:#e76767">*</span></label>
+            <input type="date" name="end_date" class="form-control" value="{{ old('end_date') ?? date('Y-m-d', strtotime('+1 month')) }}" required>
+            @error('end_date')
+                <div class="error-message">{{ $message }}</div>
+            @enderror
+        </div>
 
-            <button type="submit" class="btn-submit">Create Promo</button>
-        </form>
-    </div>
+        <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-primary">Create Promo</button>
+            <button type="button" onclick="window.history.back()" class="btn btn-back">← Back</button>
+        </div>
+    </form>
 </div>
 
 <script>
     AOS.init();
 
-    function toggleDarkMode() {
-        document.body.classList.toggle('dark-mode');
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        const body = document.body;
+        const toggle = document.getElementById('darkModeToggle');
+
+        if (isDarkMode) {
+            body.classList.add('dark-mode');
+            toggle.textContent = '☀️';
+        }
+
+        toggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+            const isDark = body.classList.contains('dark-mode');
+            localStorage.setItem('darkMode', isDark);
+            toggle.textContent = isDark ? '☀️' : '🌙';
+        });
+    });
 </script>
 
 @if(session('success'))
