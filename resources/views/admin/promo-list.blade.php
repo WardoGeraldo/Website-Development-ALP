@@ -35,43 +35,64 @@
             transition: background-color 0.3s;
         }
 
+        /* Main Content Container */
+        .main-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
         /* Header */
         .store-header {
             text-align: center;
-            margin-top: 60px;
             margin-bottom: 30px;
         }
 
         .store-header h1 {
             font-size: 2.5rem;
             font-weight: 600;
-            color: #111;
+            color: #111; /* Always black text for header */
+        }
+
+        .store-header p {
+            color: #555;
+            font-size: 1.1rem;
         }
 
         /* Promo Table */
+        .promo-table-container {
+            width: 100%;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
         .promo-table {
             width: 100%;
-            margin-top: 30px;
-            padding: 20px;
             background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-collapse: collapse;
         }
 
         .promo-table th,
         .promo-table td {
-            padding: 10px;
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
+            border-bottom: 1px solid #eee;
         }
 
         .promo-table th {
             font-weight: 600;
-            color: #444;
+            color: #333;
+            background-color: #f8f8f8;
         }
 
         .promo-table td {
-            color: #777;
+            color: #555;
         }
 
         .promo-table tr:hover {
@@ -79,7 +100,7 @@
         }
 
         .btn-view {
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 1.2rem;
             background: #007bff;
             color: white;
             border: none;
@@ -87,16 +108,19 @@
             cursor: pointer;
             font-size: 0.9rem;
             transition: background 0.3s;
+            display: inline-block;
+            text-decoration: none;
         }
 
         .btn-view:hover {
-            background-color: #e76767;
+            background-color: #0056b3;
         }
 
         /* Add Promo Button */
         .btn-add-promo {
             display: block;
-            margin: 20px auto;
+            width: fit-content;
+            margin: 0 auto 30px;
             padding: 0.75rem 2rem;
             background-color: #111;
             color: white;
@@ -109,46 +133,74 @@
         }
 
         .btn-add-promo:hover {
-            background-color: #e76767;
+            background-color: #333;
+        }
+        
+        /* Dark mode adjustments */
+        body.dark-mode .store-header h1 {
+            color: #f5f5f5;
+        }
+        
+        body.dark-mode .store-header p {
+            color: #ccc;
+        }
+        
+        body.dark-mode .promo-table {
+            background-color: #1e1e1e;
+        }
+        
+        body.dark-mode .promo-table th {
+            background-color: #2a2a2a;
+            color: #e0e0e0;
+        }
+        
+        body.dark-mode .promo-table td {
+            color: #bbb;
+            border-bottom: 1px solid #333;
+        }
+        
+        body.dark-mode .promo-table tr:hover {
+            background-color: #2c2c2c;
         }
     </style>
 
-
-    <div class="container">
-        <div class="store-header">
+    <div class="main-container">
+        <div class="store-header" data-aos="fade-down">
             <h1>Promo List</h1>
             <p>Manage and view all active promos for your store.</p>
         </div>
 
         <!-- Add New Promo Button -->
-        <button class="btn-add-promo" onclick="location.href='{{ route('admin.promo.create') }}'">+ Add New Promo</button>
+        <button class="btn-add-promo" data-aos="fade-up" onclick="location.href='{{ route('admin.promo.create') }}'">+ Add New Promo</button>
 
         <!-- Promo Table -->
-        <table class="promo-table" data-aos="fade-up">
-            <thead>
-                <tr>
-                    <th>Promo Code</th>
-                    <th>Description</th>
-                    <th>Discount (%)</th>
-                    <th>Start Date</th>
-                    <th>End Date</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($promos as $promo)
+        <div class="promo-table-container" data-aos="fade-up">
+            <table class="promo-table">
+                <thead>
                     <tr>
-                        <td>{{ $promo['promo_code'] }}</td>
-                        <td>{{ $promo['description'] }}</td>
-                        <td>{{ $promo['discount'] }}</td>
-                        <td>{{ $promo['start_date'] }}</td>
-                        <td>{{ $promo['end_date'] }}</td>
-                        <td><a href="{{ route('admin.promo.details', ['id' => $promo['id']]) }}" class="btn-view">View</a>
-                        </td>
+                        <th>Promo Code</th>
+                        <th>Description</th>
+                        <th>Discount (%)</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($promos as $promo)
+                        <tr>
+                            <td>{{ $promo['promo_code'] }}</td>
+                            <td>{{ $promo['description'] }}</td>
+                            <td>{{ $promo['discount'] }}</td>
+                            <td>{{ $promo['start_date'] }}</td>
+                            <td>{{ $promo['end_date'] }}</td>
+                            <td><a href="{{ route('admin.promo.details', ['id' => $promo['id']]) }}" class="btn-view">View</a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
 
     @if (session('success'))
@@ -157,12 +209,25 @@
         </script>
     @endif
 
-    <script>
-        AOS.init();
+<script>
+    AOS.init();
 
-        // Toggle Dark Mode
-        function toggleDarkMode() {
-            document.body.classList.toggle('dark-mode');
+    // Check for saved dark mode preference
+    document.addEventListener('DOMContentLoaded', function() {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').textContent = '☀️';
         }
-    </script>
+    });
+
+    // Toggle Dark Mode
+    document.getElementById('darkModeToggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
+        this.textContent = isDarkMode ? '☀️' : '🌙';
+    });
+</script>
+
 @endsection

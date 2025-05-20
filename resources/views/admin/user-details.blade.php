@@ -35,6 +35,11 @@
         transition: background-color 0.3s;
     }
 
+    body.dark-mode .dark-mode-toggle {
+        background: #f5f5f5;
+        color: #121212;
+    }
+
     /* Header */
     .store-header {
         text-align: center;
@@ -43,18 +48,36 @@
     }
 
     .store-header h1 {
-        font-size: 2.5rem;
         font-weight: 600;
+        transition: color 0.3s ease;
+    }
+
+    body:not(.dark-mode) .store-header h1 {
         color: #111;
+    }
+
+    body.dark-mode .store-header h1 {
+        color: #f5f5f5;
     }
 
     /* User Details Section */
     .user-details {
         padding: 30px;
-        background-color: #fff;
         border-radius: 8px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         margin: 20px 0;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    body:not(.dark-mode) .user-details {
+        background-color: #fff;
+        color: #333;
+    }
+
+    body.dark-mode .user-details {
+        background-color: #1e1e1e;
+        color: #f5f5f5;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .user-details p {
@@ -62,10 +85,12 @@
         margin: 10px 0;
     }
 
+    .user-details strong {
+        font-weight: 600;
+    }
+
     .btn-back {
         padding: 0.75rem 1.5rem;
-        background-color: #111;
-        color: white;
         border: none;
         border-radius: 50px;
         cursor: pointer;
@@ -75,14 +100,24 @@
         margin-top: 20px;
     }
 
-    .btn-back:hover {
-        background-color: #e76767;
+    body:not(.dark-mode) .btn-back {
+        background-color: #111;
+        color: white;
     }
 
+    body.dark-mode .btn-back {
+        background-color: #f5f5f5;
+        color: #121212;
+    }
+
+    .btn-back:hover {
+        background-color: #e76767;
+        color: white;
+    }
 </style>
 
 <!-- Dark Mode Button -->
-<button class="dark-mode-toggle" onclick="toggleDarkMode()">🌙</button>
+<button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
 
 <div class="container">
     <div class="store-header">
@@ -106,10 +141,22 @@
 <script>
     AOS.init();
 
+    // Check for saved dark mode preference
+    document.addEventListener('DOMContentLoaded', function() {
+        const isDarkMode = localStorage.getItem('darkMode') === 'true';
+        if (isDarkMode) {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').textContent = '☀️';
+        }
+    });
+
     // Toggle Dark Mode
-    function toggleDarkMode() {
+    document.getElementById('darkModeToggle').addEventListener('click', function() {
         document.body.classList.toggle('dark-mode');
-    }
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        localStorage.setItem('darkMode', isDarkMode);
+        this.textContent = isDarkMode ? '☀️' : '🌙';
+    });
 </script>
 
 @endsection

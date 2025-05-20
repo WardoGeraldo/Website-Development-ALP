@@ -40,7 +40,7 @@
 
         /* Header styles */
         .container {
-            margin-top: 50px;
+            margin-top: 2;
         }
 
         .sales-list-header {
