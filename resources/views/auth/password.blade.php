@@ -573,17 +573,14 @@
                     </div>
                 @endif
 
-                <form method="POST" action="{{ route('password.email.custom') }}">
-                    @csrf
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" 
-                            class="form-input @error('email') is-invalid @enderror" 
-                            placeholder=" " value="{{ old('email') }}" required autofocus>
-                        <label for="email">Email Address</label>
-                    </div>
+                <div class="form-group">
+                    <input type="email" id="email" name="email" 
+                        class="form-input" 
+                        placeholder=" " value="{{ old('email') }}">
+                    <label for="email">Email Address</label>
+                </div>
 
-                    <button type="submit" class="btn btn-reset">Send Reset Link</button>
-                </form>
+                <a href="{{ route('login.show') }}" class="btn btn-reset">Send Reset Link</a>
 
                 <div class="back-to-login">
                     <a href="{{ route('login.show') }}">← Back to Login</a>

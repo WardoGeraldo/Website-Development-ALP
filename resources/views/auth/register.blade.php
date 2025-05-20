@@ -580,7 +580,7 @@
                     </div>
                 @endif
 
-                <form method="POST" action="#">
+                <form method="POST" action="{{ route('register') }}" id="registerForm">
                     @csrf
                     <div class="form-group">
                         <input 
@@ -621,19 +621,9 @@
                         <label for="password">Password</label>
                     </div>
 
-                    <div class="form-group">
-                        <input 
-                            type="password" 
-                            id="password_confirmation" 
-                            name="password_confirmation" 
-                            class="form-input"
-                            placeholder=" " 
-                            required
-                        >
-                        <label for="password_confirmation">Confirm Password</label>
-                    </div>
+                    <button type="button" class="btn btn-signup" onclick="window.location='{{ route('login.show') }}'">Create Account</button>
 
-                    <button type="submit" class="btn btn-signup">Create Account</button>
+
                 </form>
 
                 <div class="login-link">
@@ -657,6 +647,37 @@
                 }, 1500);
             }
 
+            // Form submission handler
+            const registerForm = document.getElementById('registerForm');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    // Prevent the default form submission
+                    e.preventDefault();
+                    
+                    // Get form values
+                    const name = document.getElementById('name').value.trim();
+                    const email = document.getElementById('email').value.trim();
+                    const password = document.getElementById('password').value;
+                    const passwordConfirmation = document.getElementById('password_confirmation').value;
+                    
+                    // Basic validation
+                    if (!name || !email || !password || !passwordConfirmation) {
+                        alert('Please fill in all fields');
+                        return;
+                    }
+                    
+                    if (password !== passwordConfirmation) {
+                        alert('Passwords do not match');
+                        return;
+                    }
+                    
+                    // If validation passes, submit the form
+                    this.submit();
+                });
+            }
+            
             // Floating particles effect
             const particlesContainer = document.getElementById('particles');
             
