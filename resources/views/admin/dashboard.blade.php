@@ -95,7 +95,7 @@
 <!-- Top Products Section -->
 <div class="data-card">
     <div class="data-header">
-        <h2>Top Selling Products</h2>
+        <h2>Top 5 Selling Products</h2>
         {{-- <span class="view-all">View All</span> --}}
     </div>
     <div class="data-body">
