@@ -321,6 +321,43 @@
             transform: rotate(180deg);
         }
 
+        /* Table responsiveness */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        /* Adjust padding on small screens */
+        @media (max-width: 576px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .data-header h2 {
+                font-size: 1rem;
+            }
+
+            .action-btn {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .action-btn i {
+                margin-right: 0.4rem;
+                font-size: 0.9rem;
+            }
+
+            .theme-toggle-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 768px) {
             .dashboard-header {

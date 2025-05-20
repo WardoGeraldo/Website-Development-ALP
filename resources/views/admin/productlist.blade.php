@@ -153,7 +153,6 @@ tbody tr:hover td {
     <table>
         <thead>
             <tr>
-                <th><input type="checkbox" /></th>
                 <th>Image</th>
                 <th>Name</th>
                 <th>Price</th>
@@ -164,7 +163,6 @@ tbody tr:hover td {
         <tbody>
             @foreach ($products as $product)
                 <tr>
-                    <td><input type="checkbox" /></td>
                     <td><img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="product-image" loading="lazy" /></td>
                     <td>{{ $product['name'] }}</td>
                     <td>Rp {{ number_format($product['price'], 0, ',', '.') }}</td>
