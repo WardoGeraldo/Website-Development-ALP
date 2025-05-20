@@ -1,151 +1,19 @@
 @extends('base.base')
-
 @section('content')
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
-    :root {
-        --bg: #f8fafc;
-        --card-bg: #ffffff;
-        --text: #1f2937;
-        --text-muted: #6b7280;
-        --header-bg: #111827;
-        --hover: #f1f5f9;
-        --badge-complete: #22c55e;
-        --badge-pending: #facc15;
-        --btn: #4f46e5;
-        --btn-hover: #4338ca;
-    }
-
-    body.dark-mode {
-        --bg: #121212;
-        --card-bg: #1e1e1e;
-        --text: #f3f4f6;
-        --text-muted: #d1d5db;
-        --header-bg: #2d2d2d;
-        --hover: #2a2a2a;
-        --badge-complete: #22c55e;
-        --badge-pending: #facc15;
-        --btn: #6366f1;
-        --btn-hover: #818cf8;
-    }
-
-    body {
-        background-color: var(--bg);
-        color: var(--text);
-        font-family: 'Inter', sans-serif;
-    }
-
-    .page-header {
-        text-align: center;
-        margin: 2rem 0 1rem;
-    }
-
-    .page-header h3 {
-        font-size: 2rem;
-        font-weight: 600;
-        color: var(--text);
-    }
-
-    .page-header p {
-        font-size: 1rem;
-        color: var(--text-muted);
-    }
-
-    .card-table {
-        background-color: var(--card-bg);
-        border-radius: 12px;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.05);
-        padding: 2rem;
-        transition: background 0.3s ease;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    thead {
-        background-color: var(--header-bg);
-    }
-
-    thead th {
-        color: #ffffff;
-        padding: 1rem;
-        text-align: center;
-        font-weight: 500;
-    }
-
-    tbody td {
-        padding: 1rem;
-        text-align: center;
-        color: var(--text);
-        vertical-align: middle;
-    }
-
-    tbody tr:nth-child(odd) {
-        background-color: transparent;
-    }
-
-    tbody tr:hover {
-        background-color: var(--hover);
-        transition: 0.3s ease;
-    }
-
-    .badge {
-        padding: 0.4em 0.8em;
-        font-size: 0.85rem;
-        border-radius: 999px;
-        font-weight: 600;
-        display: inline-block;
-    }
-
-    .badge.completed {
-        background-color: var(--badge-complete);
-        color: white;
-    }
-
-    .badge.pending {
-        background-color: var(--badge-pending);
-        color: #1f2937;
-    }
-
-    .btn-view {
-        background-color: var(--btn);
-        color: #fff;
-        border: none;
-        padding: 0.5rem 1.2rem;
-        border-radius: 8px;
-        font-size: 0.875rem;
-        font-weight: 500;
-        transition: background-color 0.3s ease;
-    }
-
-    .btn-view:hover {
-        background-color: var(--btn-hover);
-        color: white;
-    }
-
-    @media (max-width: 768px) {
-        .btn-view {
-            width: 100%;
-            margin-top: 0.5rem;
-        }
-    }
-</style>
-
-<div class="container py-4">
-    <div class="page-header" data-aos="fade-up">
-        <h3>Sales List</h3>
-        <p>Monitor all your transactions at a glance</p>
+<div class="dashboard-container">
+    <!-- Header Section -->
+    <div class="dashboard-header">
+        <h1>Sales List</h1>
+        <div class="header-controls">
+        </div>
     </div>
-
-    <div class="card-table" data-aos="fade-up" data-aos-delay="100">
-        <table>
+<!-- Sales Table -->
+<div class="data-card" data-aos="fade-up">
+    <div class="data-header">
+        <h2>Monitor all your transactions at a glance</h2>
+    </div>
+    <div class="data-body">
+        <table class="luxury-table">
             <thead>
                 <tr>
                     <th>#ID</th>
@@ -164,31 +32,299 @@
                         <td>
                             @php
                                 $statusClass = match($s['status']) {
-                                    'completed' => 'badge completed',
-                                    'pending' => 'badge pending',
-                                    default => 'badge bg-secondary text-white'
+                                    'completed' => 'status-badge completed',
+                                    'pending' => 'status-badge pending',
+                                    default => 'status-badge default'
                                 };
                             @endphp
                             <span class="{{ $statusClass }}">{{ ucfirst($s['status']) }}</span>
                         </td>
                         <td>
-                            <a href="{{ route('admin.invoice.index', ['sales_id' => $s['id']]) }}" class="btn-view">
-                                View
+                            <a href="{{ route('admin.invoice.index', ['sales_id' => $s['id']]) }}" class="action-btn">
+                                <i class="bi bi-eye"></i>
+                                <span>View</span>
                             </a>
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-muted text-center py-4">No sales data available.</td>
+                        <td colspan="5" class="empty-message">No sales data available.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+</div>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>
+    // Initialize AOS
     AOS.init();
+    
+    // Display current date
+    const dateElement = document.getElementById('current-date');
+    if (dateElement) {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const today = new Date();
+        dateElement.textContent = today.toLocaleDateString('en-US', options);
+    }
+
+    // Check for saved theme preference or use system preference
+    const savedTheme = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+    
+    // Set initial theme
+    if (initialTheme === 'dark') {
+        document.body.classList.add('dark-theme');
+    }
 </script>
+<style>
+    /* Base Styles with Dark Mode Support */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    :root {
+        --bg-color: #F8F9FD;
+        --text-color: #333;
+        --text-secondary: #777;
+        --border-color: rgba(0,0,0,0.05);
+        --card-bg: #fff;
+        --card-shadow: 0 4px 20px rgba(0,0,0,0.04);
+        --card-hover-shadow: 0 8px 25px rgba(0,0,0,0.08);
+        --accent-color: #896CFF;
+        --accent-light: rgba(137, 108, 255, 0.1);
+        --table-header-bg: rgba(0,0,0,0.02);
+        --status-completed: #22c55e;
+        --status-pending: #facc15;
+        --status-default: #9ca3af;
+    }
+
+    .dark-theme {
+        --bg-color: #121212;
+        --text-color: #f1f1f1;
+        --text-secondary: #c5c5c5;
+        --border-color: rgba(255,255,255,0.1);
+        --card-bg: #1e1e1e;
+        --card-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        --card-hover-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        --accent-color: #a58bff;
+        --accent-light: rgba(137, 108, 255, 0.2);
+        --table-header-bg: rgba(255,255,255,0.05);
+        --status-completed: #22c55e;
+        --status-pending: #facc15;
+        --status-default: #9ca3af;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-color: var(--bg-color);
+        color: var(--text-color);
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .dashboard-container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Header Styles */
+    .dashboard-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .dashboard-header h1 {
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--text-color);
+        position: relative;
+    }
+
+    .dashboard-header h1::after {
+        content: "";
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 40px;
+        height: 3px;
+        background: linear-gradient(90deg, #896CFF, #5A3FD9);
+        border-radius: 10px;
+    }
+    
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .date-display {
+        display: flex;
+        align-items: center;
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        gap: 0.5rem;
+    }
+
+    /* Cards & Containers */
+    .data-card {
+        background: var(--card-bg);
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        transition: all 0.3s ease;
+        margin-bottom: 2rem;
+    }
+
+    .data-card:hover {
+        box-shadow: var(--card-hover-shadow);
+        border-color: rgba(137, 108, 255, 0.2);
+    }
+
+    .data-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .data-header h2 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-color);
+    }
+
+    /* Table Styles */
+    .luxury-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .luxury-table thead tr {
+        background-color: var(--table-header-bg);
+        border-radius: 8px;
+    }
+
+    .luxury-table th {
+        text-align: left;
+        padding: 1rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: var(--text-secondary);
+    }
+
+    .luxury-table td {
+        padding: 1rem;
+        font-size: 0.95rem;
+        border-bottom: 1px solid var(--border-color);
+        color: var(--text-color);
+    }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.4em 0.8em;
+        font-size: 0.85rem;
+        border-radius: 999px;
+        font-weight: 600;
+    }
+
+    .status-badge.completed {
+        background-color: var(--status-completed);
+        color: white;
+    }
+
+    .status-badge.pending {
+        background-color: var(--status-pending);
+        color: #1f2937;
+    }
+
+    .status-badge.default {
+        background-color: var(--status-default);
+        color: white;
+    }
+
+    /* Action Button */
+    .action-btn {
+        display: inline-flex;
+        align-items: center;
+        background: var(--accent-light);
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        color: var(--accent-color);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .action-btn:hover {
+        background: var(--accent-color);
+        color: #fff;
+        transform: translateY(-3px);
+    }
+
+    .action-btn i {
+        margin-right: 0.5rem;
+        font-size: 1rem;
+    }
+
+    /* Empty Table Message */
+    .empty-message {
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 2rem 0 !important;
+        font-style: italic;
+    }
+
+    /* Glassmorphism Cards */
+    .data-card {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .dark-theme .data-card {
+        background: rgba(30, 30, 30, 0.2);
+    }
+
+    /* Smooth Theme Transitions */
+    body, .dark-theme, .dark-theme * {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .dashboard-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+        
+        .header-controls {
+            width: 100%;
+            justify-content: space-between;
+        }
+        
+        .luxury-table {
+            display: block;
+            overflow-x: auto;
+        }
+    }
+</style>
 @endsection
