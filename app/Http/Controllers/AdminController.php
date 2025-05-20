@@ -153,6 +153,37 @@ class AdminController extends Controller
         ];
     }
 
+    // Display edit form
+    public function editUser($id)
+    {
+        $users = $this->getDummyUsers();
+
+        if (!isset($users[$id])) {
+            abort(404);
+        }
+
+        $user = $users[$id];
+
+        return view('admin.user-list', compact('user'));
+    }
+
+    // Handle form submission (simulate update)
+    public function updateUser(Request $request, $id)
+    {
+        $data = $request->only(['name', 'email', 'address', 'phone', 'gender', 'dob', 'role']);
+
+        // Simulate "updated" user
+        $user = array_merge(['id' => $id], $data);
+
+        // Get the full dummy list again (not updated for real)
+        $users = $this->getDummyUsers();
+
+        // Redirect to the user list with success flash message
+        return redirect()->route('admin.userlist')->with('success', 'User updated successfully (temporarily)');
+    }
+
+
+
     public function create()
     {
         // Return the view with an empty product data
@@ -415,39 +446,47 @@ class AdminController extends Controller
         return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
     }
 
-   public function dashboardView()
-{
-    // Dummy data, ganti sesuai logikamu nanti
-    $totalProducts = 100;
-    $totalUsers = 50;
-    $totalSales = 120000000;
-    $totalPromos = 4;
+    public function dashboardView()
+    {
+        // Dummy data, ganti sesuai logikamu nanti
+        $totalProducts = 100;
+        $totalUsers = 50;
+        $totalSales = 120000000;
+        $totalPromos = 4;
 
-    $todayRevenue = 1250000;
-    $weekRevenue = 8400000;
+        $todayRevenue = 1250000;
+        $weekRevenue = 8400000;
 
-    $topProducts = [
-        ['name' => 'Oversized Tee', 'sold' => 40, 'stock' => ['s'=>10, 'm'=>20, 'l'=>5, 'xxl'=>5]],
-        ['name' => 'Minimalist Hoodie', 'sold' => 32, 'stock' => ['s'=>5, 'm'=>15, 'l'=>8, 'xxl'=>4]],
-    ];
+        $topProducts = [
+            ['name' => 'Oversized Tee', 'sold' => 40, 'stock' => ['s' => 10, 'm' => 20, 'l' => 5, 'xxl' => 5]],
+            ['name' => 'Minimalist Hoodie', 'sold' => 32, 'stock' => ['s' => 5, 'm' => 15, 'l' => 8, 'xxl' => 4]],
+        ];
 
-    $topCustomers = [
-        ['name' => 'Nadya Zahra', 'email' => 'nadya@example.com', 'orders' => 8, 'totalSpent' => 1250000],
-        ['name' => 'Dewi Lestari', 'email' => 'dewi@example.com', 'orders' => 7, 'totalSpent' => 900000],
-        ['name' => 'Intan Maharani', 'email' => 'dewi@example.com', 'orders' => 8,'totalSpent' => 880000],
-    ];
+        $topCustomers = [
+            ['name' => 'Nadya Zahra', 'email' => 'nadya@example.com', 'orders' => 8, 'totalSpent' => 1250000],
+            ['name' => 'Dewi Lestari', 'email' => 'dewi@example.com', 'orders' => 7, 'totalSpent' => 900000],
+            ['name' => 'Intan Maharani', 'email' => 'dewi@example.com', 'orders' => 8, 'totalSpent' => 880000],
+        ];
 
-    $salesMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-    $salesData = [2000000, 2500000, 1800000, 3000000, 3500000];
+        $salesMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
+        $salesData = [2000000, 2500000, 1800000, 3000000, 3500000];
 
-    $categoryLabels = ['Top', 'Bottom', 'Accessories'];
-    $categoryData = [40, 30, 30];
+        $categoryLabels = ['Top', 'Bottom', 'Accessories'];
+        $categoryData = [40, 30, 30];
 
-    return view('admin.dashboard', compact(
-        'totalProducts', 'totalUsers', 'totalSales', 'totalPromos',
-        'todayRevenue', 'weekRevenue', 'topProducts', 'topCustomers',
-        'salesMonths', 'salesData', 'categoryLabels', 'categoryData'
-    ));
-}
-
+        return view('admin.dashboard', compact(
+            'totalProducts',
+            'totalUsers',
+            'totalSales',
+            'totalPromos',
+            'todayRevenue',
+            'weekRevenue',
+            'topProducts',
+            'topCustomers',
+            'salesMonths',
+            'salesData',
+            'categoryLabels',
+            'categoryData'
+        ));
+    }
 }
