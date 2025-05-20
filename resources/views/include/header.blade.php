@@ -40,6 +40,39 @@
         color: #f5f5f5;
         border-color: #444;
     }
+    .dark-mode .size-chart-container {
+    background-color: #121212;
+    color: #f0f0f0;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode table {
+        background-color: #1e1e1e;
+        color: #eee;
+    }
+
+    .dark-mode table thead {
+        background-color: #2a2a2a;
+    }
+
+    .dark-mode table th,
+    .dark-mode table td {
+        border-bottom: 1px solid #444;
+    }
+
+    .dark-mode table th {
+        color: #ccc;
+    }
+
+    .dark-mode .back-button {
+        color: #fff;
+        background-color: #2a2a2a;
+    }
+
+    .dark-mode .back-button:hover {
+        background-color: #3a3a3a;
+    }
+
 
     body.dark-mode .form-control::placeholder {
         color: #aaa;
@@ -130,3 +163,9 @@
         </div>
     </nav>
 @endif
+
+<script>
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>

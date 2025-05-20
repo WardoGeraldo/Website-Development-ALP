@@ -40,6 +40,17 @@
         font-weight: bold;
         margin-top: 1rem;
     }
+
+    .dark-mode .history-container{
+        background-color: #121212;
+        color: #f0f0f0;
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+    }
+
+    .dark-mode .history-entry h4 {
+        color: #f0f0f0;
+        box-shadow: 0 6px 20px rgba(255, 255, 255, 0.05);
+    }
 </style>
 
 <div class="history-container">
