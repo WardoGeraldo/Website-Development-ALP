@@ -19,6 +19,7 @@
         background-color: var(--footer-bg) !important;
         color: var(--footer-text) !important;
         transition: background-color 0.3s ease, color 0.3s ease;
+        font-size: 0.95rem;
     }
 
     footer a {
@@ -33,7 +34,56 @@
     footer .border-top {
         border-color: var(--footer-border) !important;
     }
+
+    footer h5 {
+        font-size: 1.1rem;
+    }
+
+    footer ul {
+        padding-left: 0;
+    }
+
+    footer ul li {
+        margin-bottom: 0.5rem;
+    }
+
+    footer .fab {
+        transition: transform 0.2s ease;
+    }
+
+    footer .fab:hover {
+        transform: scale(1.15);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        footer .row {
+            flex-direction: column;
+        }
+
+        footer .col-md-3 {
+            width: 100%;
+            text-align: center;
+        }
+
+        footer .col-md-3 h5 {
+            margin-top: 1.5rem;
+        }
+
+        footer .col-md-3 ul {
+            margin-bottom: 1rem;
+        }
+
+        footer .d-flex.gap-3 {
+            justify-content: center;
+        }
+
+        footer .text-center {
+            padding-top: 1rem;
+        }
+    }
 </style>
+
 
 <footer class="pt-5 border-top">
     <div class="container">

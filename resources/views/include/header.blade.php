@@ -50,27 +50,43 @@
     }
 
     @media (max-width: 768px) {
-    .search-wrapper {
+        .search-wrapper {
+            width: 100%;
+        }
+
+        .navbar-collapse {
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    .navbar-nav {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .navbar-nav li {
+        text-align: center;
+    }
+
+    form {
         width: 100%;
     }
 
-    .navbar-collapse {
-        flex-direction: column;
-        align-items: stretch;
+    .navbar-toggler {
+        border: none;
     }
-}
-        .navbar-nav {
-            width: 100%;
-            margin-top: 1rem;
-        }
 
-        .navbar-nav li {
-            text-align: center;
-        }
+    .navbar-toggler-icon {
+        background-image: var(--toggler-icon);
+    }
 
-        form {
-            width: 100%;
-        }
+    body.dark-mode {
+        --toggler-icon: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+    }
+
+    body:not(.dark-mode) {
+        --toggler-icon: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='black' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
     }
 </style>
 

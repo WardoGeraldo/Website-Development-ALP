@@ -28,6 +28,7 @@
         }
 
         /* Dark Mode Toggle Button Styles */
+        /* Base styling */
         .dark-mode-toggle {
             position: fixed;
             top: 20px;
@@ -38,7 +39,6 @@
             padding: 0.75rem 1.2rem;
             border-radius: 25px;
             cursor: grab;
-            /* change to grab */
             z-index: 9999;
             font-size: 1.3rem;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
@@ -46,27 +46,46 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-
+        /* Hover */
         .dark-mode-toggle:hover {
             background-color: #e76767;
             box-shadow: 0 6px 12px rgba(231, 103, 103, 0.7);
         }
+
+        /* Responsive adjustment */
+        @media (max-width: 768px) {
+            .dark-mode-toggle {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: auto;
+                padding: 0.6rem 1rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dark-mode-toggle {
+                bottom: 15px;
+                right: 15px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <script>
-   document.addEventListener('DOMContentLoaded', function () {
-    const savedMode = localStorage.getItem('darkMode');
+    document.addEventListener('DOMContentLoaded', function() {
+        const savedMode = localStorage.getItem('darkMode');
 
-    // Kalau belum pernah disimpan, tetap dark mode
-    if (!savedMode || savedMode === 'enabled') {
-        document.body.classList.add('dark-mode');
-        document.querySelector('.dark-mode-toggle').textContent = '☀️';
-    } else {
-        document.body.classList.remove('dark-mode');
-        document.querySelector('.dark-mode-toggle').textContent = '🌙';
-    }
-});
-
+        // Kalau belum pernah disimpan, tetap dark mode
+        if (!savedMode || savedMode === 'enabled') {
+            document.body.classList.add('dark-mode');
+            document.querySelector('.dark-mode-toggle').textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.querySelector('.dark-mode-toggle').textContent = '🌙';
+        }
+    });
 </script>
 
 <body>
@@ -108,11 +127,22 @@
 
                 const onMouseMove = function(e) {
                     isDragging = true;
-                    toggleButton.style.top = `${e.clientY - offsetY}px`;
-                    toggleButton.style.left = `${e.clientX - offsetX}px`;
+                    const maxX = window.innerWidth - toggleButton.offsetWidth;
+                    const maxY = window.innerHeight - toggleButton.offsetHeight;
+
+                    let newX = e.clientX - offsetX;
+                    let newY = e.clientY - offsetY;
+
+                    // Constrain within window
+                    newX = Math.max(0, Math.min(newX, maxX));
+                    newY = Math.max(0, Math.min(newY, maxY));
+
+                    toggleButton.style.left = `${newX}px`;
+                    toggleButton.style.top = `${newY}px`;
                     toggleButton.style.right = 'auto';
                     toggleButton.style.cursor = 'grabbing';
                 };
+
 
                 const onMouseUp = function() {
                     document.removeEventListener('mousemove', onMouseMove);
