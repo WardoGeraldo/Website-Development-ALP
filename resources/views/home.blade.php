@@ -377,7 +377,12 @@
         font-size: 1.5rem;
         font-weight: 600;
         margin-bottom: 8px;
+        font-size: 50px;
         color: var(--text-dark);
+    }
+
+    .dark-mode .product-title{
+        color: black;
     }
 
     .product-price {
@@ -406,6 +411,75 @@
         color: white;
         border-color: transparent;
     }
+
+    /* Serif heading for elegant title */
+    h2.product-title {
+        font-family: 'Playfair Display', serif;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+
+    /* Elegant badges */
+    .badge-tag {
+        background-color: #E0C8A0; /* soft beige */
+        color: #3B3B3B;
+        font-weight: 600;
+        font-size: 12px;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+    }
+
+    /* Card styling */
+    .card {
+        background-color: #121212;
+        color: #ffffff;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    }
+
+    .card-img-top {
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+        object-fit: cover;
+        height: 350px;
+        width: 100%;
+    }
+
+    /* Text styling */
+    .card-title {
+        font-weight: 500;
+        font-size: 16px;
+        margin-bottom: 0.25rem;
+    }
+
+    .product-price {
+        font-weight: 500;
+        color: #f3c17c; /* soft gold */
+        font-size: 15px;
+    }
+
+    /* Button styling */
+    .btn-outline-light {
+        border: 1px solid #ccc;
+        color: #fff;
+        padding: 6px 18px;
+        font-size: 13px;
+        border-radius: 50px;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-outline-light:hover {
+        background-color: #f3c17c;
+        color: #000;
+        border-color: #f3c17c;
+    }
+
 
     /* === ABOUT SECTION === */
     .about-section {
@@ -788,39 +862,26 @@
     </div>
 </div>
 
-<!-- Featured Products -->
-<div class="section-spacing">
-    <div class="container">
-        <div class="section-heading" data-aos="fade-up">
-            <span class="heading-badge">Collection</span>
-            <h2 class="section-title">Best Seller</h2>
-            <p class="section-subtitle">Temukan pilihan terbaik untuk setiap kesempatan.</p>
-        </div>
-        
-        <div class="row">
-            @php $products = [
-                ['title' => 'Oversized Tee', 'price' => 'Rp 299.000', 'badge' => 'New Arrival'],
-                ['title' => 'Minimalist Hoodie', 'price' => 'Rp 499.000', 'badge' => 'Best Seller'],
-                ['title' => 'Slim Fit Pants', 'price' => 'Rp 399.000', 'badge' => 'Limited'],
-                ['title' => 'Monochrome Cap', 'price' => 'Rp 149.000', 'badge' => 'Last Stock'],
-            ]; @endphp
-
-            @foreach ($products as $index => $product)
-            <div class="col-md-3 col-sm-6" data-aos="luxury-fade-up" data-aos-delay="{{ 100 * $index }}">
-                <div class="product-card">
-                    <div class="product-image">
-                        <span class="product-badge">{{ $product['badge'] }}</span>
-                        <img src="fotoBaju.jpg" alt="{{ $product['title'] }}">
+<div class="container py-5">
+    <h5 class="text-center text-uppercase text-[13px] text-[#C7A17A] tracking-wide mb-2">Collection</h5>
+    <h2 class="product-title text-center font-serif text-4xl mb-1">Best Seller</h2>
+    <p class=" text-center font-serif text-gray-300 mb-4">Temukan pilihan terbaik untuk setiap kesempatan.</p>
+    <div class="row justify-content-center">
+        @foreach ($bestSellers as $product)
+            <div class="col-md-3 mb-4">
+                <div class="card bg-dark text-white rounded-3 shadow-lg h-100 border-0">
+                    <div class="position-relative">
+                        <span class="badge bg-warning text-dark position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill">BEST SELLER</span>
+                        <img src="{{ $product['image'] }}" class="card-img-top rounded-top" alt="{{ $product['name'] }}">
                     </div>
-                    <div class="product-details">
-                        <h3 class="product-title">{{ $product['title'] }}</h3>
-                        <div class="product-price">{{ $product['price'] }}</div>
-                        <a href="{{ route('product.show', ['id' => 1]) }}" class="product-btn">Lihat Detail</a>
+                    <div class="card-body d-flex flex-column justify-content-between">
+                        <h5 class="card-title">{{ $product['name'] }}</h5>
+                        <p class="product-price mb-2">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
+                        <a href="{{ route('detail.bestSeller', $product['id']) }}" class="btn btn-outline-light mt-auto rounded-pill">LIHAT DETAIL</a>
                     </div>
                 </div>
             </div>
-            @endforeach
-        </div>
+        @endforeach
     </div>
 </div>
 

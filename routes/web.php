@@ -22,6 +22,7 @@
 
     // Halaman utama dan /home mengarah ke home.blade.php
     Route::get('/', [HomeController::class, 'show'])->name('home');
+    Route::get('/', [ProductController::class, 'home'])->name('home');
     Route::get('/home', [HomeController::class, 'show']); // Tambahan supaya /home tidak 404
 
     // Login
@@ -49,6 +50,7 @@
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.show');
     Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
+    Route::get('/best-seller/{id}',[ProductController::class, 'showBestSeller'])->name('detail.bestSeller');
 
     Route::get('/size-chart', function () {
         return view('size-chart');

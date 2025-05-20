@@ -27,6 +27,18 @@ class ProductController extends Controller
         }
     }
 
+    public function showBestSeller($id)
+    {
+        $products = $this->getProductsWithImages();
+
+        if (isset($products[$id])) {
+            $product = $products[$id];
+            return view('product-detail-home', compact('product'));
+        } else {
+            abort(404);
+        }
+    }
+
     // Kumpulan produk dengan image langsung dalam array
     protected function getProductsWithImages()
     {
@@ -165,5 +177,15 @@ class ProductController extends Controller
     public function getAllProducts()
     {
         return $this->getProductsWithImages();
+    }
+
+    public function home()
+    {
+        $productController = new ProductController();
+        $products = $productController->getAllProducts();
+
+        $bestSellers = array_slice($products, 0, 4); // Top 4 items
+
+        return view('home', compact('bestSellers'));
     }
 }
