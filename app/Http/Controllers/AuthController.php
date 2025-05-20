@@ -34,7 +34,7 @@ public function login_auth(Request $request)
         if ($validated['email'] == 'admin@admin.com') {
             session(['role' => 'admin']);
             // Redirect admin to admin dashboard
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('admin.dash');
         } else {
             session(['role' => 'user']);
             // Redirect normal user to home page
