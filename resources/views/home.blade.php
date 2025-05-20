@@ -304,6 +304,10 @@
         color: var(--text-dark);
     }
 
+    .dark-mode .section-title {
+        color: white;
+    }
+
     .section-subtitle {
         font-size: 1.1rem;
         color: rgba(16, 16, 16, 0.6);

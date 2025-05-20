@@ -9,7 +9,7 @@
         background-color: #fafafa;
         border-radius: 20px;
         box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
-        font-family: 'Poppins', sans-serif;
+        font-family: 'Cormorant', serif;
         color: #222;
     }
 

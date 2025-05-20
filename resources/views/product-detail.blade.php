@@ -28,12 +28,19 @@
     .product-info h1 {
         font-size: 2.5rem;
         font-weight: bold;
+        font-family: 'Cormorant', serif;
     }
 
     .product-info .description {
         font-size: 1.1rem;
         margin-top: 10px;
         color: #555;
+        font-family: 'Cormorant', serif;
+
+    }
+
+    .dark-mode .product-info .description {
+        color: white;
     }
 
     .product-info .price {
@@ -41,6 +48,12 @@
         font-weight: 600;
         color: #222;
         margin-top: 15px;
+        font-family: 'Cormorant', serif;
+
+    }
+
+    .dark-mode .product-info .price {
+        color: white;
     }
 
     .product-info select,
@@ -50,6 +63,9 @@
         width: 100%;
         border-radius: 8px;
         border: 1px solid #ccc;
+        font-family: 'Cormorant', serif;
+        color: black;
+
     }
 
     .product-info button {
@@ -66,18 +82,6 @@
     .product-info button:hover {
         background-color: #333;
     }
-    .size-chart-link {
-        display: inline-block;
-        margin-top: 6px;
-        font-size: 14px;
-        color: #333;
-        text-decoration: underline;
-        transition: color 0.3s ease;
-    }
-
-    .size-chart-link:hover {
-        color: #000;
-    }
 
     .wishlist-button {
         display: inline-block;
@@ -86,6 +90,10 @@
         cursor: pointer;
         font-size: 16px;
         text-decoration: underline;
+    }
+
+    .dark-mode .wishlist-button {
+        color: white;
     }
 
     .back-button {
@@ -103,10 +111,14 @@
         color: #666;
         cursor: pointer;
         text-decoration: underline;
+        font-family: 'Cormorant', serif;
         font-weight: 500;
         font-size: 20px;
     }
 
+    .dark-mode .back-button-top {
+        color: white;
+    }
 </style>
 
 <div class="container py-5 position-relative">
@@ -139,7 +151,6 @@
                             <option value="{{ strtolower($size) }}">{{ $size }}</option>
                         @endforeach
                     </select>
-                    <a href="{{ route('size.chart') }}" target="_blank" class="size-chart-link">🔍 View Size Chart</a>
                 </div>
             @endif
 

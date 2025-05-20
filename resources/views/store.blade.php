@@ -291,7 +291,8 @@
         z-index: 1;
         font-weight: 500;
         min-width: 80px; 
-
+    }
+    
     .btn-cart::before {
         content: '';
         position: absolute;
