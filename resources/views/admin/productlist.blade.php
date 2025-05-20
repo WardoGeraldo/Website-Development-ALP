@@ -74,29 +74,33 @@
     }
 
     table {
-        width: 100%;
-        border-collapse: separate;
-        border-spacing: 0 12px;
-    }
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
 
-    thead th {
-        color: var(--text-light);
-        font-weight: 600;
-        padding: 12px 16px;
-        border-bottom: 2px solid var(--border);
-    }
+thead th {
+    background-color: var(--card);
+    color: var(--text-light);
+    font-weight: 600;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
 
-    tbody td {
-        background: var(--card);
-        color: var(--text);
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--border);
-        vertical-align: middle;
-    }
+tbody td {
+    background-color: var(--card);
+    color: var(--text);
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+    word-wrap: break-word;
+}
 
-    tbody tr:hover td {
-        background-color: rgba(99, 102, 241, 0.05);
-    }
+tbody tr:hover td {
+    background-color: var(--hover);
+}
+
 
     .product-image {
         width: 60px;
@@ -163,7 +167,7 @@
                     <td><input type="checkbox" /></td>
                     <td><img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="product-image" loading="lazy" /></td>
                     <td>{{ $product['name'] }}</td>
-                    <td>{{ number_format($product['price'], 0, ',', '.') }}</td>
+                    <td>Rp {{ number_format($product['price'], 0, ',', '.') }}</td>
                     <td>
                         @php
                             $totalStock = isset($product['stock']) ? array_sum($product['stock']) : 0;
