@@ -8,7 +8,6 @@
 
 <!-- Custom styles -->
 <style>
-
    .footer-section {
         padding: 40px 0;
         background-color: var(--light-gray);
@@ -31,6 +30,16 @@
         --text-secondary: #505050;
         --text-accent: #D4AF37;
         --transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    
+    /* Dark mode variable overrides */
+    body.dark-mode {
+        --primary: #121212;
+        --secondary: #f5f5f5;
+        --light-gray: #1e1e1e;
+        --medium-gray: #333333;
+        --text-primary: #f5f5f5;
+        --text-secondary: #aaaaaa;
     }
     
     body, html {
@@ -236,7 +245,7 @@
     
     .faq-item {
         margin-bottom: 1.5rem;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2);
         background-color: var(--light-gray);
         border-radius: 5px;
         overflow: hidden;
@@ -298,7 +307,7 @@
     }
     
     .faq-item.active {
-        background-color: white;
+        background-color: var(--primary);
         border-left: 3px solid var(--accent);
     }
     
@@ -330,7 +339,7 @@
     
     /* Contact Form */
     .form-container {
-        background-color: white;
+        background-color: var(--primary);
         box-shadow: 0 10px 30px rgba(0,0,0,0.08);
         border: 1px solid var(--medium-gray);
         border-radius: 8px;
@@ -459,7 +468,7 @@
     }
     
     .success-content {
-        background-color: white;
+        background-color: var(--primary);
         padding: 3rem 4rem;
         border-radius: 5px;
         text-align: center;
