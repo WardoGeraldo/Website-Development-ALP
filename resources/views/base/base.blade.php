@@ -28,6 +28,7 @@
         }
 
         /* Dark Mode Toggle Button Styles */
+        /* Base styling */
         .dark-mode-toggle {
             position: fixed;
             top: 20px;
@@ -37,7 +38,7 @@
             border: none;
             padding: 0.75rem 1.2rem;
             border-radius: 25px;
-            cursor: pointer;
+            cursor: grab;
             z-index: 9999;
             font-size: 1.3rem;
             box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
@@ -45,40 +46,54 @@
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
+        /* Hover */
         .dark-mode-toggle:hover {
             background-color: #e76767;
             box-shadow: 0 6px 12px rgba(231, 103, 103, 0.7);
         }
+
+        /* Responsive adjustment */
+        @media (max-width: 768px) {
+            .dark-mode-toggle {
+                top: auto;
+                bottom: 20px;
+                right: 20px;
+                left: auto;
+                padding: 0.6rem 1rem;
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dark-mode-toggle {
+                bottom: 15px;
+                right: 15px;
+                font-size: 1rem;
+            }
+        }
     </style>
 </head>
 <script>
-    // On page load, check localStorage for dark mode setting
     document.addEventListener('DOMContentLoaded', function() {
-        if (localStorage.getItem('darkMode') === 'enabled') {
+        const savedMode = localStorage.getItem('darkMode');
+
+        // Kalau belum pernah disimpan, tetap dark mode
+        if (!savedMode || savedMode === 'enabled') {
             document.body.classList.add('dark-mode');
+            document.querySelector('.dark-mode-toggle').textContent = '☀️';
+        } else {
+            document.body.classList.remove('dark-mode');
+            document.querySelector('.dark-mode-toggle').textContent = '🌙';
         }
     });
-
-    // Toggle function
-    function toggleDarkMode() {
-        const body = document.body;
-        body.classList.toggle('dark-mode');
-
-        // Save preference to localStorage
-        if (body.classList.contains('dark-mode')) {
-            localStorage.setItem('darkMode', 'enabled');
-        } else {
-            localStorage.setItem('darkMode', 'disabled');
-        }
-    }
 </script>
 
 <body>
-    @if(!isset($__env->getSections()['hide_header_footer']))
+    @if (!isset($__env->getSections()['hide_header_footer']))
         <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
     @endif
 
-    @if(!isset($__env->getSections()['hide_header_footer']))
+    @if (!isset($__env->getSections()['hide_header_footer']))
         @include('include.header')
     @endif
 
@@ -87,35 +102,74 @@
         @yield('scripts')
     </div>
 
-    @if(!isset($__env->getSections()['hide_header_footer']))
+    @if (!isset($__env->getSections()['hide_header_footer']))
         @include('include.footer')
     @endif
 
     <!-- Place the dark mode toggle script here -->
     <script>
-      const toggleButton = document.querySelector('.dark-mode-toggle');
-      
-      // Only run this script if the button exists
-      if(toggleButton) {
-          // Load mode from localStorage on page load
-          if(localStorage.getItem('darkMode') === 'enabled'){
-              document.body.classList.add('dark-mode');
-              toggleButton.textContent = '☀️'; // sun icon
-          }
+        const toggleButton = document.querySelector('.dark-mode-toggle');
 
-          toggleButton.addEventListener('click', () => {
-              document.body.classList.toggle('dark-mode');
+        if (toggleButton) {
+            // Dark mode load state
+            if (localStorage.getItem('darkMode') === 'enabled') {
+                document.body.classList.add('dark-mode');
+                toggleButton.textContent = '☀️';
+            }
 
-              if(document.body.classList.contains('dark-mode')){
-                  localStorage.setItem('darkMode', 'enabled');
-                  toggleButton.textContent = '☀️';
-              } else {
-                  localStorage.setItem('darkMode', 'disabled');
-                  toggleButton.textContent = '🌙';
-              }
-          });
-      }
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            toggleButton.addEventListener('mousedown', function(e) {
+                isDragging = false; // reset on down
+                offsetX = e.clientX - toggleButton.getBoundingClientRect().left;
+                offsetY = e.clientY - toggleButton.getBoundingClientRect().top;
+
+                const onMouseMove = function(e) {
+                    isDragging = true;
+                    const maxX = window.innerWidth - toggleButton.offsetWidth;
+                    const maxY = window.innerHeight - toggleButton.offsetHeight;
+
+                    let newX = e.clientX - offsetX;
+                    let newY = e.clientY - offsetY;
+
+                    // Constrain within window
+                    newX = Math.max(0, Math.min(newX, maxX));
+                    newY = Math.max(0, Math.min(newY, maxY));
+
+                    toggleButton.style.left = `${newX}px`;
+                    toggleButton.style.top = `${newY}px`;
+                    toggleButton.style.right = 'auto';
+                    toggleButton.style.cursor = 'grabbing';
+                };
+
+
+                const onMouseUp = function() {
+                    document.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseup', onMouseUp);
+                    toggleButton.style.cursor = 'grab';
+                };
+
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+            });
+
+            toggleButton.addEventListener('click', function(e) {
+                if (isDragging) {
+                    // Prevent toggling if it was a drag
+                    isDragging = false;
+                    return;
+                }
+                // Toggle dark mode
+                document.body.classList.toggle('dark-mode');
+                const isDark = document.body.classList.contains('dark-mode');
+                localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+                toggleButton.textContent = isDark ? '☀️' : '🌙';
+            });
+        }
     </script>
+
+
 </body>
 
 </html>
