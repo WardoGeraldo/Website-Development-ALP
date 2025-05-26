@@ -31,7 +31,6 @@
             <table>
                 <thead>
                     <tr>
-                        <th><input type="checkbox" /></th>
                         <th>Image</th>
                         <th>Name</th>
                         <th>Price</th>
@@ -42,7 +41,6 @@
                 <tbody>
                     @foreach ($products as $product)
                         <tr>
-                            <td><input type="checkbox" /></td>
                             <td><img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="product-image" loading="lazy" /></td>
                             <td>{{ $product['name'] }}</td>
                             <td>Rp {{ number_format($product['price'], 0, ',', '.') }}</td>
@@ -274,11 +272,6 @@
         text-align: right;
     }
 
-    /* Checkbox styling */
-    input[type="checkbox"] {
-        accent-color: var(--accent);
-    }
-
     /* Bootstrap alert styling for theme */
     .alert-success {
         background-color: var(--card);
@@ -330,7 +323,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!searchInput || !table) return;
 
     const emptyRow = document.createElement('tr');
-    emptyRow.innerHTML = `<td colspan="6" class="text-center py-4 text-muted">No products found.</td>`;
+    emptyRow.innerHTML = `<td colspan="5" class="text-center py-4 text-muted">No products found.</td>`;
     emptyRow.style.display = 'none';
     table.appendChild(emptyRow);
 
