@@ -8,65 +8,71 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
-        /* Default Dark Theme to match product list */
+        /* Light Mode Variables (Default) - matching users list page */
         :root {
-            --bg: #121212;
-            --card: #1e1e1e;
-            --text: #f3f4f6;
-            --text-light: #9ca3af;
-            --border: #2d2d2d;
-            --accent: #818cf8;
-            --accent-hover: #6366f1;
-            --hover-bg: rgba(255, 255, 255, 0.05);
+            --bg-color: #F8F9FD;
+            --text-color: #333;
+            --text-secondary: #777;
+            --border-color: rgba(0, 0, 0, 0.05);
+            --card-bg: #fff;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            --accent-color: #896CFF;
+            --accent-light: rgba(137, 108, 255, 0.1);
+            --input-bg: #fff;
+            --input-border: #e1e5e9;
+            --input-focus-border: #896CFF;
         }
 
-        /* Light Mode Variables (if needed) */
-        body.light-mode {
-            --bg: #f8f9fa;
-            --card: #ffffff;
-            --text: #212529;
-            --text-light: #6c757d;
-            --border: #dee2e6;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --hover-bg: rgba(0, 0, 0, 0.05);
+        /* Dark Mode Variables - matching users list page */
+        body.dark-mode {
+            --bg-color: #121212;
+            --text-color: #f1f1f1;
+            --text-secondary: #c5c5c5;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            --accent-color: #a58bff;
+            --accent-light: rgba(137, 108, 255, 0.2);
+            --input-bg: #2a2a2a;
+            --input-border: rgba(255, 255, 255, 0.1);
+            --input-focus-border: #a58bff;
         }
 
-        /* Set body background to match */
         body {
-            background-color: var(--bg) !important;
-            color: var(--text) !important;
-            margin: 0;
-            font-family: 'Inter', sans-serif;
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.5s ease;
         }
 
-        /* Container Styles */
+        /* Container Styles - matching users list page */
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
-            background-color: var(--bg);
-            color: var(--text);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.5s ease;
         }
 
-        /* Header Styles */
+        /* Header Styles - matching users list page */
         .store-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
             padding-bottom: 1rem;
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .store-header h1 {
             font-size: 2rem;
             font-weight: 600;
-            color: var(--text);
+            color: var(--text-color);
             position: relative;
             margin: 0;
         }
@@ -82,24 +88,22 @@
             border-radius: 10px;
         }
 
-        /* Form Container */
+        /* Form Container - matching users list page card style */
         .form-container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 30px;
-            background: var(--card);
+            padding: 2rem;
+            background: var(--card-bg);
             border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
             font-size: 1rem;
-            transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.5s ease;
         }
 
-        body.dark-mode .form-container {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        }
-
-        body.light-mode .form-container {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        .form-container:hover {
+            box-shadow: var(--card-hover-shadow);
+            border-color: rgba(137, 108, 255, 0.2);
         }
 
         .form-group {
@@ -111,34 +115,34 @@
         .form-group label {
             font-size: 1rem;
             font-weight: 500;
-            color: var(--text);
+            color: var(--text-color);
             margin-bottom: 8px;
-            transition: color 0.3s ease;
+            transition: all 0.5s ease;
         }
 
         .form-group input,
         .form-group textarea {
             padding: 12px 16px;
             font-size: 1rem;
-            border: 1px solid var(--border);
+            border: 2px solid var(--input-border);
             border-radius: 8px;
-            transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-            background-color: var(--card);
-            color: var(--text);
-            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
-            border-color: var(--accent);
+            border-color: var(--input-focus-border);
             outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 0 0 3px var(--accent-light);
         }
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
-            color: var(--text-light);
+            color: var(--text-secondary);
         }
 
         .form-group textarea {
@@ -146,43 +150,24 @@
             min-height: 120px;
         }
 
+        /* Bootstrap form control overrides - ensuring visibility */
         .form-control {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border-color: var(--border) !important;
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+            border: 2px solid var(--input-border) !important;
+            border-radius: 8px !important;
+            transition: all 0.3s ease !important;
         }
 
         .form-control:focus {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border-color: var(--accent) !important;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+            border-color: var(--input-focus-border) !important;
+            box-shadow: 0 0 0 3px var(--accent-light) !important;
         }
 
-        body.dark-mode .form-control {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border-color: var(--border) !important;
-        }
-
-        body.dark-mode .form-control:focus {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border-color: var(--accent) !important;
-            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1) !important;
-        }
-
-        body.light-mode .form-control {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border-color: var(--border) !important;
-        }
-
-        body.light-mode .form-control:focus {
-            background-color: var(--card) !important;
-            color: var(--text) !important;
-            border-color: var(--accent) !important;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+        .form-control::placeholder {
+            color: var(--text-secondary) !important;
         }
 
         .image-preview {
@@ -194,45 +179,39 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        body.dark-mode .image-preview {
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
-        }
-
-        body.light-mode .image-preview {
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
         }
 
         .btn-submit {
             padding: 12px 24px;
-            background-color: var(--accent);
+            background-color: var(--accent-color);
             color: white;
             font-weight: 500;
-            border-radius: 8px;
+            border-radius: 50px;
             border: none;
             font-size: 1rem;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
         }
 
         .btn-submit:hover {
-            background-color: var(--accent-hover);
-            transform: translateY(-1px);
+            background-color: #5A3FD9;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(137, 108, 255, 0.3);
         }
 
-        /* Alert Styles */
+        /* Alert Styles - matching users list page */
         .alert {
             padding: 16px;
             margin-bottom: 20px;
             border-radius: 8px;
-            border: 1px solid var(--border);
-            background-color: var(--card);
-            color: var(--text);
+            border: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+            transition: all 0.5s ease;
         }
 
         .alert-success {
@@ -242,15 +221,14 @@
         }
 
         body.dark-mode .alert-success {
-            background-color: rgba(16, 185, 129, 0.1);
+            background-color: rgba(16, 185, 129, 0.15);
             border-color: #10b981;
             color: #6ee7b7;
         }
 
-        body.light-mode .alert-success {
-            background-color: #d1fae5;
-            border-color: #10b981;
-            color: #065f46;
+        /* Smooth Theme Transitions */
+        * {
+            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
         /* Responsive Design */
