@@ -20,8 +20,8 @@ class PaymentSeeder extends Seeder
         foreach ($paidOrders as $order) {
             DB::table('payments')->insert([
                 'order_id' => $order->order_id,
-                'payment_method' => $methods[array_rand($methods)],
-                'payment_status' => 'paid',
+                'payment_type' => $methods[array_rand($methods)],
+                'transaction_status' => 'paid',
                 'payment_date' => now(),
                 'amount' => $order->total_price,
                 'created_at' => now(),

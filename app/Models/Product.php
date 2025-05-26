@@ -2,22 +2,23 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    use HasFactory;
-
-    // Jika nama tabel kamu adalah 'products', ini bisa diabaikan
-    // protected $table = 'products';
-
-    // Daftar kolom yang boleh diisi secara massal (mass assignment)
+    protected $primaryKey = 'product_id'; // since your PK is not 'id'
+    
     protected $fillable = [
         'name',
-        'category',
+        'description',
         'price',
-        'image',
-        'description', // Tambahkan jika kamu punya kolom deskripsi di DB
+        'category_id',
+        'status_del',
     ];
+
+    // // Example relationship to category (optional, if needed)
+    // public function category()
+    // {
+    //     return $this->belongsTo(ProductCategory::class, 'category_id');
+    // }
 }

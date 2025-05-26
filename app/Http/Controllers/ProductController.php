@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 
@@ -10,21 +11,46 @@ class ProductController extends Controller
     // Method untuk menampilkan semua produk
     public function index()
     {
-        $products = $this->getProductsWithImages();
-        return view('store', compact('products'));
+        // $products = $this->getProductsWithImages();
+        // return view('store', compact('products'));
+        $products = Product::where('status_del', false)->get()->map(function ($product) {
+        return [
+            'id' => $product->product_id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'category' => $this->mapCategoryIdToName($product->category_id),
+            'image' => $this->getFirstImage($product->product_id),
+        ];
+    });
+
+    return view('store', compact('products'));
     }
 
     // Method untuk menampilkan detail satu produk
     public function show($id)
     {
-        $products = $this->getProductsWithImages();
+        // $products = $this->getProductsWithImages();
 
-        if (isset($products[$id])) {
-            $product = $products[$id];
-            return view('product-detail', compact('product'));
-        } else {
-            abort(404);
-        }
+        // if (isset($products[$id])) {
+        //     $product = $products[$id];
+        //     return view('product-detail', compact('product'));
+        // } else {
+        //     abort(404);
+        // }
+        $product = Product::where('product_id', $id)->where('status_del', false)->firstOrFail();
+
+        $productData = [
+            'id' => $product->product_id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'category' => $this->mapCategoryIdToName($product->category_id),
+            'image' => $this->getFirstImage($product->product_id),
+            'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'], // static for now
+        ];
+
+        return view('product-detail', ['product' => $productData]);
     }
 
     public function showBestSeller($id)
@@ -154,25 +180,28 @@ class ProductController extends Controller
         ];
     }
 
-    // Helper method untuk ambil gambar pertama dari folder produk
     protected function getFirstImage($productId)
     {
-        $path = public_path("images/products/{$productId}");
+        $directory = public_path("images/products/{$productId}");
 
-        if (!File::exists($path)) {
+        if (!File::exists($directory)) {
             return asset('fotoBaju.jpg'); // fallback image
         }
 
-        $files = array_filter(File::allFiles($path), function ($file) {
-            return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
+        $files = File::files($directory);
+
+        $filtered = array_filter($files, function ($file) {
+            return in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'webp']);
         });
 
-        if (count($files) > 0) {
-            return asset("images/products/{$productId}/" . reset($files)->getBasename());
+        if (count($filtered) > 0) {
+            $firstFile = reset($filtered);
+            return asset("images/products/{$productId}/" . $firstFile->getFilename());
         }
 
-        return asset('fotoBaju.jpg'); // fallback jika folder kosong
+        return asset('fotoBaju.jpg'); // fallback
     }
+
 
     public function getAllProducts()
     {
@@ -187,5 +216,16 @@ class ProductController extends Controller
         $bestSellers = array_slice($products, 0, 4); // Top 4 items
 
         return view('home', compact('bestSellers'));
+    }
+
+    protected function mapCategoryIdToName($categoryId)
+    {
+        return match($categoryId) {
+            1 => 'top',
+            2 => 'bottom',
+            3 => 'bag',
+            4 => 'accessories',
+            default => 'unknown',
+        };
     }
 }
