@@ -64,26 +64,14 @@
         // Initialize AOS
         AOS.init();
 
-
-
-        // Theme management
-        const themeToggleBtn = document.getElementById('theme-toggle');
-
-        // Check for saved theme preference or use system preference
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-        // Set initial theme
-        if (initialTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-        }
-
-        // Toggle theme
-        themeToggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-theme');
-            const isDark = document.body.classList.contains('dark-theme');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        // Set current date
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const now = new Date();
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                dateElement.textContent = now.toLocaleDateString('en-US', options);
+            }
         });
     </script>
 
@@ -91,6 +79,7 @@
         /* Base Styles with Dark Mode Support */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+        /* Light Mode Variables (Default) */
         :root {
             --bg-color: #F8F9FD;
             --text-color: #333;
@@ -104,7 +93,8 @@
             --table-header-bg: rgba(0, 0, 0, 0.02);
         }
 
-        .dark-theme {
+        /* Dark Mode Variables - Using same class as base template */
+        body.dark-mode {
             --bg-color: #121212;
             --text-color: #f1f1f1;
             --text-secondary: #c5c5c5;
@@ -123,17 +113,13 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-
         .dashboard-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.5s ease, color 0.5s ease;
         }
 
         /* Header Styles */
@@ -170,42 +156,6 @@
             gap: 1.5rem;
         }
 
-        .theme-toggle-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.2rem;
-            color: var(--text-color);
-            padding: 0.3rem;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            background-color: var(--accent-light);
-        }
-
-        .theme-toggle-btn:hover {
-            background-color: var(--accent-light);
-        }
-
-        .dark-icon {
-            display: none;
-        }
-
-        .light-icon {
-            display: inline-block;
-        }
-
-        .dark-theme .dark-icon {
-            display: inline-block;
-        }
-
-        .dark-theme .light-icon {
-            display: none;
-        }
-
         .date-display {
             display: flex;
             align-items: center;
@@ -221,7 +171,7 @@
             padding: 1.5rem;
             box-shadow: var(--card-shadow);
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            transition: all 0.5s ease;
             margin-bottom: 2rem;
         }
 
@@ -267,6 +217,15 @@
             font-size: 0.95rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .luxury-table tbody tr:hover {
+            background-color: var(--accent-light);
+        }
+
+        .luxury-table tbody tr:hover td {
+            background-color: transparent;
         }
 
         /* Action Button */
@@ -287,6 +246,7 @@
             background: var(--accent-color);
             color: #fff;
             transform: translateY(-3px);
+            text-decoration: none;
         }
 
         .action-btn i {
@@ -294,40 +254,49 @@
             font-size: 1rem;
         }
 
-        /* Glassmorphism Cards */
-        .data-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Alert styling for theme compatibility */
+        .alert-success {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            transition: all 0.5s ease;
         }
 
-        .dark-theme .data-card {
-            background: rgba(30, 30, 30, 0.2);
+        .btn-close {
+            filter: var(--text-color) == #f1f1f1 ? invert(1) : invert(0);
         }
 
         /* Smooth Theme Transitions */
-        body,
-        .dark-theme,
-        .dark-theme * {
-            transition: background-color 0.3s ease, color 0.3s ease;
+        * {
+            transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
         }
 
-        /* Rotate Toggle Icon on Theme Change */
-        .theme-toggle-btn i {
-            transition: transform 0.3s ease;
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .luxury-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .luxury-table th,
+            .luxury-table td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+            }
         }
 
-        .dark-theme .theme-toggle-btn .bi {
-            transform: rotate(180deg);
-        }
-
-        /* Table responsiveness */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-        }
-
-        /* Adjust padding on small screens */
         @media (max-width: 576px) {
             .dashboard-container {
                 padding: 1rem;
@@ -349,31 +318,6 @@
             .action-btn i {
                 margin-right: 0.4rem;
                 font-size: 0.9rem;
-            }
-
-            .theme-toggle-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 1rem;
-            }
-        }
-
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .dashboard-header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 1rem;
-            }
-
-            .header-controls {
-                width: 100%;
-                justify-content: space-between;
-            }
-
-            .luxury-table {
-                display: block;
-                overflow-x: auto;
             }
         }
     </style>

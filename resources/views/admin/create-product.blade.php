@@ -4,95 +4,185 @@
     <!-- AOS Animation -->
     <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
 
     <style>
-        /* Removed body and dark-mode styles here, rely on base.base */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+        /* Default Dark Theme to match product list */
+        :root {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #f3f4f6;
+            --text-light: #9ca3af;
+            --border: #2d2d2d;
+            --accent: #818cf8;
+            --accent-hover: #6366f1;
+            --hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Light Mode Variables (if needed) */
+        body.light-mode {
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #212529;
+            --text-light: #6c757d;
+            --border: #dee2e6;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --hover-bg: rgba(0, 0, 0, 0.05);
+        }
+
+        /* Set body background to match */
+        body {
+            background-color: var(--bg) !important;
+            color: var(--text) !important;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Container Styles */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Header Styles */
+        .store-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .store-header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text);
+            position: relative;
+            margin: 0;
+        }
+
+        .store-header h1::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #896CFF, #5A3FD9);
+            border-radius: 10px;
+        }
 
         /* Form Container */
         .form-container {
-            width: 100%;
             max-width: 600px;
             margin: 0 auto;
             padding: 30px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            background: var(--card);
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             font-size: 1rem;
             transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
         }
 
         body.dark-mode .form-container {
-            background-color: #222;
-            color: #f5f5f5;
-            box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
-            border-color: #555;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-mode .form-container {
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             display: flex;
             flex-direction: column;
-        }
-
-        body.dark-mode .form-control {
-            background-color: #333 !important;
-            color: #ddd !important;
-            border-color: #555 !important;
-        }
-
-        body.dark-mode .form-control:focus {
-            background-color: #333 !important;
-            color: #ddd !important;
-            border-color: #e76767 !important;
-            box-shadow: none !important;
         }
 
         .form-group label {
             font-size: 1rem;
             font-weight: 500;
-            color: #444;
-            margin-bottom: 5px;
+            color: var(--text);
+            margin-bottom: 8px;
             transition: color 0.3s ease;
-        }
-
-        body.dark-mode .form-group label {
-            color: #ddd;
         }
 
         .form-group input,
         .form-group textarea {
-            padding: 0.75rem;
+            padding: 12px 16px;
             font-size: 1rem;
-            border: 1px solid #ddd;
+            border: 1px solid var(--border);
             border-radius: 8px;
             transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-            background-color: #fff;
-            color: #333;
-        }
-
-        body.dark-mode .form-group input,
-        body.dark-mode .form-group textarea {
-            background-color: #333;
-            border-color: #555;
-            color: #ddd;
+            background-color: var(--card);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
-            border-color: #007bff;
+            border-color: var(--accent);
             outline: none;
-            transition: border-color 0.3s ease;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
 
-        body.dark-mode .form-group input:focus,
-        body.dark-mode .form-group textarea:focus {
-            border-color: #e76767;
-            outline: none;
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-light);
         }
 
         .form-group textarea {
             resize: vertical;
             min-height: 120px;
+        }
+
+        .form-control {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+
+        .form-control:focus {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+        }
+
+        body.dark-mode .form-control {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+
+        body.dark-mode .form-control:focus {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.1) !important;
+        }
+
+        body.light-mode .form-control {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--border) !important;
+        }
+
+        body.light-mode .form-control:focus {
+            background-color: var(--card) !important;
+            color: var(--text) !important;
+            border-color: var(--accent) !important;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
         }
 
         .image-preview {
@@ -104,37 +194,87 @@
             display: block;
             margin-left: auto;
             margin-right: auto;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body.dark-mode .image-preview {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        body.light-mode .image-preview {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         }
 
         .btn-submit {
-            padding: 1rem 2rem;
-            background-color: #111;
+            padding: 12px 24px;
+            background-color: var(--accent);
             color: white;
-            font-weight: 600;
-            border-radius: 50px;
+            font-weight: 500;
+            border-radius: 8px;
             border: none;
             font-size: 1rem;
             cursor: pointer;
             width: 100%;
             margin-top: 20px;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            font-family: 'Inter', sans-serif;
         }
 
         .btn-submit:hover {
-            background-color: #e76767;
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
         }
 
-        body.dark-mode .btn-submit {
-            background-color: #e76767;
-            color: #fff;
+        /* Alert Styles */
+        .alert {
+            padding: 16px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--card);
+            color: var(--text);
         }
 
-        body.dark-mode .btn-submit:hover {
-            background-color: #b44141;
+        .alert-success {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        body.dark-mode .alert-success {
+            background-color: rgba(16, 185, 129, 0.1);
+            border-color: #10b981;
+            color: #6ee7b7;
+        }
+
+        body.light-mode .alert-success {
+            background-color: #d1fae5;
+            border-color: #10b981;
+            color: #065f46;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .store-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .form-container {
+                padding: 20px;
+                margin: 0 1rem;
+            }
+
+            .store-header h1 {
+                font-size: 1.5rem;
+            }
         }
     </style>
-
-    <!-- Removed inline dark mode toggle button -->
 
     <div class="container">
         <div class="store-header">

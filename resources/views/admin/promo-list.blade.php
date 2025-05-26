@@ -49,7 +49,7 @@
                             <tr>
                                 <td>{{ $promo['promo_code'] }}</td>
                                 <td>{{ $promo['description'] }}</td>
-                                <td>{{ $promo['discount'] }}</td>
+                                <td>{{ $promo['discount'] }}%</td>
                                 <td>{{ $promo['start_date'] }}</td>
                                 <td>{{ $promo['end_date'] }}</td>
                                 <td>
@@ -85,9 +85,12 @@
             --accent-color: #896CFF;
             --accent-light: rgba(137, 108, 255, 0.1);
             --table-header-bg: rgba(0, 0, 0, 0.02);
+            --success-bg: rgba(25, 135, 84, 0.1);
+            --success-border: rgba(25, 135, 84, 0.2);
+            --success-color: #198754;
         }
 
-        .dark-theme {
+        body.dark-mode {
             --bg-color: #121212;
             --text-color: #f1f1f1;
             --text-secondary: #c5c5c5;
@@ -98,6 +101,9 @@
             --accent-color: #a58bff;
             --accent-light: rgba(137, 108, 255, 0.2);
             --table-header-bg: rgba(255, 255, 255, 0.05);
+            --success-bg: rgba(25, 135, 84, 0.2);
+            --success-border: rgba(25, 135, 84, 0.3);
+            --success-color: #4ade80;
         }
 
         * {
@@ -201,6 +207,7 @@
         .luxury-table {
             width: 100%;
             border-collapse: collapse;
+            background-color: transparent;
         }
 
         .luxury-table thead tr {
@@ -214,6 +221,7 @@
             font-size: 0.9rem;
             font-weight: 500;
             color: var(--text-secondary);
+            background-color: var(--table-header-bg);
         }
 
         .luxury-table td {
@@ -221,6 +229,15 @@
             font-size: 0.95rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-color);
+            background-color: transparent;
+        }
+
+        .luxury-table tbody tr {
+            background-color: transparent;
+        }
+
+        .luxury-table tbody tr:hover {
+            background-color: var(--table-header-bg);
         }
 
         /* Action Button */
@@ -243,6 +260,7 @@
             background: var(--accent-color);
             color: #fff;
             transform: translateY(-3px);
+            text-decoration: none;
         }
 
         .action-btn i {
@@ -260,43 +278,62 @@
             box-shadow: 0 4px 12px rgba(137, 108, 255, 0.3);
         }
 
-        /* Glassmorphism Cards */
-        .data-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .dark-theme .data-card {
-            background: rgba(30, 30, 30, 0.2);
-        }
-
         /* Alert Styles */
         .alert {
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             border-radius: 8px;
             margin-bottom: 1rem;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .alert-success {
-            background-color: rgba(25, 135, 84, 0.1);
-            border: 1px solid rgba(25, 135, 84, 0.2);
-            color: #198754;
+            background-color: var(--success-bg);
+            border: 1px solid var(--success-border);
+            color: var(--success-color);
         }
 
         .alert-dismissible {
             position: relative;
+            padding-right: 3rem;
         }
 
         .btn-close {
             position: absolute;
-            top: 0;
-            right: 0;
-            padding: 1rem;
+            top: 50%;
+            right: 1rem;
+            transform: translateY(-50%);
+            padding: 0;
             background: transparent;
             border: none;
             font-size: 1.25rem;
             cursor: pointer;
+            color: var(--success-color);
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .btn-close:hover {
+            opacity: 1;
+        }
+
+        .btn-close::before {
+            content: "×";
+        }
+
+        /* Fade animation */
+        .fade {
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .fade.show {
+            opacity: 1;
+        }
+
+        /* Smooth Theme Transitions */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
 
         /* Responsive Adjustments */
@@ -316,6 +353,10 @@
                 display: block;
                 overflow-x: auto;
             }
+
+            .dashboard-container {
+                padding: 1rem;
+            }
         }
     </style>
 
@@ -323,34 +364,49 @@
         // Initialize AOS
         AOS.init();
 
-        // Set current date
+        // Set current date and handle dark mode
         document.addEventListener('DOMContentLoaded', function() {
+            // Set current date
             const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
             const currentDate = new Date().toLocaleDateString(undefined, options);
-            document.getElementById('current-date').textContent = currentDate;
-            
-            // Check for saved theme preference or use system preference
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-            
-            // Set initial theme
-            if (initialTheme === 'dark') {
-                document.body.classList.add('dark-theme');
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                dateElement.textContent = currentDate;
             }
-        });
+            
+            // Check if dark mode is already enabled from base template
+            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled' || document.body.classList.contains('dark-mode');
+            
+            if (isDarkModeEnabled) {
+                document.body.classList.add('dark-mode');
+            }
 
-        // Show success message as alert rather than using JavaScript alert
-        @if (session('success'))
-        setTimeout(function() {
-            const alert = document.querySelector('.alert');
-            if (alert) {
-                alert.classList.add('fade');
-                setTimeout(function() {
-                    alert.style.display = 'none';
-                }, 500);
-            }
-        }, 3000);
-        @endif
+            // Auto-dismiss alert after 5 seconds
+            @if (session('success'))
+            setTimeout(function() {
+                const alert = document.querySelector('.alert');
+                if (alert) {
+                    alert.classList.remove('show');
+                    setTimeout(function() {
+                        alert.style.display = 'none';
+                    }, 500);
+                }
+            }, 5000);
+            @endif
+
+            // Handle manual alert dismissal
+            const closeButtons = document.querySelectorAll('.btn-close');
+            closeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const alert = this.closest('.alert');
+                    if (alert) {
+                        alert.classList.remove('show');
+                        setTimeout(() => {
+                            alert.style.display = 'none';
+                        }, 300);
+                    }
+                });
+            });
+        });
     </script>
 @endsection

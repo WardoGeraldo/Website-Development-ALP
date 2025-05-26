@@ -71,44 +71,15 @@
         dateElement.textContent = today.toLocaleDateString('en-US', options);
     }
 
-    // Check for saved theme preference or use system preference
-    const savedTheme = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-    
-    // Set initial theme
-    if (initialTheme === 'dark') {
-        document.body.classList.add('dark-mode');
-    }
-    
-    // Connect to existing light mode toggle in header
+    // Simple initialization - let the base template handle dark mode
     document.addEventListener('DOMContentLoaded', function() {
-        // Look for common theme toggle selectors
-        const themeToggles = document.querySelectorAll('.theme-toggle, #theme-toggle, .light-mode-toggle, #light-mode-toggle, .dark-mode-toggle, #dark-mode-toggle');
+        // Check if dark mode is already enabled from base template
+        const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled' || document.body.classList.contains('dark-mode');
         
-        themeToggles.forEach(toggle => {
-            toggle.addEventListener('click', function() {
-                toggleTheme();
-            });
-        });
-        
-        // Global event listener for theme toggle
-        document.addEventListener('themeToggle', function() {
-            toggleTheme();
-        });
-    });
-    
-    // Theme toggle function
-    function toggleTheme() {
-        const isDark = document.body.classList.contains('dark-mode');
-        if (isDark) {
-            document.body.classList.remove('dark-mode');
-            localStorage.setItem('theme', 'light');
-        } else {
+        if (isDarkModeEnabled) {
             document.body.classList.add('dark-mode');
-            localStorage.setItem('theme', 'dark');
         }
-    }
+    });
 </script>
 <style>
     /* Base Styles with Dark Mode Support */
@@ -240,6 +211,7 @@
     .luxury-table {
         width: 100%;
         border-collapse: collapse;
+        background-color: transparent;
     }
 
     .luxury-table thead tr {
@@ -253,6 +225,7 @@
         font-size: 0.9rem;
         font-weight: 500;
         color: var(--text-secondary);
+        background-color: var(--table-header-bg);
     }
 
     .luxury-table td {
@@ -260,6 +233,15 @@
         font-size: 0.95rem;
         border-bottom: 1px solid var(--border-color);
         color: var(--text-color);
+        background-color: transparent;
+    }
+
+    .luxury-table tbody tr {
+        background-color: transparent;
+    }
+
+    .luxury-table tbody tr:hover {
+        background-color: var(--table-header-bg);
     }
 
     /* Status Badges */
@@ -306,6 +288,7 @@
         background: var(--accent-color);
         color: #fff;
         transform: translateY(-3px);
+        text-decoration: none;
     }
 
     .action-btn i {
@@ -321,20 +304,9 @@
         font-style: italic;
     }
 
-    /* Glassmorphism Cards */
-    .data-card {
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    body.dark-mode .data-card {
-        background: rgba(30, 30, 30, 0.2);
-    }
-
     /* Smooth Theme Transitions */
-    body, body.dark-mode, body.dark-mode * {
-        transition: background-color 0.3s ease, color 0.3s ease;
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
     }
 
     /* Responsive Adjustments */
@@ -353,6 +325,10 @@
         .luxury-table {
             display: block;
             overflow-x: auto;
+        }
+        
+        .dashboard-container {
+            padding: 1rem;
         }
     }
 </style>

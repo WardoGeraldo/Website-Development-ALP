@@ -80,7 +80,20 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
+    /* Light Mode Variables (Default) */
     :root {
+        --bg: #f8f9fa;
+        --card: #ffffff;
+        --text: #212529;
+        --text-light: #6c757d;
+        --border: #dee2e6;
+        --accent: #6366f1;
+        --accent-hover: #4f46e5;
+        --hover-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Dark Mode Variables */
+    body.dark-mode {
         --bg: #121212;
         --card: #1e1e1e;
         --text: #f3f4f6;
@@ -88,20 +101,17 @@
         --border: #2d2d2d;
         --accent: #818cf8;
         --accent-hover: #6366f1;
+        --hover-bg: rgba(255, 255, 255, 0.05);
     }
 
-    body {
-        background-color: var(--bg);
-        color: var(--text);
-        font-family: 'Inter', sans-serif;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    /* Dashboard Container and Header Styles from User List */
+    /* Apply theme variables to elements */
     .dashboard-container {
         max-width: 1400px;
         margin: 0 auto;
         padding: 2rem;
+        background-color: var(--bg);
+        color: var(--text);
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .dashboard-header {
@@ -145,14 +155,19 @@
         gap: 0.5rem;
     }
 
-    /* Original Product List Styles */
+    /* Product List Styles */
     .product-list-container {
         max-width: 1100px;
         margin: 40px auto;
         background: var(--card);
         border-radius: 12px;
         padding: 24px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    body.dark-mode .product-list-container {
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
     }
 
     .btn-add {
@@ -176,6 +191,16 @@
         border: 1px solid var(--border);
         background-color: var(--card);
         color: var(--text);
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .search-container input:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    .search-container input::placeholder {
+        color: var(--text-light);
     }
 
     .top-bar {
@@ -200,6 +225,7 @@
         padding: 16px;
         border-bottom: 1px solid var(--border);
         text-align: left;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     tbody td {
@@ -209,10 +235,11 @@
         border-bottom: 1px solid var(--border);
         vertical-align: middle;
         word-wrap: break-word;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     tbody tr:hover td {
-        background-color: rgba(255, 255, 255, 0.05);
+        background-color: var(--hover-bg);
     }
 
     .product-image {
@@ -221,6 +248,10 @@
         object-fit: cover;
         border-radius: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    body.dark-mode .product-image {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
     }
 
     .action-icon {
@@ -243,6 +274,26 @@
         text-align: right;
     }
 
+    /* Checkbox styling */
+    input[type="checkbox"] {
+        accent-color: var(--accent);
+    }
+
+    /* Bootstrap alert styling for theme */
+    .alert-success {
+        background-color: var(--card);
+        border-color: var(--border);
+        color: var(--text);
+    }
+
+    /* Button styling for delete form */
+    .btn-link {
+        background: none !important;
+        border: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
     @media (max-width: 768px) {
         .dashboard-header {
             flex-direction: column;
@@ -263,59 +314,12 @@
         .search-container {
             width: 100%;
         }
+
+        .dashboard-container {
+            padding: 1rem;
+        }
     }
 </style>
-
-<div class="product-list-container">
-    <div class="top-bar">
-        <button class="btn-add" onclick="location.href='{{ route('admin.product.create') }}'">+ Add</button>
-        <div class="search-container ms-auto">
-            <input type="search" id="productSearch" placeholder="Search" />
-        </div>
-    </div>
-
-    <table>
-        <thead>
-            <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Total Stock</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ($products as $product)
-                <tr>
-                    <td><img src="{{ $product['image'] }}" alt="{{ $product['name'] }}" class="product-image" loading="lazy" /></td>
-                    <td>{{ $product['name'] }}</td>
-                    <td>Rp {{ number_format($product['price'], 0, ',', '.') }}</td>
-                    <td>
-                        @php
-                            $totalStock = isset($product['stock']) ? array_sum($product['stock']) : 0;
-                        @endphp
-                        {{ $totalStock }}
-                    </td>
-                    <td>
-                        <i class="bi bi-pencil action-icon" title="Edit"
-                            onclick="location.href='{{ route('admin.product.edit', ['id' => $product['id']]) }}'"></i>
-                        <form action="{{ route('admin.product.delete', ['id' => $product['id']]) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" onclick="return confirm('Are you sure you want to delete?')" class="btn btn-link p-0 m-0">
-                                <i class="bi bi-trash action-icon" title="Delete"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-            @endforeach
-        </tbody>
-    </table>
-
-    <div class="table-footer">
-        <div>Showing {{ count($products) }} entries</div>
-    </div>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
