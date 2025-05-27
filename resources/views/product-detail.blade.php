@@ -119,6 +119,21 @@
     .dark-mode .back-button-top {
         color: white;
     }
+
+    #product-image-slider button {
+        background-color: black;
+        color: white;
+        padding: 8px 14px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        font-family: 'Cormorant', serif;
+        transition: background-color 0.3s;
+    }
+
+    #product-image-slider button:hover {
+        background-color: #444;
+    }
 </style>
 
 <div class="container py-5 position-relative">
@@ -129,12 +144,19 @@
     </div>
 
     <div class="product-details" data-aos="fade-up">
-        <div class="product-image">
-            <img src="{{ $product['image'] }}" 
-                 alt="{{ $product['name'] }}" 
-                 class="img-fluid"
-                 onerror="this.onerror=null; this.src='{{ asset('fotoBaju.jpg') }}';">
+        <div class="product-image" id="product-image-slider">
+            <img id="mainImage"
+                src="{{ $product['images'][0] ?? asset('fotoBaju.jpg') }}"
+                alt="{{ $product['name'] }}"
+                class="img-fluid"
+                onerror="this.onerror=null; this.src='{{ asset('fotoBaju.jpg') }}';" />
+            
+            <div style="margin-top: 10px; text-align: center;">
+                <button onclick="changeImage(-1)" style="margin-right: 10px;">← Prev</button>
+                <button onclick="changeImage(1)">Next →</button>
+            </div>
         </div>
+
 
         <div class="product-info">
             <h1>{{ $product['name'] }}</h1>
@@ -154,15 +176,6 @@
                 </div>
             @endif
 
-
-
-            {{-- <select>
-                <option value="color">Select Color</option>
-                <option value="black">Black</option>
-                <option value="white">White</option>
-                <option value="red">Red</option>
-            </select> --}}
-
             <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" placeholder="Quantity"
                 oninput="this.value = Math.min(this.value, 100)"
                 class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
@@ -179,4 +192,25 @@
 <script>
     AOS.init();
 </script>
+
+<script>
+    AOS.init();
+
+    const images = @json($product['images']);
+    let currentImageIndex = 0;
+
+    function changeImage(direction) {
+        currentImageIndex += direction;
+
+        if (currentImageIndex < 0) {
+            currentImageIndex = images.length - 1;
+        } else if (currentImageIndex >= images.length) {
+            currentImageIndex = 0;
+        }
+
+        const imgElement = document.getElementById('mainImage');
+        imgElement.src = images[currentImageIndex];
+    }
+</script>
+
 @endsection

@@ -4,180 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
 {
-    // Method untuk menampilkan semua produk
+    // Show all products
     public function index()
     {
-        // $products = $this->getProductsWithImages();
-        // return view('store', compact('products'));
         $products = Product::where('status_del', false)->get()->map(function ($product) {
-        return [
-            'id' => $product->product_id,
-            'name' => $product->name,
-            'price' => $product->price,
-            'description' => $product->description,
-            'category' => $this->mapCategoryIdToName($product->category_id),
-            'image' => $this->getFirstImage($product->product_id),
-        ];
-    });
+            return [
+                'id' => $product->product_id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'description' => $product->description,
+                'category' => $this->mapCategoryIdToName($product->category_id),
+                'image' => $this->getFirstImage($product->product_id),
+            ];
+        });
 
-    return view('store', compact('products'));
+        return view('store', compact('products'));
     }
 
-    // Method untuk menampilkan detail satu produk
+    // Show single product
     public function show($id)
     {
-        // $products = $this->getProductsWithImages();
+        $product = Product::findOrFail($id);
 
-        // if (isset($products[$id])) {
-        //     $product = $products[$id];
-        //     return view('product-detail', compact('product'));
-        // } else {
-        //     abort(404);
-        // }
-        $product = Product::where('product_id', $id)->where('status_del', false)->firstOrFail();
+        $images = $this->getAllImages($id);
 
-        $productData = [
-            'id' => $product->product_id,
-            'name' => $product->name,
-            'price' => $product->price,
-            'description' => $product->description,
-            'category' => $this->mapCategoryIdToName($product->category_id),
-            'image' => $this->getFirstImage($product->product_id),
-            'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'], // static for now
-        ];
-
-        return view('product-detail', ['product' => $productData]);
-    }
-
-    public function showBestSeller($id)
-    {
-        $products = $this->getProductsWithImages();
-
-        if (isset($products[$id])) {
-            $product = $products[$id];
-            return view('product-detail-home', compact('product'));
-        } else {
-            abort(404);
-        }
-    }
-
-    // Kumpulan produk dengan image langsung dalam array
-    protected function getProductsWithImages()
-    {
-        return [
-            1 => [
-                'id' => 1,
-                'name' => 'Pastel Shirt',
-                'price' => 299000,
-                'description' => 'A stylish shirt that could never go wrong for casual or professional work.',
-                'category' => 'top',
-                'image' => $this->getFirstImage(1),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            2 => [
-                'id' => 2,
-                'name' => 'Black Veravia Signature Dress',
-                'price' => 499000,
-                'description' => 'A Stylish dress for modern look that will light up your charm',
-                'category' => 'top',
-                'image' => $this->getFirstImage(2),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            3 => [
-                'id' => 3,
-                'name' => 'Oversized Pink Tee',
-                'price' =>299000,
-                'description' => 'Perfect for a smart casual look.',
-                'category' => 'top',
-                'image' => $this->getFirstImage(3),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            4 => [
-                'id' => 4,
-                'name' => 'Long-Sleeved Green Shirt',
-                'price' => 349000,
-                'description' => 'A long-sleeved shirt with a premium wool',
-                'category' => 'top',
-                'image' => $this->getFirstImage(4),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            5 => [
-                'id' => 5,
-                'name' => 'Pastel Fit Pants',
-                'price' => 449000,
-                'description' => 'A simple, yet fits with every top you have',
-                'category' => 'bottom',
-                'image' => $this->getFirstImage(5),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            6 => [
-                'id' => 6,
-                'name' => 'Black Wool Underwear',
-                'price' => 129000,
-                'description' => 'Made with premium sheep wool to make you comfy',
-                'category' => 'bottom',
-                'image' => $this->getFirstImage(6),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            7 => [
-                'id' => 7,
-                'name' => 'Denim Baggy Jeans',
-                'price' => 649000,
-                'description' => 'A simple, yet stylish baggy jeans to complement your outfit of the day.',
-                'category' => 'bottom',
-                'image' => $this->getFirstImage(7),
-                'sizes' => ['XS','S', 'M', 'L', 'XL','XXL'],
-            ],
-            8 => [
-                'id' => 8,
-                'name' => 'Sunkist Cap',
-                'price' => 249000,
-                'description' => 'A stylish cap to complement your outfit during the day.',
-                'category' => 'accessories',
-                'image' => $this->getFirstImage(8),
-                'sizes' => ['One Size Fits All'],
-            ],
-            9 => [
-                'id' => 9,
-                'name' => 'Brown Wisdom Cap',
-                'price' => 249000,
-                'description' => 'A simple, yet stylish cap to complement your outfit.',
-                'category' => 'accessories',
-                'image' => $this->getFirstImage(9),
-                'sizes' => ['One Size Fits All'],
-            ],
-            10 => [
-            'id' => 10,
-                'name' => 'Brown Leather Bag',
-                'price' => 1149000,
-                'description' => 'A simple, yet real leathered bag with a sand color.',
-                'category' => 'bag',
-                'image' => $this->getFirstImage(10),
-                'sizes' => ['One Size'],
-            ],
-            11 => [
-                'id' => 11,
-                'name' => 'Pink Captain Bag',
-                'price' => 1549000,
-                'description' => 'A sweet pastel pink look that will make you charm',
-                'category' => 'bag',
-                'image' => $this->getFirstImage(11),
-                'sizes' => ['One Size'],
-            ],
-            12 => [
-                'id' => 12,
-                'name' => 'Abstract Leather Bag',
-                'price' => 1649000,
-                'description' => 'An abstract leather bag that will make you feel obsessed.',
-                'category' => 'bag',
-                'image' => $this->getFirstImage(12),
-                'sizes' => ['One Size'],
-            ],
-        ];
+        return view('product-detail', [
+            'product' => [
+                'name' => $product->name,
+                'description' => $product->description,
+                'price' => $product->price,
+                'sizes' => explode(',', $product->sizes),
+                'images' => $images,
+            ]
+        ]);
     }
 
     protected function getFirstImage($productId)
@@ -189,9 +53,8 @@ class ProductController extends Controller
         }
 
         $files = File::files($directory);
-
         $filtered = array_filter($files, function ($file) {
-            return in_array($file->getExtension(), ['jpg', 'jpeg', 'png', 'webp']);
+            return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
         });
 
         if (count($filtered) > 0) {
@@ -199,28 +62,54 @@ class ProductController extends Controller
             return asset("images/products/{$productId}/" . $firstFile->getFilename());
         }
 
-        return asset('fotoBaju.jpg'); // fallback
+        return asset('fotoBaju.jpg');
     }
 
-
-    public function getAllProducts()
+    protected function getAllImages($productId)
     {
-        return $this->getProductsWithImages();
+        $directory = public_path("images/products/{$productId}");
+
+        if (!File::exists($directory)) {
+            return [asset('fotoBaju.jpg')]; // fallback
+        }
+
+        $files = File::files($directory);
+        $filtered = array_filter($files, function ($file) {
+            return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
+        });
+
+        if (count($filtered) > 0) {
+            return array_map(function ($file) use ($productId) {
+                return asset("images/products/{$productId}/" . $file->getFilename());
+            }, $filtered);
+        }
+
+        return [asset('fotoBaju.jpg')]; // fallback
     }
 
+    // Show best seller (currently first 4 products)
     public function home()
     {
-        $productController = new ProductController();
-        $products = $productController->getAllProducts();
+        $products = Product::where('status_del', false)->take(4)->get()->map(function ($product) {
+            return [
+                'id' => $product->product_id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'description' => $product->description,
+                'category' => $this->mapCategoryIdToName($product->category_id),
+                'image' => $this->getFirstImage($product->product_id),
+                'sizes' => ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+            ];
+        });
 
-        $bestSellers = array_slice($products, 0, 4); // Top 4 items
-
-        return view('home', compact('bestSellers'));
+        return view('home', ['bestSellers' => $products]);
     }
+    
 
+    // Helper: map category ID to name
     protected function mapCategoryIdToName($categoryId)
     {
-        return match($categoryId) {
+        return match ($categoryId) {
             1 => 'top',
             2 => 'bottom',
             3 => 'bag',

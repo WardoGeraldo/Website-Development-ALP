@@ -23,6 +23,18 @@ class ProductSeeder extends Seeder
                 'category_id' => 1, // Top
             ],
             [
+                'name' => 'Oversized Pink Tee',
+                'description' => 'Perfect for a smart casual look.',
+                'price' => 299000,
+                'category_id' => 1, // Top
+            ],
+            [
+                'name' => 'Long-Sleeved Green Shirt',
+                'description' => 'A long-sleeved shirt with a premium wool',
+                'price' => 349000,
+                'category_id' => 1, // Top
+            ],
+            [
                 'name' => 'Pastel Fit Pants',
                 'description' => 'A simple, yet fits with every top you have',
                 'price' => 449000,
@@ -33,6 +45,24 @@ class ProductSeeder extends Seeder
                 'description' => 'Made with premium sheep wool to make you comfy',
                 'price' => 129000,
                 'category_id' => 2, // Bottom
+            ],
+            [
+                'name' => 'Denim Baggy Jeans',
+                'description' => 'A simple, yet stylish baggy jeans to complement your outfit of the day.',
+                'price' => 649000,
+                'category_id' => 2, // Bottom
+            ],
+            [
+                'name' => 'Sunkist Cap',
+                'description' => 'A stylish cap to complement your outfit during the day.',
+                'price' => 249000,
+                'category_id' => 4, // Accessories
+            ],
+            [
+                'name' => 'Brown Wisdom Cap',
+                'description' => 'A simple, yet stylish cap to complement your outfit.',
+                'price' => 249000,
+                'category_id' => 4, // Accessories
             ],
             [
                 'name' => 'Brown Leather Bag',
@@ -51,36 +81,6 @@ class ProductSeeder extends Seeder
                 'description' => 'An abstract leather bag that will make you feel obsessed.',
                 'price' => 1649000,
                 'category_id' => 3, // Bag
-            ],
-            [
-                'name' => 'Sunkist Cap',
-                'description' => 'A stylish cap to complement your outfit during the day.',
-                'price' => 249000,
-                'category_id' => 4, // Accessories
-            ],
-            [
-                'name' => 'Brown Wisdom Cap',
-                'description' => 'A simple, yet stylish cap to complement your outfit.',
-                'price' => 249000,
-                'category_id' => 4, // Accessories
-            ],
-            [
-                'name' => 'Oversized Pink Tee',
-                'description' => 'Perfect for a smart casual look.',
-                'price' => 299000,
-                'category_id' => 1, // Top
-            ],
-            [
-                'name' => 'Long-Sleeved Green Shirt',
-                'description' => 'A long-sleeved shirt with a premium wool',
-                'price' => 349000,
-                'category_id' => 1, // Top
-            ],
-            [
-                'name' => 'Denim Baggy Jeans',
-                'description' => 'A simple, yet stylish baggy jeans to complement your outfit of the day.',
-                'price' => 649000,
-                'category_id' => 2, // Bottom
             ],
         ];
 
