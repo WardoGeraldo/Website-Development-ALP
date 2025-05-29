@@ -6,11 +6,36 @@ use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    // public function show(){
-    //     return view('cart');
-    // }
+    public function add(Request $request)
+    {
+        $productId = $request->input('product_id');
+        $name = $request->input('name');
+        $price = $request->input('price');
+        $size = $request->input('size');
+        $quantity = (int) $request->input('quantity');
 
-    // Display the cart contents
+        $cart = session()->get('cart', []);
+
+        // Generate unique key using productId + size (to differentiate sizes)
+        $key = $productId . '-' . $size;
+
+        if (isset($cart[$key])) {
+            $cart[$key]['quantity'] += $quantity;
+        } else {
+            $cart[$key] = [
+                'product_id' => $productId,
+                'name' => $name,
+                'price' => $price,
+                'size' => $size,
+                'quantity' => $quantity,
+            ];
+        }
+
+        session()->put('cart', $cart);
+
+        return redirect()->route('cart.index')->with('success', 'Product added to cart!');
+    }
+    
     public function index(Request $request)
     {
         // Check if the cart exists in the session, otherwise set it with dummy data

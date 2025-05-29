@@ -163,25 +163,31 @@
             <p class="description">{{ $product['description'] }}</p>
             <p class="price">Rp{{ number_format($product['price'], 0, ',', '.') }}</p>
 
-            <!-- Size Selection -->
-            @if (!empty($product['sizes']))
-                <div>
-                    <select>
-                        <option value="">Select Size</option>
-                        @foreach ($product['sizes'] as $size)
-                            <option value="{{ strtolower($size) }}">{{ $size }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            @endif
+           <form action="{{ route('cart.add') }}" method="POST">
+                @csrf
 
+                <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+                <input type="hidden" name="name" value="{{ $product['name'] }}">
+                <input type="hidden" name="price" value="{{ $product['price'] }}">
 
-            <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" placeholder="Quantity"
-                oninput="this.value = Math.min(this.value, 100)"
-                class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
+                @if (!empty($product['sizes']))
+                    <div>
+                        <select name="size" required>
+                            <option value="">Select Size</option>
+                            @foreach ($product['sizes'] as $size)
+                                <option value="{{ $size }}">{{ $size }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                @else
+                    <input type="hidden" name="size" value="One Size">
+                @endif
 
-            <button onclick="alert('Added to cart: {{ $product['name'] }}')">Add to Cart</button>
+                <input type="number" name="quantity" min="1" max="100" value="1"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
 
+                <button type="submit">Add to Cart</button>
+            </form>
             <span class="wishlist-button" onclick="alert('Added to wishlist')">
                 Add to Wishlist <i class="far fa-heart"></i>
             </span>
