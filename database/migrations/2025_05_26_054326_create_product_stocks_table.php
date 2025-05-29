@@ -17,7 +17,7 @@ return new class extends Migration
                   ->constrained('products', 'product_id')
                   ->onDelete('cascade');
 
-            $table->enum('size', ['XS','S', 'M', 'L', 'XL', 'XXL']);
+            $table->enum('size', ['XS','S', 'M', 'L', 'XL', 'XXL', 'One Size']);
             $table->integer('quantity')->default(0);
             $table->integer('low_stock_threshold')->default(5); // default alert limit
             $table->boolean('status_del')->default(false); // soft delete manual

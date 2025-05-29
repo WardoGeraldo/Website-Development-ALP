@@ -163,7 +163,6 @@
             <p class="description">{{ $product['description'] }}</p>
             <p class="price">Rp{{ number_format($product['price'], 0, ',', '.') }}</p>
 
-            <!-- Size and Color Selection -->
             <!-- Size Selection -->
             @if (!empty($product['sizes']))
                 <div>
@@ -175,6 +174,7 @@
                     </select>
                 </div>
             @endif
+
 
             <input type="number" id="quantity" name="quantity" min="1" max="100" step="1" placeholder="Quantity"
                 oninput="this.value = Math.min(this.value, 100)"

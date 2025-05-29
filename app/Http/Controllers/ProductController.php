@@ -38,7 +38,13 @@ class ProductController extends Controller
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
-                'sizes' => explode(',', $product->sizes),
+                'sizes' => DB::table('product_stocks')
+                ->where('product_id', $id)
+                ->where('quantity', '>', 0)
+                ->pluck('size')
+                ->unique()
+                ->values()
+                ->toArray(),
                 'images' => $images,
             ]
         ]);
