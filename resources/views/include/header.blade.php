@@ -90,6 +90,10 @@
     }
 </style>
 
+@php
+    $user = session('user'); // Ambil dari session
+@endphp
+
 <nav class="navbar navbar-expand-lg border-bottom shadow-sm py-3">
     <div class="container">
         <!-- Logo -->
@@ -110,7 +114,7 @@
         <!-- Collapsible Content -->
         <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarMain">
             <!-- Search Bar -->
-            @if (session('role') == 'user')
+            @if (session('user_role') === 'customer')
                 <form class="d-flex w-100 my-2 my-lg-0 search-wrapper" onsubmit="filterProductsBySearch(event)">
                     <input id="searchInput" class="form-control rounded-pill ps-3 me-2" type="search"
                         placeholder="Cari produk, tren, dan merek." aria-label="Search">
@@ -122,26 +126,34 @@
 
             <!-- Right Side Icons -->
             <ul class="navbar-nav ms-auto align-items-center mt-3 mt-lg-0">
-                @if (session('user'))
+                @if (session()->has('user_id'))
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="#"><i class="fas fa-user me-1"></i> {{ session('user') }}</a>
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-user me-1"></i>
+                            {{ $user->name ?? $user->email }}
+                        </a>
                     </li>
                     <li class="nav-item me-3">
                         <a class="nav-link" href="{{ route('logout') }}">Logout</a>
                     </li>
                 @else
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ route('login.show') }}"><i class="fas fa-user me-1"></i> Masuk /
-                            Daftar</a>
+                        <a class="nav-link" href="{{ route('login') }}">
+                            <i class="fas fa-user me-1"></i> Masuk / Daftar
+                        </a>
                     </li>
                 @endif
 
-                @if (session('role') == 'user')
+                @if (session()->has('user_id') && session('user_role') === 'customer')
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ route('wishlist.show') }}"><i class="far fa-heart"></i></a>
+                        <a class="nav-link" href="{{ route('wishlist.show') }}">
+                            <i class="far fa-heart"></i>
+                        </a>
                     </li>
                     <li class="nav-item me-3">
-                        <a class="nav-link" href="{{ route('cart.index') }}"><i class="fas fa-shopping-bag"></i></a>
+                        <a class="nav-link" href="{{ route('cart.index') }}">
+                            <i class="fas fa-shopping-bag"></i>
+                        </a>
                     </li>
                 @endif
             </ul>
@@ -149,9 +161,7 @@
     </div>
 </nav>
 
-
-
-@if (session('role') == 'user')
+@if (session('user_role') === 'customer')
     <nav class="secondary-nav py-2">
         <div class="container d-flex flex-wrap gap-3 fw-semibold small">
             <a href="{{ route('home') }}" class="text-decoration-none">Home</a>
@@ -162,7 +172,7 @@
             <a href="{{ route('support.show') }}" class="text-decoration-none">Support</a>
         </div>
     </nav>
-@elseif(session('role') == 'admin')
+@elseif (session('user_role') === 'admin')
     <nav class="secondary-nav py-2">
         <div class="container d-flex flex-wrap gap-3 fw-semibold small">
             <a href="{{ route('admin.dash') }}" class="text-decoration-none">Dashboard</a>
