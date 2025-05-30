@@ -1,9 +1,7 @@
 @extends('base.base')
 @section('hide_header_footer', true)
 @section('content')
-    <link
-        href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         :root {
@@ -84,19 +82,13 @@
                 transform: translateX(-100%);
                 width: 0;
             }
-
             50% {
                 width: 100%;
             }
-
             100% {
                 transform: translateX(100%);
                 width: 0;
             }
-        }
-
-        .animate__animated {
-            --animate-duration: 1s;
         }
 
         .signup-wrapper {
@@ -139,7 +131,6 @@
                 transform: translate(-50%, -50%) scale(1);
                 opacity: 0.5;
             }
-
             100% {
                 transform: translate(-50%, -50%) scale(1.2);
                 opacity: 0.7;
@@ -182,15 +173,12 @@
         .signup-container {
             position: relative;
             width: 90%;
-            max-width: 500px;
+            max-width: 550px;
             background: rgba(12, 12, 12, 0.4);
             backdrop-filter: blur(20px);
             border-radius: 24px;
             overflow: hidden;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6),
-                0 2px 4px rgba(255, 255, 255, 0.03),
-                0 0 1px rgba(255, 255, 255, 0.1),
-                0 0 100px rgba(212, 175, 122, 0.05);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(255, 255, 255, 0.03), 0 0 1px rgba(255, 255, 255, 0.1), 0 0 100px rgba(212, 175, 122, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.05);
             transform-style: preserve-3d;
             transform: translateZ(0) rotateX(0) rotateY(0);
@@ -205,7 +193,6 @@
                 opacity: 0;
                 transform: translateZ(0) perspective(1200px) rotateX(5deg) translateY(30px);
             }
-
             100% {
                 opacity: 1;
                 transform: translateZ(0) perspective(1200px) rotateX(0) translateY(0);
@@ -230,7 +217,7 @@
         .signup-form {
             display: flex;
             flex-direction: column;
-            padding: 3.5rem;
+            padding: 3rem;
             position: relative;
             overflow: hidden;
             z-index: 2;
@@ -248,7 +235,7 @@
         }
 
         .signup-header {
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             text-align: center;
             opacity: 0;
             transform: translateY(30px);
@@ -258,8 +245,8 @@
         .signup-header h2 {
             font-family: 'Cormorant', serif;
             font-weight: 600;
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
+            font-size: 2rem;
+            margin-bottom: 0.8rem;
             background: var(--gradient-gold);
             -webkit-background-clip: text;
             background-clip: text;
@@ -269,7 +256,7 @@
 
         .signup-header p {
             font-weight: 300;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             color: rgba(255, 255, 255, 0.75);
             line-height: 1.6;
             letter-spacing: 0.5px;
@@ -278,40 +265,38 @@
         .veravia-logo-small {
             font-family: 'Cormorant', serif;
             font-weight: 700;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             letter-spacing: 4px;
             color: transparent;
             background: var(--gradient-gold);
             -webkit-background-clip: text;
             background-clip: text;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.2rem;
             text-align: center;
             opacity: 0;
             animation: fadeInDown 1s ease forwards 1.2s;
         }
 
+        .form-row {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.8rem;
+        }
+
         .form-group {
             position: relative;
-            margin-bottom: 2.2rem;
+            margin-bottom: 1.8rem;
             opacity: 0;
             transform: translateY(30px);
+            flex: 1;
         }
 
-        .form-group:nth-child(1) {
-            animation: fadeInUp 1s ease forwards 1.6s;
-        }
-
-        .form-group:nth-child(2) {
-            animation: fadeInUp 1s ease forwards 1.7s;
-        }
-
-        .form-group:nth-child(3) {
-            animation: fadeInUp 1s ease forwards 1.8s;
-        }
-
-        .form-group:nth-child(4) {
-            animation: fadeInUp 1s ease forwards 1.9s;
-        }
+        .form-group:nth-child(1) { animation: fadeInUp 1s ease forwards 1.6s; }
+        .form-group:nth-child(2) { animation: fadeInUp 1s ease forwards 1.7s; }
+        .form-group:nth-child(3) { animation: fadeInUp 1s ease forwards 1.8s; }
+        .form-group:nth-child(4) { animation: fadeInUp 1s ease forwards 1.9s; }
+        .form-group:nth-child(5) { animation: fadeInUp 1s ease forwards 2.0s; }
+        .form-group:nth-child(6) { animation: fadeInUp 1s ease forwards 2.1s; }
 
         .form-group label {
             display: block;
@@ -319,7 +304,7 @@
             top: 50%;
             left: 16px;
             transform: translateY(-50%);
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 300;
             color: rgba(255, 255, 255, 0.65);
             pointer-events: none;
@@ -329,14 +314,13 @@
 
         .form-input {
             width: 100%;
-            padding: 16px;
-            padding-left: 16px;
+            padding: 14px 16px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+            border-radius: 10px;
             color: #ffffff;
             font-family: 'Montserrat', sans-serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
             letter-spacing: 0.5px;
         }
@@ -348,25 +332,25 @@
             background: rgba(255, 255, 255, 0.07);
         }
 
-        .form-input:focus+label,
-        .form-input:not(:placeholder-shown)+label {
+        .form-input:focus + label,
+        .form-input:not(:placeholder-shown) + label {
             top: 0;
             left: 12px;
             transform: translateY(-50%);
             padding: 0 6px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             background: rgba(12, 12, 12, 0.9);
             border-radius: 4px;
             color: var(--light-gold);
         }
 
         .btn {
-            padding: 16px;
+            padding: 14px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-family: 'Montserrat', sans-serif;
             font-weight: 500;
-            font-size: 1rem;
+            font-size: 0.95rem;
             letter-spacing: 0.8px;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -393,12 +377,12 @@
             background: var(--gradient-gold);
             color: var(--text-dark);
             opacity: 0;
-            animation: fadeInUp 1s ease forwards 2s;
+            animation: fadeInUp 1s ease forwards 2.2s;
         }
 
         .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 175, 122, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 175, 122, 0.1);
             background: var(--gradient-gold-hover);
         }
 
@@ -407,16 +391,16 @@
         }
 
         .login-link {
-            margin-top: 2rem;
+            margin-top: 1.5rem;
             text-align: center;
             opacity: 0;
-            animation: fadeIn 1s ease forwards 2.2s;
+            animation: fadeIn 1s ease forwards 2.4s;
         }
 
         .login-link a {
             color: rgba(255, 255, 255, 0.65);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
             position: relative;
             letter-spacing: 0.5px;
@@ -443,12 +427,10 @@
         }
 
         .alert {
-            padding: 1.2rem;
-            border-radius: 12px;
-            margin-bottom: 1.8rem;
-            display: flex;
-            align-items: flex-start;
-            font-size: 0.95rem;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
             letter-spacing: 0.3px;
             opacity: 0;
             animation: fadeIn 1s ease forwards 1.6s;
@@ -461,26 +443,17 @@
         }
 
         .alert ul {
-            margin-bottom: 0;
+            margin: 0;
             padding-left: 1rem;
         }
 
         .alert li {
-            margin-bottom: 0.5rem;
-        }
-
-        .alert li:last-child {
-            margin-bottom: 0;
+            margin-bottom: 0.3rem;
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         @keyframes fadeInUp {
@@ -488,7 +461,6 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -500,7 +472,6 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
-
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -510,41 +481,32 @@
         @media (max-width: 768px) {
             .signup-container {
                 width: 95%;
-                max-width: 460px;
+                max-width: 480px;
             }
-
             .signup-form {
-                padding: 3rem 2.5rem;
+                padding: 2.5rem 2rem;
             }
-
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
             .signup-header h2 {
-                font-size: 2rem;
+                font-size: 1.8rem;
             }
-
             .brand-watermark {
                 font-size: 18vw;
             }
         }
 
         @media (max-width: 480px) {
-            .signup-container {
-                width: 95%;
-            }
-
             .signup-form {
-                padding: 2.5rem 1.8rem;
+                padding: 2rem 1.5rem;
             }
-
             .signup-header h2 {
-                font-size: 1.8rem;
+                font-size: 1.6rem;
             }
-
-            .signup-header p {
-                font-size: 0.9rem;
-            }
-
             .form-group {
-                margin-bottom: 1.8rem;
+                margin-bottom: 1.5rem;
             }
         }
     </style>
@@ -583,47 +545,52 @@
                 <form method="POST" action="{{ route('register') }}" id="registerForm">
                     @csrf
                     <div class="form-group">
-                        <input 
-                            type="text" 
-                            id="name" 
-                            name="name" 
-                            class="form-input @error('name') is-invalid @enderror" 
-                            placeholder=" "
-                            value="{{ old('name') }}" 
-                            required 
-                            autofocus
-                        >
+                        <input type="text" id="name" name="name" class="form-input @error('name') is-invalid @enderror" 
+                               placeholder=" " value="{{ old('name') }}" required autofocus>
                         <label for="name">Full Name</label>
                     </div>
 
                     <div class="form-group">
-                        <input 
-                            type="email" 
-                            id="email" 
-                            name="email" 
-                            class="form-input @error('email') is-invalid @enderror" 
-                            placeholder=" "
-                            value="{{ old('email') }}" 
-                            required
-                        >
+                        <input type="email" id="email" name="email" class="form-input @error('email') is-invalid @enderror" 
+                               placeholder=" " value="{{ old('email') }}" required>
                         <label for="email">Email Address</label>
                     </div>
 
-                    <div class="form-group">
-                        <input 
-                            type="password" 
-                            id="password" 
-                            name="password" 
-                            class="form-input @error('password') is-invalid @enderror"
-                            placeholder=" " 
-                            required
-                        >
-                        <label for="password">Password</label>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="password" id="password" name="password" class="form-input @error('password') is-invalid @enderror"
+                                   placeholder=" " required>
+                            <label for="password">Password</label>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
+                                   placeholder=" " required>
+                            <label for="password_confirmation">Confirm Password</label>
+                        </div>
                     </div>
 
-                    <button type="button" class="btn btn-signup" onclick="window.location='{{ route('login') }}'">Create Account</button>
+                    <div class="form-group">
+                        <input type="text" id="phone_number" name="phone_number" class="form-input @error('phone_number') is-invalid @enderror" 
+                               placeholder=" " value="{{ old('phone_number') }}">
+                        <label for="phone_number">Phone Number (Optional)</label>
+                    </div>
 
+                    <div class="form-row">
+                        <div class="form-group">
+                            <input type="date" id="birthdate" name="birthdate" class="form-input @error('birthdate') is-invalid @enderror" 
+                                   placeholder=" " value="{{ old('birthdate') }}">
+                            <label for="birthdate">Birth Date (Optional)</label>
+                        </div>
 
+                        <div class="form-group">
+                            <input type="text" id="address" name="address" class="form-input @error('address') is-invalid @enderror" 
+                                   placeholder=" " value="{{ old('address') }}">
+                            <label for="address">Address (Optional)</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-signup">Create Account</button>
                 </form>
 
                 <div class="login-link">
@@ -640,44 +607,12 @@
             if (preloader) {
                 setTimeout(function() {
                     preloader.classList.add('hidden');
-                    // Force removal after animation completes
                     setTimeout(function() {
                         preloader.style.display = 'none';
                     }, 1000);
                 }, 1500);
             }
 
-            // Form submission handler
-            const registerForm = document.getElementById('registerForm');
-            const submitBtn = document.getElementById('submitBtn');
-            
-            if (registerForm) {
-                registerForm.addEventListener('submit', function(e) {
-                    // Prevent the default form submission
-                    e.preventDefault();
-                    
-                    // Get form values
-                    const name = document.getElementById('name').value.trim();
-                    const email = document.getElementById('email').value.trim();
-                    const password = document.getElementById('password').value;
-                    const passwordConfirmation = document.getElementById('password_confirmation').value;
-                    
-                    // Basic validation
-                    if (!name || !email || !password || !passwordConfirmation) {
-                        alert('Please fill in all fields');
-                        return;
-                    }
-                    
-                    if (password !== passwordConfirmation) {
-                        alert('Passwords do not match');
-                        return;
-                    }
-                    
-                    // If validation passes, submit the form
-                    this.submit();
-                });
-            }
-            
             // Floating particles effect
             const particlesContainer = document.getElementById('particles');
             
@@ -685,23 +620,19 @@
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
                 
-                // Random size between 2-8px
                 const size = Math.random() * 6 + 2;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
                 
-                // Random position
                 const posX = Math.random() * 100;
                 const posY = Math.random() * 100;
                 particle.style.left = `${posX}%`;
                 particle.style.top = `${posY}%`;
                 
-                // Random opacity
                 particle.style.opacity = Math.random() * 0.1 + 0.05;
                 
                 particlesContainer.appendChild(particle);
                 
-                // Animate and remove
                 setTimeout(() => {
                     particle.style.opacity = '0';
                     setTimeout(() => {
@@ -710,15 +641,13 @@
                 }, 5000);
             }
             
-            // Create particles at intervals
             setInterval(createParticle, 500);
             
-            // Initial particles
             for (let i = 0; i < 20; i++) {
                 setTimeout(createParticle, i * 200);
             }
 
-            // 3D tilt effect for the container
+            // 3D tilt effect
             const signupContainer = document.getElementById('signupContainer');
             
             document.addEventListener('mousemove', function(e) {
@@ -727,10 +656,25 @@
                 signupContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
             });
 
-            // Reset transform when mouse leaves
             document.addEventListener('mouseleave', function() {
                 signupContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
             });
+
+            // Form handling
+            const registerForm = document.getElementById('registerForm');
+            
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    const password = document.getElementById('password').value;
+                    const passwordConfirmation = document.getElementById('password_confirmation').value;
+                    
+                    if (password !== passwordConfirmation) {
+                        e.preventDefault();
+                        alert('Passwords do not match!');
+                        return false;
+                    }
+                });
+            }
         });
     </script>
 @endsection
