@@ -31,9 +31,9 @@ class AuthController extends Controller
             $role = Auth::user()->role;   // Get the role from DB
             $id = Auth::user()->user_id;
             session(['user_role' => $role]);
-            session(['user_id'=> $id]); 
+            session(['user_id' => $id]);
             $user = Auth::user();
-            session(['user'=>$user]);
+            session(['user' => $user]);
             //dd(session('user')); // Save to session
             //dd(session('user_role'));
             // dd(session('role'));
@@ -77,6 +77,42 @@ class AuthController extends Controller
         // // Redirect to home/dashboard
         // return redirect()->intended('/home');
     }
+
+    public function storeRegister(Request $request)
+{
+    // Validasi input
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|email|unique:users,email',
+        'password' => 'required|confirmed|min:8',
+        'address' => 'nullable|string|max:255',
+        'phone_number' => 'nullable|string|max:20',
+        'birthdate' => 'nullable|date',
+    ]);
+
+    // Insert data user
+    $user = User::create([
+        'name'         => $request->name,
+        'email'        => $request->email,
+        'password'     => bcrypt($request->password),
+        'role'         => 'customer', // default role
+        'address'      => $request->address,
+        'phone_number' => $request->phone_number,
+        'birthdate'    => $request->birthdate,
+        'status_del'   => 0, // aktif
+    ]);
+
+    // Login user
+    Auth::login($user);
+
+    // Simpan user ke session manual
+    $request->session()->regenerate();
+    session(['user' => $user]);
+
+    // Redirect
+    return redirect()->route('home');
+}
+
 
     public function forgotPassword()
     {

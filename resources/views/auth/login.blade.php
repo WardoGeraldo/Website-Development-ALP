@@ -499,11 +499,15 @@
         .btn-login {
             background: var(--gradient-gold);
             color: var(--text-dark);
-            opacity: 1; /* Changed from 0 */
-            display: block; /* Changed from none */
+            opacity: 1;
+            /* Changed from 0 */
+            display: block;
+            /* Changed from none */
             animation: fadeInUp 1s ease forwards 0.4s;
-            z-index: 100; /* Added z-index */
-            position: relative; /* Added position */
+            z-index: 100;
+            /* Added z-index */
+            position: relative;
+            /* Added position */
         }
 
         .btn:hover {
@@ -801,35 +805,35 @@
         }
     </style>
 
-        <!-- Preloader -->
-        <div class="preloader" id="preloader">
-            <div class="preloader-logo">VERAVIA</div>
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">VERAVIA</div>
+    </div>
+
+    <div class="login-wrapper">
+        <div class="background-effect">
+            <div class="luxury-ambience"></div>
+            <div class="floating-particles" id="particles"></div>
+            <div class="brand-watermark">VERAVIA</div>
         </div>
 
-        <div class="login-wrapper">
-            <div class="background-effect">
-                <div class="luxury-ambience"></div>
-                <div class="floating-particles" id="particles"></div>
-                <div class="brand-watermark">VERAVIA</div>
+        <div class="login-container" id="loginContainer">
+            <div class="login-image">
+                <div class="image-overlay"></div>
+                <div class="image-grain"></div>
+                <div class="veravia-logo">VERAVIA</div>
+                <div class="image-carousel">
+                    <img src="/api/placeholder/800/600" alt="Luxury Fashion Collection" class="carousel-image active">
+                    <img src="/api/placeholder/800/600" alt="Premium Fashion" class="carousel-image">
+                    <img src="/api/placeholder/800/600" alt="Exclusive Designer Wear" class="carousel-image">
+                </div>
+                <div class="login-quote">
+                    <q>Elegance is not standing out, but being remembered.</q>
+                    <cite>— Giorgio Armani</cite>
+                </div>
             </div>
 
-            <div class="login-container" id="loginContainer">
-                <div class="login-image">
-                    <div class="image-overlay"></div>
-                    <div class="image-grain"></div>
-                    <div class="veravia-logo">VERAVIA</div>
-                    <div class="image-carousel">
-                        <img src="/api/placeholder/800/600" alt="Luxury Fashion Collection" class="carousel-image active">
-                        <img src="/api/placeholder/800/600" alt="Premium Fashion" class="carousel-image">
-                        <img src="/api/placeholder/800/600" alt="Exclusive Designer Wear" class="carousel-image">
-                    </div>
-                    <div class="login-quote">
-                        <q>Elegance is not standing out, but being remembered.</q>
-                        <cite>— Giorgio Armani</cite>
-                    </div>
-                </div>
-
-                <div class="login-form">
+            <div class="login-form">
                 <div class="login-welcome">
                     <h2>Welcome Back</h2>
                     <p>Sign in to experience exclusive fashion collections</p>
@@ -898,7 +902,8 @@
                     </div>
 
                     <!-- Fixed login button - proper type and styling -->
-                    <button type="submit" id="loginBtn" class="btn btn-login">Log In</button>                    <div class="extra-actions">
+                    <button type="submit" id="loginBtn" class="btn btn-login">Log In</button>
+                    <div class="extra-actions">
                         <a href="{{ route('password.request') }}">Forgot password?</a>
                         <a href="{{ route('register') }}">Create Account</a>
                     </div>
@@ -909,183 +914,183 @@
         </div>
     </div>
 
- <script>
-// Replace the JavaScript portion with this fixed version
-document.addEventListener("DOMContentLoaded", function() {
-    // Preloader - fix to ensure it disappears
-    const preloader = document.getElementById('preloader');
-    if (preloader) {
-        setTimeout(function() {
-            preloader.classList.add('hidden');
-            // Force removal after animation completes
-            setTimeout(function() {
-                preloader.style.display = 'none';
-            }, 1000);
-        }, 1500);
-    }
-
-    // Image carousel
-    const images = document.querySelectorAll('.carousel-image');
-    let currentIndex = 0;
-
-    function nextImage() {
-        images[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % images.length;
-        images[currentIndex].classList.add('active');
-    }
-
-    setInterval(nextImage, 5000);
-
-    // Floating particles effect
-    const particlesContainer = document.getElementById('particles');
-    
-    function createParticle() {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        
-        // Random size between 2-8px
-        const size = Math.random() * 6 + 2;
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        
-        // Random position
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        particle.style.left = `${posX}%`;
-        particle.style.top = `${posY}%`;
-        
-        // Random opacity
-        particle.style.opacity = Math.random() * 0.1 + 0.05;
-        
-        particlesContainer.appendChild(particle);
-        
-        // Animate and remove
-        setTimeout(() => {
-            particle.style.opacity = '0';
-            setTimeout(() => {
-                particle.remove();
-            }, 500);
-        }, 5000);
-    }
-    
-    // Create particles at intervals
-    setInterval(createParticle, 500);
-    
-    // Initial particles
-    for (let i = 0; i < 20; i++) {
-        setTimeout(createParticle, i * 200);
-    }
-
-    // Form interaction
-    const loginContainer = document.getElementById('loginContainer');
-    const emailInput = document.getElementById('emailInput');
-    const passwordContainer = document.getElementById('passwordContainer');
-    const passwordInput = document.getElementById('passwordInput');
-    const nextBtn = document.getElementById('nextBtn');
-    const loginBtn = document.getElementById('loginBtn');
-    const spinner = document.getElementById('spinner');
-    const emailValidIcon = document.getElementById('emailValidIcon');
-    const emailInvalidIcon = document.getElementById('emailInvalidIcon');
-    const passwordValidIcon = document.getElementById('passwordValidIcon');
-    const passwordInvalidIcon = document.getElementById('passwordInvalidIcon');
-    const loginForm = document.getElementById('loginForm');
-
-    // Make sure login button is properly initialized
-    if (loginBtn) {
-        loginBtn.style.display = 'none'; // Initially hidden
-        loginBtn.style.opacity = '1';
-        loginBtn.disabled = false; // Ensure it's not disabled by default
-    }
-
-    // 3D tilt effect
-    document.addEventListener('mousemove', function(e) {
-        const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
-        const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
-        loginContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-    });
-
-    // Reset transform when mouse leaves
-    document.addEventListener('mouseleave', function() {
-        loginContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
-    });
-
-    // Email validation
-    emailInput.addEventListener('input', function() {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        const isValid = emailPattern.test(emailInput.value);
-        
-        if (emailInput.value.length > 0) {
-            if (isValid) {
-                emailValidIcon.style.display = 'block';
-                emailInvalidIcon.style.display = 'none';
-                nextBtn.disabled = false;
-            } else {
-                emailValidIcon.style.display = 'none';
-                emailInvalidIcon.style.display = 'block';
-                nextBtn.disabled = true;
+    <script>
+        // Replace the JavaScript portion with this fixed version
+        document.addEventListener("DOMContentLoaded", function() {
+            // Preloader - fix to ensure it disappears
+            const preloader = document.getElementById('preloader');
+            if (preloader) {
+                setTimeout(function() {
+                    preloader.classList.add('hidden');
+                    // Force removal after animation completes
+                    setTimeout(function() {
+                        preloader.style.display = 'none';
+                    }, 1000);
+                }, 1500);
             }
-        } else {
-            emailValidIcon.style.display = 'none';
-            emailInvalidIcon.style.display = 'none';
-            nextBtn.disabled = true;
-        }
-    });
 
-    // FIX: Password validation - simplified logic to just check length
-    passwordInput.addEventListener('input', function() {
-        // Consider any password valid if it has at least 1 character
-        if (passwordInput.value.length > 0) {
-            passwordValidIcon.style.display = 'block';
-            passwordInvalidIcon.style.display = 'none';
-            if (loginBtn) loginBtn.disabled = false;
-        } else {
-            passwordValidIcon.style.display = 'none';
-            passwordInvalidIcon.style.display = 'block';
-            if (loginBtn) loginBtn.disabled = true;
-        }
-    });
+            // Image carousel
+            const images = document.querySelectorAll('.carousel-image');
+            let currentIndex = 0;
 
-    // Next button click
-    if(nextBtn) {
-        nextBtn.addEventListener('click', function() {
-            if (emailInput.value) {
-                nextBtn.style.display = 'none';
-                passwordContainer.classList.add('show');
-                // Ensure login button is visible and enabled
-                if(loginBtn) {
-                    loginBtn.style.display = 'block';
-                    loginBtn.disabled = false;
+            function nextImage() {
+                images[currentIndex].classList.remove('active');
+                currentIndex = (currentIndex + 1) % images.length;
+                images[currentIndex].classList.add('active');
+            }
+
+            setInterval(nextImage, 5000);
+
+            // Floating particles effect
+            const particlesContainer = document.getElementById('particles');
+
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+
+                // Random size between 2-8px
+                const size = Math.random() * 6 + 2;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+
+                // Random position
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                particle.style.left = `${posX}%`;
+                particle.style.top = `${posY}%`;
+
+                // Random opacity
+                particle.style.opacity = Math.random() * 0.1 + 0.05;
+
+                particlesContainer.appendChild(particle);
+
+                // Animate and remove
+                setTimeout(() => {
+                    particle.style.opacity = '0';
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 500);
+                }, 5000);
+            }
+
+            // Create particles at intervals
+            setInterval(createParticle, 500);
+
+            // Initial particles
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createParticle, i * 200);
+            }
+
+            // Form interaction
+            const loginContainer = document.getElementById('loginContainer');
+            const emailInput = document.getElementById('emailInput');
+            const passwordContainer = document.getElementById('passwordContainer');
+            const passwordInput = document.getElementById('passwordInput');
+            const nextBtn = document.getElementById('nextBtn');
+            const loginBtn = document.getElementById('loginBtn');
+            const spinner = document.getElementById('spinner');
+            const emailValidIcon = document.getElementById('emailValidIcon');
+            const emailInvalidIcon = document.getElementById('emailInvalidIcon');
+            const passwordValidIcon = document.getElementById('passwordValidIcon');
+            const passwordInvalidIcon = document.getElementById('passwordInvalidIcon');
+            const loginForm = document.getElementById('loginForm');
+
+            // Make sure login button is properly initialized
+            if (loginBtn) {
+                loginBtn.style.display = 'none'; // Initially hidden
+                loginBtn.style.opacity = '1';
+                loginBtn.disabled = false; // Ensure it's not disabled by default
+            }
+
+            // 3D tilt effect
+            document.addEventListener('mousemove', function(e) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                loginContainer.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            // Reset transform when mouse leaves
+            document.addEventListener('mouseleave', function() {
+                loginContainer.style.transform = 'rotateY(0deg) rotateX(0deg)';
+            });
+
+            // Email validation
+            emailInput.addEventListener('input', function() {
+                const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const isValid = emailPattern.test(emailInput.value);
+
+                if (emailInput.value.length > 0) {
+                    if (isValid) {
+                        emailValidIcon.style.display = 'block';
+                        emailInvalidIcon.style.display = 'none';
+                        nextBtn.disabled = false;
+                    } else {
+                        emailValidIcon.style.display = 'none';
+                        emailInvalidIcon.style.display = 'block';
+                        nextBtn.disabled = true;
+                    }
+                } else {
+                    emailValidIcon.style.display = 'none';
+                    emailInvalidIcon.style.display = 'none';
+                    nextBtn.disabled = true;
                 }
-                // Focus the password field
-                passwordInput.focus();
-            }
-        });
-    }
+            });
 
-    // FIX: Ensure the form can be submitted either by button or Enter key
-    if(loginForm) {
-        loginForm.addEventListener('submit', function(e) {
-            // Only submit if both fields have values
-            if(emailInput.value && passwordInput.value) {
-                spinner.style.display = 'block';
-                return true;
-            } else {
-                e.preventDefault();
-                return false;
+            // FIX: Password validation - simplified logic to just check length
+            passwordInput.addEventListener('input', function() {
+                // Consider any password valid if it has at least 1 character
+                if (passwordInput.value.length > 0) {
+                    passwordValidIcon.style.display = 'block';
+                    passwordInvalidIcon.style.display = 'none';
+                    if (loginBtn) loginBtn.disabled = false;
+                } else {
+                    passwordValidIcon.style.display = 'none';
+                    passwordInvalidIcon.style.display = 'block';
+                    if (loginBtn) loginBtn.disabled = true;
+                }
+            });
+
+            // Next button click
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    if (emailInput.value) {
+                        nextBtn.style.display = 'none';
+                        passwordContainer.classList.add('show');
+                        // Ensure login button is visible and enabled
+                        if (loginBtn) {
+                            loginBtn.style.display = 'block';
+                            loginBtn.disabled = false;
+                        }
+                        // Focus the password field
+                        passwordInput.focus();
+                    }
+                });
+            }
+
+            // FIX: Ensure the form can be submitted either by button or Enter key
+            if (loginForm) {
+                loginForm.addEventListener('submit', function(e) {
+                    // Only submit if both fields have values
+                    if (emailInput.value && passwordInput.value) {
+                        spinner.style.display = 'block';
+                        return true;
+                    } else {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
+            }
+
+            // FIX: Direct click handler for the login button
+            if (loginBtn) {
+                loginBtn.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default to control submission
+                    if (emailInput.value && passwordInput.value) {
+                        spinner.style.display = 'block';
+                        loginForm.submit();
+                    }
+                });
             }
         });
-    }
-    
-    // FIX: Direct click handler for the login button
-    if (loginBtn) {
-        loginBtn.addEventListener('click', function(e) {
-            e.preventDefault(); // Prevent default to control submission
-            if(emailInput.value && passwordInput.value) {
-                spinner.style.display = 'block';
-                loginForm.submit();
-            }
-        });
-    }
-});    
-</script>
-@endsection 
+    </script>
+@endsection

@@ -621,13 +621,13 @@
                         <label for="password">Password</label>
                     </div>
 
-                    <button type="button" class="btn btn-signup" onclick="window.location='{{ route('login.show') }}'">Create Account</button>
+                    <button type="button" class="btn btn-signup" onclick="window.location='{{ route('login') }}'">Create Account</button>
 
 
                 </form>
 
                 <div class="login-link">
-                    <a href="{{ route('login.show') }}">Already have an account? Sign In</a>
+                    <a href="{{ route('login') }}">Already have an account? Sign In</a>
                 </div>
             </div>
         </div>
