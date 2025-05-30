@@ -166,9 +166,9 @@
            <form action="{{ route('cart.add') }}" method="POST">
                 @csrf
 
-                <input type="hidden" name="product_id" value="{{ $product['id'] }}">
+                {{-- <input type="hidden" name="product_id" value="{{ $product['product_id'] }}">
                 <input type="hidden" name="name" value="{{ $product['name'] }}">
-                <input type="hidden" name="price" value="{{ $product['price'] }}">
+                <input type="hidden" name="price" value="{{ $product['price'] }}"> --}}
 
                 @if (!empty($product['sizes']))
                     <div>
