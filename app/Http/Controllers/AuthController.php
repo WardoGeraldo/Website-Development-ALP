@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -79,39 +79,39 @@ class AuthController extends Controller
     }
 
     public function storeRegister(Request $request)
-{
-    // Validasi input
-    $request->validate([
-        'name' => 'required|string|max:255',
-        'email' => 'required|email|unique:users,email',
-        'password' => 'required|confirmed|min:8',
-        'address' => 'nullable|string|max:255',
-        'phone_number' => 'nullable|string|max:20',
-        'birthdate' => 'nullable|date',
-    ]);
+    {
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|confirmed|min:8',
+            'address' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
+            'birthdate' => 'nullable|date',
+        ]);
 
-    // Insert data user
-    $user = User::create([
-        'name'         => $request->name,
-        'email'        => $request->email,
-        'password'     => bcrypt($request->password),
-        'role'         => 'customer', // default role
-        'address'      => $request->address,
-        'phone_number' => $request->phone_number,
-        'birthdate'    => $request->birthdate,
-        'status_del'   => 0, // aktif
-    ]);
+        // Insert data user
+        $user = User::create([
+            'name'         => $request->name,
+            'email'        => $request->email,
+            'password'     => bcrypt($request->password),
+            'role'         => 'customer', // default role
+            'address'      => $request->address,
+            'phone_number' => $request->phone_number,
+            'birthdate'    => $request->birthdate,
+            'status_del'   => 0, // aktif
+        ]);
 
-    // Login user
-    Auth::login($user);
+        // Login user
+        Auth::login($user);
 
-    // Simpan user ke session manual
-    $request->session()->regenerate();
-    session(['user' => $user]);
+        // Simpan user ke session manual
+        $request->session()->regenerate();
+        session(['user' => $user]);
 
-    // Redirect
-    return redirect()->route('home');
-}
+        // Redirect
+        return redirect()->route('login');
+    }
 
 
     public function forgotPassword()
