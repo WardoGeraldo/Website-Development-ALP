@@ -73,8 +73,12 @@ Route::middleware('manual_auth')->group(function () {
         Route::get('/product/create', [AdminController::class, 'create'])->name('admin.product.create');
         Route::post('/product', [AdminController::class, 'store'])->name('admin.product.store');
         Route::get('/product/{id}/edit', [AdminController::class, 'edit'])->name('admin.product.edit');
-        Route::post('/product/{id}', [AdminController::class, 'update'])->name('admin.product.update');
+        Route::put('/product/{id}', [AdminController::class, 'update'])->name('admin.product.update');
         Route::delete('/product/{id}', [AdminController::class, 'destroy'])->name('admin.product.delete');
+        Route::delete('/admin/product/{id}/image', [AdminController::class, 'deleteImage'])->name('admin.product.image.delete');
+        Route::put('/admin/product/image/{id}', [AdminController::class, 'updateImage'])->name('admin.product.image.update');
+
+
 
         Route::get('/promos', [AdminController::class, 'promoList'])->name('admin.promo.list');
         Route::get('/promo/create', [AdminController::class, 'createPromo'])->name('admin.promo.create');

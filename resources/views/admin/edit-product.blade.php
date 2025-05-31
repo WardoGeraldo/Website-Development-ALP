@@ -135,14 +135,40 @@
         <h1>Edit Product: {{ $product['name'] }}</h1>
 
         <!-- Current product image -->
-        <img src="{{ $product['image'] }}" alt="Current Image" class="current-image" id="currentImage">
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+            @foreach ($product['images'] as $image)
+                <div style="position: relative; width: 100px; text-align: center;">
+                    <img src="{{ asset($image['url']) }}" alt="Current Image" class="current-image"
+                        style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
 
-        <!-- File input -->
-        <label for="image">Change Image:</label>
-        <input type="file" id="image" name="image" accept="image/*">
+                    <div style="margin-top: 5px;">
+                        <input type="radio" name="primary_image" value="{{ $image['id'] }}"
+                            {{ $image['is_primary'] ? 'checked' : '' }}> Primary
+                    </div>
+
+                    <form action="{{ route('admin.product.image.delete', ['id' => $product['id']]) }}" method="POST"
+                        style="position: absolute; top: -10px; right: -10px;">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="image_url" value="{{ $image['url'] }}">
+                        <button type="submit"
+                            style="background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 14px;">&times;</button>
+                    </form>
+                </div>
+            @endforeach
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+            <label for="images" style="display: block; margin-bottom: 5px;">Change Image:</label>
+            <input type="file" id="images" name="images[]" accept="image/*" multiple>
+        </div>
+
+
+
+
 
         <script>
-            document.getElementById('image').addEventListener('change', function(event) {
+            document.getElementById('images').addEventListener('change', function(event) {
                 const file = event.target.files[0];
                 const currentImage = document.getElementById('currentImage');
                 if (file) {
@@ -156,9 +182,12 @@
         </script>
 
         <form action="{{ route('admin.product.update', ['id' => $product['id']]) }}" method="POST"
-            enctype="multipart/form-data" id="editProductForm">
+            enctype="multipart/form-data">
             @csrf
-            @method('POST') {{-- Change to PUT if your route expects PUT --}}
+            @method('PUT')
+
+            @csrf
+            @method('PUT')
 
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" value="{{ $product['name'] }}" required>
@@ -174,18 +203,19 @@
 
             <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
                 @php
-                    $sizes = ['s', 'm', 'l', 'xxl'];
+                    $sizes = ['one_size', 'xs', 's', 'm', 'l', 'xxl'];
                 @endphp
 
                 @foreach ($sizes as $size)
                     <div style="flex: 1;">
                         <label for="stock_{{ $size }}"
-                            style="text-transform: uppercase;">{{ $size }}</label>
+                            style="text-transform: uppercase;">{{ str_replace('_', ' ', $size) }}</label>
                         <input type="number" id="stock_{{ $size }}" name="stock[{{ $size }}]"
                             min="0" value="{{ $product['stock'][$size] ?? 0 }}" required>
                     </div>
                 @endforeach
-            </div> <!-- THIS WAS MISSING -->
+
+            </div>
 
 
             <button type="submit" class="btn-save">Save Changes</button>

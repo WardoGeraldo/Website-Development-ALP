@@ -11,151 +11,6 @@ class AdminController extends Controller
     protected $products;
     protected $users;  // Add users array
 
-
-
-    public function __construct()
-    {
-        // Initialize products and users array here
-        $this->products = $this->getDummyProducts();
-        $this->users = $this->getDummyUsers();  // Initialize users
-    }
-
-    /**
-     * Method to return the list of products (admin dashboard).
-     */
-    public function index()
-    {
-        return view('admin.productlist', ['products' => $this->products]);
-    }
-
-    /**
-     * Method to return the list of users (admin user list).
-     */
-    public function userList()
-    {
-        return view('admin.user-list', ['users' => $this->users]);
-    }
-
-    /**
-     * Helper method to get dummy products data.
-     */
-    private function getDummyProducts()
-    {
-        return [
-            1 => [
-                'id' => 1,
-                'name' => 'Pastel Shirt',
-                'price' => 299000,
-                'description' => 'A stylish shirt that could never go wrong for casual or professional work.',
-                'category' => 'top',
-                'image' => $this->getFirstImage(1),
-                'stock' => ['s' => 10, 'm' => 12, 'l' => 8, 'xxl' => 3],
-            ],
-            2 => [
-                'id' => 2,
-                'name' => 'Black Veravia Signature Dress',
-                'price' => 499000,
-                'description' => 'A Stylish dress for modern look that will light up your charm',
-                'category' => 'top',
-                'image' => $this->getFirstImage(2),
-                'stock' => ['s' => 6, 'm' => 10, 'l' => 9, 'xxl' => 4],
-            ],
-            3 => [
-                'id' => 3,
-                'name' => 'Oversized Pink Tee',
-                'price' => 299000,
-                'description' => 'Perfect for a smart casual look.',
-                'category' => 'top',
-                'image' => $this->getFirstImage(3),
-                'stock' => ['s' => 9, 'm' => 14, 'l' => 10, 'xxl' => 2],
-            ],
-            4 => [
-                'id' => 4,
-                'name' => 'Long-Sleeved Green Shirt',
-                'price' => 349000,
-                'description' => 'A long-sleeved shirt with a premium wool',
-                'category' => 'top',
-                'image' => $this->getFirstImage(4),
-                'stock' => ['s' => 5, 'm' => 7, 'l' => 6, 'xxl' => 2],
-            ],
-            5 => [
-                'id' => 5,
-                'name' => 'Pastel Fit Pants',
-                'price' => 449000,
-                'description' => 'A simple, yet fits with every top you have',
-                'category' => 'bottom',
-                'image' => $this->getFirstImage(5),
-                'stock' => ['s' => 7, 'm' => 10, 'l' => 9, 'xxl' => 3],
-            ],
-            6 => [
-                'id' => 6,
-                'name' => 'Black Wool Underwear',
-                'price' => 129000,
-                'description' => 'Made with premium sheep wool to make you comfy',
-                'category' => 'bottom',
-                'image' => $this->getFirstImage(6),
-                'stock' => ['s' => 15, 'm' => 20, 'l' => 12, 'xxl' => 5],
-            ],
-            7 => [
-                'id' => 7,
-                'name' => 'Denim Baggy Jeans',
-                'price' => 649000,
-                'description' => 'A simple, yet stylish baggy jeans to complement your outfit of the day.',
-                'category' => 'bottom',
-                'image' => $this->getFirstImage(7),
-                'stock' => ['s' => 6, 'm' => 8, 'l' => 7, 'xxl' => 3],
-            ],
-            8 => [
-                'id' => 8,
-                'name' => 'Sunkist Cap',
-                'price' => 249000,
-                'description' => 'A stylish cap to complement your outfit during the day.',
-                'category' => 'accessories',
-                'image' => $this->getFirstImage(8),
-                'stock' => ['s' => 4, 'm' => 6, 'l' => 6, 'xxl' => 2],
-            ],
-            9 => [
-                'id' => 9,
-                'name' => 'Brown Wisdom Cap',
-                'price' => 249000,
-                'description' => 'A simple, yet stylish cap to complement your outfit.',
-                'category' => 'accessories',
-                'image' => $this->getFirstImage(9),
-                'stock' => ['s' => 3, 'm' => 5, 'l' => 7, 'xxl' => 1],
-            ],
-            10 => [
-                'id' => 10,
-                'name' => 'Brown Leather Bag',
-                'price' => 1149000,
-                'description' => 'A simple, yet real leathered bag with a sand color.',
-                'category' => 'bag',
-                'image' => $this->getFirstImage(10),
-                'stock' => ['s' => 2, 'm' => 3, 'l' => 4, 'xxl' => 1],
-            ],
-            11 => [
-                'id' => 11,
-                'name' => 'Pink Captain Bag',
-                'price' => 1549000,
-                'description' => 'A sweet pastel pink look that will make you charm',
-                'category' => 'bag',
-                'image' => $this->getFirstImage(11),
-                'stock' => ['s' => 2, 'm' => 4, 'l' => 3, 'xxl' => 1],
-            ],
-            12 => [
-                'id' => 12,
-                'name' => 'Abstract Leather Bag',
-                'price' => 1649000,
-                'description' => 'An abstract leather bag that will make you feel obsessed.',
-                'category' => 'bag',
-                'image' => $this->getFirstImage(12),
-                'stock' => ['s' => 3, 'm' => 4, 'l' => 2, 'xxl' => 1],
-            ],
-        ];
-    }
-
-    /**
-     * Helper method to get dummy users data.
-     */
     private function getDummyUsers()
     {
         return [
@@ -242,6 +97,186 @@ class AdminController extends Controller
         ];
     }
 
+    public function index()
+    {
+        $products = Product::with(['images', 'stock'])->where('status_del', 0)->get();
+
+        $productsData = $products->map(function ($product) {
+            // Cari gambar primary
+            $image = $product->images->where('is_primary', 1)->first();
+
+            return [
+                'id' => $product->product_id,
+                'name' => $product->name,
+                'price' => $product->price,
+                'description' => $product->description,
+                'category' => $product->category ? $product->category->name : null,
+                'image' => $image
+                    ? asset('images/products/' . $product->product_id . '/' . basename($image->url))
+                    : asset('images/default.jpg'),
+                'stock' => $this->getStockSizes($product),
+            ];
+        });
+
+        return view('admin.productlist', [
+            'products' => $productsData,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $product = Product::with(['stock', 'images'])->where('product_id', $id)->firstOrFail();
+
+        $productData = [
+            'id' => $product->product_id,
+            'name' => $product->name,
+            'price' => $product->price,
+            'description' => $product->description,
+            'category' => $product->category ? $product->category->name : null,
+            'images' => $product->images->map(function ($img) {
+                return [
+                    'id' => $img->id,
+                    'url' => $img->url,
+                    'is_primary' => $img->is_primary,
+                ];
+            })->toArray(),
+
+            'stock' => [
+                'xs' => $product->stock->where('size', 'XS')->first()->quantity ?? 0,
+                's' => $product->stock->where('size', 'S')->first()->quantity ?? 0,
+                'm' => $product->stock->where('size', 'M')->first()->quantity ?? 0,
+                'l' => $product->stock->where('size', 'L')->first()->quantity ?? 0,
+                'xxl' => $product->stock->where('size', 'XXL')->first()->quantity ?? 0,
+                'one_size' => $product->stock->where('size', 'ONE SIZE')->first()->quantity ?? 0, // Tambahin
+            ],
+        ];
+
+        return view('admin.edit-product', ['product' => $productData]);
+    }
+
+    public function deleteImage(Request $request, $id)
+    {
+        $product = Product::findOrFail($id);
+
+        $imagePath = public_path($request->input('image_url'));
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
+
+        // Delete record dari database juga kalau ada
+        $product->images()->where('url', 'like', '%' . basename($imagePath))->delete();
+
+        return back()->with('success', 'Image deleted successfully!');
+    }
+
+
+
+
+    public function update(Request $request, $id)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'stock' => 'required|array',
+            'primary_image' => 'nullable|exists:product_images,id',
+        ]);
+
+        $product = Product::with('images')->where('product_id', $id)->firstOrFail();
+        $product->name = $validated['name'];
+        $product->price = $validated['price'];
+        $product->save();
+
+        // Update stock per size
+        foreach ($validated['stock'] as $size => $qty) {
+            $stock = $product->stock()->where('size', $size)->first();
+            if ($stock) {
+                $stock->quantity = $qty;
+                $stock->save();
+            }
+        }
+
+        // Update Primary Image
+        if ($request->filled('primary_image')) {
+            // Reset semua gambar jadi non-primary
+            $product->images()->update(['is_primary' => 0]);
+
+            // Set gambar yang dipilih jadi primary
+            $product->images()->where('id', $request->primary_image)->update(['is_primary' => 1]);
+        }
+
+        // Upload new images (kalau ada)
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $imageFile) {
+                $filename = $imageFile->getClientOriginalName();
+                $destinationPath = public_path('images/products/' . $product->product_id);
+
+                if (!file_exists($destinationPath)) {
+                    mkdir($destinationPath, 0777, true);
+                }
+
+                $imageFile->move($destinationPath, $filename);
+
+                $product->images()->create([
+                    'url' => 'images/products/' . $product->product_id . '/' . $filename,
+                    'is_primary' => 0, // new image not primary by default
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
+    }
+
+    public function updateImage(Request $request, $id)
+    {
+        $request->validate([
+            'new_image' => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+        ]);
+
+        $image = \App\Models\ProductImage::findOrFail($id);
+
+        // Hapus file lama
+        if (file_exists(public_path($image->url))) {
+            unlink(public_path($image->url));
+        }
+
+        // Upload file baru
+        $file = $request->file('new_image');
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $destinationPath = public_path('images/products/' . $image->product_id);
+        $file->move($destinationPath, $filename);
+
+        // Update record database
+        $image->url = 'images/products/' . $image->product_id . '/' . $filename;
+        $image->save();
+
+        return back()->with('success', 'Image updated successfully!');
+    }
+
+
+
+
+
+    private function getStockSizes($product)
+    {
+        // Ini ukuran yang kamu mau tampilkan di edit form
+        $standardSizes = ['xs', 's', 'm', 'l', 'xl', 'xxl', 'one size'];
+
+        // Initialize semua ukuran ke 0
+        $stockSizes = array_fill_keys($standardSizes, 0);
+
+        foreach ($product->stock as $stock) {
+            $size = strtolower($stock->size);
+            if (isset($stockSizes[$size])) {
+                $stockSizes[$size] += $stock->quantity;
+            }
+        }
+
+        return $stockSizes;
+    }
+
+
+
+
     // Display edit form
     public function editUser($id)
     {
@@ -318,20 +353,6 @@ class AdminController extends Controller
         return asset('images/default.jpg');
     }
 
-
-    public function edit($id)
-    {
-        // Check if product exists in dummy data
-        if (!isset($this->products[$id])) {
-            abort(404, 'Product not found');
-        }
-
-        $product = $this->products[$id];
-
-        // Return an edit view with the product data
-        return view('admin.edit-product', compact('product'));
-    }
-
     public function userDetails($id)
     {
         // Check if user exists in dummy data
@@ -344,42 +365,6 @@ class AdminController extends Controller
         // Return a view with user data
         return view('admin.user-details', compact('user'));
     }
-
-    // Method to update product data
-    public function update(Request $request, $id)
-    {
-        $validated = $request->validate([
-            'name' => 'required|string',
-            'price' => 'required|numeric',
-            'category' => 'required|string',
-            'description' => 'nullable|string',
-            'stock' => 'required|array',
-            'stock.s' => 'required|integer|min:0',
-            'stock.m' => 'required|integer|min:0',
-            'stock.l' => 'required|integer|min:0',
-            'stock.xxl' => 'required|integer|min:0',
-        ]);
-
-        if (isset($this->products[$id])) {
-            $this->products[$id]['name'] = $request->name;
-            $this->products[$id]['price'] = $request->price;
-            $this->products[$id]['category'] = $request->category;
-            $this->products[$id]['description'] = $request->description;
-            $this->products[$id]['stock'] = $request->stock;
-
-            if ($request->hasFile('image')) {
-                $this->products[$id]['image'] = $this->storeImage($request->file('image'), $id);
-            }
-
-            // Save updated products back to session
-            session(['products' => $this->products]);
-
-            return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
-        }
-
-        return redirect()->route('admin.dashboard')->with('error', 'Product not found');
-    }
-
 
 
     // Helper method untuk ambil gambar pertama dari folder produk
