@@ -35,6 +35,7 @@ class ProductController extends Controller
 
         return view('product-detail', [
             'product' => [
+                'product_id' => $product->product_id, // supaya product id nyambung
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,

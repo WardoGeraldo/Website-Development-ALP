@@ -166,28 +166,38 @@
            <form action="{{ route('cart.add') }}" method="POST">
                 @csrf
 
-                {{-- <input type="hidden" name="product_id" value="{{ $product['product_id'] }}">
-                <input type="hidden" name="name" value="{{ $product['name'] }}">
-                <input type="hidden" name="price" value="{{ $product['price'] }}"> --}}
+                <input type="hidden" name="product_id" value="{{ $product['product_id'] }}">
 
                 @if (!empty($product['sizes']))
-                    <div>
-                        <select name="size" required>
-                            <option value="">Select Size</option>
-                            @foreach ($product['sizes'] as $size)
-                                <option value="{{ $size }}">{{ $size }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                    <select name="product_size" required>
+                        <option value="">Select Size</option>
+                        @foreach ($product['sizes'] as $size)
+                            @php
+                                $stock = DB::table('product_stocks')
+                                    ->where('product_id', $product['product_id'])
+                                    ->where('size', $size)
+                                    ->value('quantity');
+                            @endphp
+                            <option value="{{ $size }}">{{ $size }} ({{ $stock }} left)</option>
+                        @endforeach
+                    </select>
                 @else
-                    <input type="hidden" name="size" value="One Size">
+                    <input type="hidden" name="product_size" value="One Size">
                 @endif
 
-                <input type="number" name="quantity" min="1" max="100" value="1"
-                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black" />
 
+                <input type="number" name="product_qty" min="1" max="100" value="1"
+                    class="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-black"/> <br>
+                    @if (session('error'))
+                    <div class="text-red-600">{{ session('error') }}</div>
+                    @endif
+
+                    @if (session('success'))
+                        <div class="text-green-600">{{ session('success') }}</div>
+                    @endif
                 <button type="submit">Add to Cart</button>
             </form>
+
             <span class="wishlist-button" onclick="alert('Added to wishlist')">
                 Add to Wishlist <i class="far fa-heart"></i>
             </span>

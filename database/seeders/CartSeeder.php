@@ -9,7 +9,7 @@ class CartSeeder extends Seeder
 {
     public function run(): void
     {
-        $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+        $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'];
 
         // Ambil 2 user_id yang merupakan customer
         $customerIds = DB::table('users')

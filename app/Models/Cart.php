@@ -6,14 +6,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Cart extends Model
 {
+    protected $primaryKey = 'cart_id';
+
+    protected $fillable = [
+        'user_id',
+        'product_id',
+        'product_size',
+        'product_qty',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'cart_id');
     }
 
-    public function products()
+    public function product()
     {
-        return $this->belongsToMany(Product::class, 'cart_has_product', 'cart_id', 'product_id')
-                    ->withPivot('cart_product_size', 'cart_product_qty');
+            return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
 }

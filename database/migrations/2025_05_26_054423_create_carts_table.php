@@ -22,7 +22,7 @@ return new class extends Migration
                   ->constrained('products', 'product_id')
                   ->onDelete('cascade');
 
-            $table->enum('product_size', ['XS','S', 'M', 'L', 'XL', 'XXL']);
+            $table->enum('product_size', ['XS','S', 'M', 'L', 'XL', 'XXL', 'One Size']);
             $table->integer('product_qty')->default(1);
 
             $table->timestamps(); // created_at & updated_at

@@ -2,81 +2,98 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     public function add(Request $request)
     {
-        $productId = $request->input('product_id');
-        $name = $request->input('name');
-        $price = $request->input('price');
-        $size = $request->input('size');
-        $quantity = (int) $request->input('quantity');
+        $request->validate([
+            'product_id' => 'required|integer',
+            'product_size' => 'required|in:XS,S,M,L,XL,XXL,One Size',
+            'product_qty' => 'required|integer|min:1',
+        ]);
 
-        $cart = session()->get('cart', []);
+        $userId = Auth::id();
+        $productId = $request->product_id;
+        $size = $request->product_size;
+        $qtyToAdd = $request->product_qty;
 
-        // Generate unique key using productId + size (to differentiate sizes)
-        $key = $productId . '-' . $size;
+        // Get available stock from product_stocks table
+        $availableStock = DB::table('product_stocks')
+            ->where('product_id', $productId)
+            ->where('size', $size)
+            ->value('quantity');
 
-        if (isset($cart[$key])) {
-            $cart[$key]['quantity'] += $quantity;
-        } else {
-            $cart[$key] = [
-                'product_id' => $productId,
-                'name' => $name,
-                'price' => $price,
-                'size' => $size,
-                'quantity' => $quantity,
-            ];
+        if (!$availableStock) {
+            return back()->with('error', 'This product is currently out of stock.');
         }
 
-        session()->put('cart', $cart);
+        // Check if item already exists in user's cart
+        $existingCartItem = Cart::where('user_id', $userId)
+            ->where('product_id', $productId)
+            ->where('product_size', $size)
+            ->first();
+
+        $totalQty = $qtyToAdd;
+        if ($existingCartItem) {
+            $totalQty += $existingCartItem->product_qty;
+        }
+
+        // If total desired quantity exceeds available stock
+        if ($totalQty > $availableStock) {
+            return back()->with('error', 'Insufficient stock available for this size. Only ' . $availableStock . ' left.');
+        }
+
+        // Save or update cart
+        if ($existingCartItem) {
+            $existingCartItem->product_qty = $totalQty;
+            $existingCartItem->save();
+        } else {
+            Cart::create([
+                'user_id' => $userId,
+                'product_id' => $productId,
+                'product_size' => $size,
+                'product_qty' => $qtyToAdd,
+            ]);
+        }
 
         return redirect()->route('cart.index')->with('success', 'Product added to cart!');
     }
-    
-    public function index(Request $request)
-    {
-        // Check if the cart exists in the session, otherwise set it with dummy data
-    if (!session()->has('cart') || empty(session()->get('cart'))) {            
-        $cart = [
-            1 => ['name' => 'Oversized Tee', 'price' => 299000, 'quantity' => 1],
-            2 => ['name' => 'Slim Fit Pants', 'price' => 399000, 'quantity' => 2],
-            3 => ['name' => 'Monochrome Cap', 'price' => 149000, 'quantity' => 1],
-            4 => ['name' => 'Wisdom Cap', 'price' => 149000, 'quantity' => 1]
-        ];
-        session()->put('cart', $cart); // Store cart in session
-    }
 
-        $cart = session()->get('cart');
-        $promo = session()->get('promo', null);
+    
+    public function index()
+    {
+        $userId = Auth::id();
+
+        // Fetch cart items from database, including product info
+        $cartItems = Cart::with('product')
+            ->where('user_id', $userId)
+            ->get();
 
         $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
+        foreach ($cartItems as $item) {
+            $total += $item->product->price * $item->product_qty;
         }
 
-        $discountAmount = 0;
-        $discountRate = 0;
-        $promoCode = '';
-
-        if ($promo) {
-            $discountRate = $promo['discount'] ?? 0;
-            $promoCode = $promo['code'] ?? '';
-            $discountAmount = $total * $discountRate;
-        }
-
+        $promo = session()->get('promo', null);
+        $discountRate = $promo['discount'] ?? 0;
+        $promoCode = $promo['code'] ?? '';
+        $discountAmount = $total * $discountRate;
         $finalTotal = $total - $discountAmount;
 
         return view('cart', [
-            'cart' => $cart,
+            'cartItems' => $cartItems,
             'promoCode' => $promoCode,
             'discountRate' => $discountRate,
             'discountAmount' => $discountAmount,
             'finalTotal' => $finalTotal,
         ]);
     }
+
 
     // Remove an item from the cart
     public function remove($id, Request $request)
@@ -94,17 +111,19 @@ class CartController extends Controller
     }
 
     public function bulkUpdate(Request $request)
-{
+    {
         $quantities = $request->input('quantities', []);
-        $cart = session()->get('cart', []);
+        $userId = Auth::id();
 
-        foreach ($quantities as $id => $qty) {
-            if (isset($cart[$id])) {
-                $cart[$id]['quantity'] = max(1, (int) $qty); // safe fallback
+        foreach ($quantities as $cartId => $qty) {
+            $cartItem = Cart::where('product_id', $cartId)->where('user_id', $userId)->first();
+            if ($cartItem) {
+                $cartItem->product_qty = max(1, (int) $qty); // prevent 0 or negative qty
+                $cartItem->save();
             }
         }
-        session()->put('cart', $cart);
-        return redirect()->back()->with('success', 'Cart updated successfully.');
+
+        return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');;
     }
     
     public function checkout(Request $request)

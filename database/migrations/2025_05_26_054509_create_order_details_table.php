@@ -22,7 +22,7 @@ return new class extends Migration
                   ->constrained('products', 'product_id')
                   ->onDelete('cascade');
 
-            $table->enum('product_size', ['XS','S', 'M', 'L', 'XL', 'XXL']);
+            $table->enum('product_size', ['XS','S', 'M', 'L', 'XL', 'XXL']); //kurang one size
             $table->integer('quantity')->default(1);
             $table->decimal('price', 10, 2); // Harga saat order (bukan harga saat ini)
 

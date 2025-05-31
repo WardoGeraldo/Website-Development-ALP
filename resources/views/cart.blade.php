@@ -482,33 +482,47 @@
 @endphp
 
 <div class="cart-grid">
-    @forelse($cart as $id => $item)
+    @forelse($cartItems as $item)
         @php
-            $itemTotal = $item['price'] * $item['quantity'];
-            $total += $itemTotal;
+            $itemTotal = $item->product->price * $item->product_qty;
         @endphp
 
         <div class="cart-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
             <div class="d-flex align-items-center">
                 <input type="checkbox" class="cart-checkbox"
-                    name="selected[]" value="{{ $id }}"
+                    name="selected[]" value="{{ $item->cart_id }}"
                     data-price="{{ $itemTotal }}">
-                <img src="{{ asset('fotoBaju.jpg') }}" alt="{{ $item['name'] }}">
-                <div class="cart-info">
-                    <h5>{{ $item['name'] }}</h5>
-                    <div class="text-muted">Size: Large</div>
-                    <div class="text-muted">Price: Rp{{ number_format($item['price'], 0, ',', '.') }}</div>
+                    @php
+                        $imageDir = public_path("images/products/{$item->product->product_id}");
+                        $imageUrl = asset('fotoBaju.jpg'); // fallback
+
+                        if (File::exists($imageDir)) {
+                            $files = File::files($imageDir);
+                            $image = collect($files)->first(function ($file) {
+                                return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
+                            });
+
+                            if ($image) {
+                                $imageUrl = asset("images/products/{$item->product->product_id}/" . $image->getFilename());
+                            }
+                        }
+                    @endphp
+                    <img src="{{ $imageUrl }}" alt="{{ $item->product->name }}" style="width: 100px;">
+                    <div class="cart-info">
+                    <h5>{{ $item->product->name }}</h5>
+                    <div class="text-muted">Size: {{ $item->product_size }}</div>
+                    <div class="text-muted">Price: Rp{{ number_format($item->product->price, 0, ',', '.') }}</div>
                     <div class="text-muted">Total: Rp{{ number_format($itemTotal, 0, ',', '.') }}</div>
                 </div>
             </div>
 
             <div class="cart-actions">
-                <form action="{{ route('cart.bulkUpdate', 0) }}" method="POST">
+                <form action="{{ route('cart.bulkUpdate') }}" method="POST">
                     @csrf
-                    <input type="number" name="quantities[{{ $id }}]" value="{{ $item['quantity'] }}" min="1">
+                    <input type="number" name="quantities[{{ $item->cart_id }}]" value="{{ $item->product_qty }}" min="1">
                     <button type="submit" class="btn-update">✔</button>
                 </form>
-                <a href="{{ route('cart.remove', $id) }}" class="btn-remove">×</a>
+                <a href="{{ route('cart.remove', $item->cart_id) }}" class="btn-remove">×</a>
             </div>
         </div>
     @empty
@@ -517,6 +531,7 @@
         </div>
     @endforelse
 </div>
+
 
 <div class="checkout-section">
     <div class="row">
