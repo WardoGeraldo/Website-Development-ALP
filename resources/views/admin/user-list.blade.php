@@ -38,18 +38,19 @@
                     <tbody>
                         @foreach ($users as $user)
                             <tr>
-                                <td>{{ $user['name'] }}</td>
-                                <td>{{ $user['address'] }}</td>
-                                <td>{{ $user['phone'] }}</td>
-                                <td>{{ $user['email'] }}</td>
+                                <td>{{ $user->name }}</td>
+                                <td>{{ $user->address }}</td>
+                                <td>{{ $user->phone_number }}</td>
+                                <td>{{ $user->email }}</td>
                                 <td>
-                                    <a href="{{ route('admin.user.details', ['id' => $user['id']]) }}" class="action-btn">
+                                    <a href="{{ route('admin.user.edit', ['id' => $user->user_id]) }}" class="action-btn">
                                         <i class="bi bi-eye"></i>
                                         <span>View</span>
                                     </a>
                                 </td>
                             </tr>
                         @endforeach
+
                     </tbody>
                 </table>
             </div>
@@ -69,7 +70,12 @@
             const dateElement = document.getElementById('current-date');
             if (dateElement) {
                 const now = new Date();
-                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
                 dateElement.textContent = now.toLocaleDateString('en-US', options);
             }
         });
@@ -263,7 +269,7 @@
         }
 
         .btn-close {
-            filter: var(--text-color) == #f1f1f1 ? invert(1) : invert(0);
+            filter: var(--text-color)==#f1f1f1 ? invert(1): invert(0);
         }
 
         /* Smooth Theme Transitions */

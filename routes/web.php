@@ -86,7 +86,7 @@ Route::middleware('manual_auth')->group(function () {
         Route::get('/promo/{id}/edit', [AdminController::class, 'showPromoDetails'])->name('admin.promo.details');
         Route::put('/promo/{id}', [AdminController::class, 'updatePromo'])->name('admin.promo.update');
 
-        Route::get('/sales', [SalesController::class, 'index'])->name('admin.sales.index');
+        Route::get('/sales', [InvoiceController::class, 'salesList'])->name('admin.sales.index');
         Route::get('/invoice/{sales_id}', [InvoiceController::class, 'index'])->name('admin.invoice.index');
 
         Route::get('/users', [AdminController::class, 'userList'])->name('admin.userlist');

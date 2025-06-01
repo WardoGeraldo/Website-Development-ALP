@@ -8,13 +8,15 @@ class Order extends Model
 {
     public function user()
     {
-        return $this->belongsTo(User::class, 'order_id', 'user_id');
+        return $this->belongsTo(User::class, 'user_id', 'user_id');
     }
+
 
     public function details()
     {
-        return $this->hasMany(OrderDetails::class, 'order_details_id', 'order_id');
+        return $this->hasMany(OrderDetails::class, 'order_id', 'order_id');
     }
+
 
     public function payment()
     {

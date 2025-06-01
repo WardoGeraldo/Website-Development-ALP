@@ -10,7 +10,7 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $primaryKey = 'user_id'; // ✅ ADD THIS!
+    protected $primaryKey = 'user_id';
 
     public function cart()
     {

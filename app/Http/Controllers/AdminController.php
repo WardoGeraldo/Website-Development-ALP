@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -11,91 +12,12 @@ class AdminController extends Controller
     protected $products;
     protected $users;  // Add users array
 
-    private function getDummyUsers()
+    public function userList()
     {
-        return [
-            1 => [
-                'id' => 1,
-                'name' => 'John Doe',
-                'address' => '123 Main St, City, Country',
-                'phone' => '123-456-7890',
-                'email' => 'john@gmail.com',
-                'gender' => 'Male',
-                'dob' => '1990-05-15',
-                'role' => 'Customer',
-            ],
-            2 => [
-                'id' => 2,
-                'name' => 'Kevin',
-                'address' => '456 Main St, City, Country',
-                'phone' => '0899-1829-2020',
-                'email' => 'kevin@gmail.com',
-                'gender' => 'Male',
-                'dob' => '1992-07-20',
-                'role' => 'Customer',
-            ],
-            3 => [
-                'id' => 3,
-                'name' => 'Sarah',
-                'address' => '789 Main St, City, Country',
-                'phone' => '0812-3456-7890',
-                'email' => 'sarah@gmail.com',
-                'gender' => 'Female',
-                'dob' => '1994-03-18',
-                'role' => 'Admin',
-            ],
-            4 => [
-                'id' => 4,
-                'name' => 'Michael Smith',
-                'address' => '321 Elm St, City, Country',
-                'phone' => '0821-3456-1234',
-                'email' => 'michael.smith@gmail.com',
-                'gender' => 'Male',
-                'dob' => '1988-11-10',
-                'role' => 'Customer',
-            ],
-            5 => [
-                'id' => 5,
-                'name' => 'Emily Johnson',
-                'address' => '654 Oak St, City, Country',
-                'phone' => '0857-9876-5432',
-                'email' => 'emily.johnson@gmail.com',
-                'gender' => 'Female',
-                'dob' => '1995-06-22',
-                'role' => 'Customer',
-            ],
-            6 => [
-                'id' => 6,
-                'name' => 'David Lee',
-                'address' => '77 Pine Ave, City, Country',
-                'phone' => '0878-2233-5566',
-                'email' => 'david.lee@gmail.com',
-                'gender' => 'Male',
-                'dob' => '1991-03-09',
-                'role' => 'Admin',
-            ],
-            7 => [
-                'id' => 7,
-                'name' => 'Olivia Brown',
-                'address' => '98 Cedar Blvd, City, Country',
-                'phone' => '0813-1122-3344',
-                'email' => 'olivia.brown@gmail.com',
-                'gender' => 'Female',
-                'dob' => '1993-12-01',
-                'role' => 'Customer',
-            ],
-            8 => [
-                'id' => 8,
-                'name' => 'James Wilson',
-                'address' => '135 Birch Lane, City, Country',
-                'phone' => '0838-4455-6677',
-                'email' => 'james.wilson@gmail.com',
-                'gender' => 'Male',
-                'dob' => '1989-08-17',
-                'role' => 'Customer',
-            ],
-        ];
+        $users = User::all(); // Panggil semua user dari database
+        return view('admin.user-list', compact('users'));
     }
+
 
     public function index()
     {
@@ -274,36 +196,35 @@ class AdminController extends Controller
         return $stockSizes;
     }
 
-
-
-
-    // Display edit form
+    // Display edit user form
     public function editUser($id)
     {
-        $users = $this->getDummyUsers();
+        $user = User::where('user_id', $id)->firstOrFail(); // Cari user berdasarkan user_id
 
-        if (!isset($users[$id])) {
-            abort(404);
-        }
-
-        $user = $users[$id];
-
-        return view('admin.user-list', compact('user'));
+        return view('admin.user-details', compact('user')); // Asumsi viewnya admin/user-edit.blade.php
     }
 
-    // Handle form submission (simulate update)
     public function updateUser(Request $request, $id)
     {
-        $data = $request->only(['name', 'email', 'address', 'phone', 'gender', 'dob', 'role']);
+        $user = User::where('user_id', $id)->firstOrFail();
 
-        // Simulate "updated" user
-        $user = array_merge(['id' => $id], $data);
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->user_id . ',user_id',
+            'address' => 'nullable|string|max:255',
+            'phone_number' => 'nullable|string|max:20',
+            'role' => 'required|in:admin,customer',
+        ]);
 
-        // Get the full dummy list again (not updated for real)
-        $users = $this->getDummyUsers();
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'address' => $request->address,
+            'phone_number' => $request->phone_number,
+            'role' => $request->role,
+        ]);
 
-        // Redirect to the user list with success flash message
-        return redirect()->route('admin.userlist')->with('success', 'User updated successfully (temporarily)');
+        return redirect()->route('admin.userlist')->with('success', 'User updated successfully!');
     }
 
 
