@@ -116,15 +116,48 @@ class CartController extends Controller
         $userId = Auth::id();
 
         foreach ($quantities as $cartId => $qty) {
-            $cartItem = Cart::where('cart_id', $cartId)->where('user_id', $userId)->first();
+            $cartItem = Cart::where('cart_id', $cartId)
+                            ->where('user_id', $userId)
+                            ->with('product') // eager load the related product
+                            ->first();
+
             if ($cartItem) {
-                $cartItem->product_qty = max(1, (int) $qty); // prevent 0 or negative qty
-                $cartItem->save();
+                $desiredQty = max(1, (int) $qty);
+                $availableStock = $cartItem->product->stock()
+                    ->where('size', $cartItem->product_size)
+                    ->sum('quantity');
+
+                if ($desiredQty <= $availableStock) {
+                    $cartItem->product_qty = $desiredQty;
+                    $cartItem->save();
+                } else {
+                    $errors = [];
+                    foreach ($quantities as $cartId => $qty) {
+                        $cartItem = Cart::with('product.stock')->where('cart_id', $cartId)->where('user_id', $userId)->first();
+
+                        if ($cartItem) {
+                            $availableStock = $cartItem->product->stock
+                                ->where('size', $cartItem->product_size)
+                                ->sum('quantity');
+
+                            if ($qty > $availableStock) {
+                                $errors["stock_error_{$cartId}"] = "Quantity for {$cartItem->product->name} exceeds available stock (max: {$availableStock}).";
+                            } else {
+                                $cartItem->product_qty = max(1, (int) $qty);
+                                $cartItem->save();
+                            }
+                        }
+                    }
+                    if (!empty($errors)) {
+                        return redirect()->route('cart.index')->withErrors($errors);
+                    }
+                }
             }
         }
 
         return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');
     }
+
     
     public function checkout(Request $request)
     {

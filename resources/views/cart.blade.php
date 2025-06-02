@@ -488,43 +488,65 @@
         @endphp
 
         <div class="cart-card" data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
-            <div class="d-flex align-items-center">
-                <input type="checkbox" class="cart-checkbox"
-                    name="selected[]" value="{{ $item->cart_id }}"
-                    data-price="{{ $itemTotal }}">
-                    @php
-                        $imageDir = public_path("images/products/{$item->product->product_id}");
-                        $imageUrl = asset('fotoBaju.jpg'); // fallback
+        <div class="d-flex align-items-center">
+            <input type="checkbox" class="cart-checkbox"
+                name="selected[]" value="{{ $item->cart_id }}"
+                data-price="{{ $itemTotal }}">
+            
+            @php
+                $imageDir = public_path("images/products/{$item->product->product_id}");
+                $imageUrl = asset('fotoBaju.jpg'); // fallback
 
-                        if (File::exists($imageDir)) {
-                            $files = File::files($imageDir);
-                            $image = collect($files)->first(function ($file) {
-                                return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
-                            });
+                if (File::exists($imageDir)) {
+                    $files = File::files($imageDir);
+                    $image = collect($files)->first(function ($file) {
+                        return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
+                    });
 
-                            if ($image) {
-                                $imageUrl = asset("images/products/{$item->product->product_id}/" . $image->getFilename());
-                            }
-                        }
-                    @endphp
-                    <img src="{{ $imageUrl }}" alt="{{ $item->product->name }}" style="width: 100px;">
-                    <div class="cart-info">
-                    <h5>{{ $item->product->name }}</h5>
-                    <div class="text-muted">Size: {{ $item->product_size }}</div>
-                    <div class="text-muted">Price: Rp{{ number_format($item->product->price, 0, ',', '.') }}</div>
-                    <div class="text-muted">Total: Rp{{ number_format($itemTotal, 0, ',', '.') }}</div>
+                    if ($image) {
+                        $imageUrl = asset("images/products/{$item->product->product_id}/" . $image->getFilename());
+                    }
+                }
+            @endphp
+
+            <img src="{{ $imageUrl }}" alt="{{ $item->product->name }}" style="width: 100px;">
+            <div class="cart-info">
+                <h5>{{ $item->product->name }}</h5>
+                <div class="text-muted">Size: {{ $item->product_size }}</div>
+                <div class="text-muted">
+                    Available Stock: {{
+                        $item->product->stock->where('size', $item->product_size)->sum('quantity')
+                    }}
                 </div>
-            </div>
-
-            <div class="cart-actions">
-                <form action="{{ route('cart.bulkUpdate') }}" method="POST">
-                    @csrf
-                    <input type="number" name="quantities[{{ $item->cart_id }}]" value="{{ $item->product_qty }}" min="1">
-                    <button type="submit" class="btn-update">✔</button>
-                </form>
-                <a href="{{ route('cart.remove', $item->cart_id) }}" class="btn-remove">×</a>
+                <div class="text-muted">Price: Rp{{ number_format($item->product->price, 0, ',', '.') }}</div>
+                <div class="text-muted">Total: Rp{{ number_format($itemTotal, 0, ',', '.') }}</div>
             </div>
         </div>
+
+        <div class="cart-actions">
+            <form action="{{ route('cart.bulkUpdate') }}" method="POST" class="d-flex flex-column align-items-start gap-1">
+                @csrf
+                <div class="d-flex align-items-center gap-2">
+                    <input type="number"
+                        name="quantities[{{ $item->cart_id }}]"
+                        value="{{ $item->product_qty }}"
+                        min="1"
+                        class="form-control form-control-sm {{ $errors->has('stock_error_' . $item->cart_id) ? 'is-invalid' : '' }}"
+                        style="width: 70px;">
+
+                    <button type="submit" class="btn btn-sm btn-light text-dark btn-update px-2">✔</button>
+                    <a href="{{ route('cart.remove', $item->cart_id) }}" class="btn btn-sm btn-danger btn-remove px-2">×</a>
+                </div>
+
+                @if($errors->has('stock_error_' . $item->cart_id))
+                    <div class="invalid-feedback d-block ps-1">
+                        {{ $errors->first('stock_error_' . $item->cart_id) }}
+                    </div>
+                @endif
+            </form>
+        </div>
+
+    </div>
     @empty
         <div class="text-center py-5">
             <div class="alert alert-info">Your cart is empty.</div>
