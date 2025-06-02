@@ -526,6 +526,8 @@
         <div class="cart-actions">
             <form action="{{ route('cart.bulkUpdate') }}" method="POST" class="d-flex flex-column align-items-start gap-1">
                 @csrf
+
+                {{-- Quantity input and action buttons --}}
                 <div class="d-flex align-items-center gap-2">
                     <input type="number"
                         name="quantities[{{ $item->cart_id }}]"
@@ -538,13 +540,17 @@
                     <a href="{{ route('cart.remove', $item->cart_id) }}" class="btn btn-sm btn-danger btn-remove px-2">×</a>
                 </div>
 
-                @if($errors->has('stock_error_' . $item->cart_id))
-                    <div class="invalid-feedback d-block ps-1">
-                        {{ $errors->first('stock_error_' . $item->cart_id) }}
-                    </div>
-                @endif
+                {{-- Reserve space for error message --}}
+                <div style="min-height: 1.25rem;">
+                    @if($errors->has('stock_error_' . $item->cart_id))
+                        <div class="invalid-feedback d-block ps-1">
+                            {{ $errors->first('stock_error_' . $item->cart_id) }}
+                        </div>
+                    @endif
+                </div>
             </form>
         </div>
+
 
     </div>
     @empty
@@ -579,18 +585,22 @@
             <div class="price-summary">
                 <div class="d-flex justify-content-between mb-2">
                     <h5 class="mb-0">Subtotal:</h5>
-                    <h5 class="mb-0">Rp<span class="subtotal-value">0</span></h5>
+                    <h5 class="mb-0">Rp<span class="subtotal-value">{{ number_format($subtotal, 0, ',', '.') }}</span></h5>
                 </div>
+
                 <div class="d-flex justify-content-between mb-2">
                     <h6 class="mb-0 text-success">Promo Discount:</h6>
-                    <h6 class="mb-0 text-success">-Rp<span class="discount-value">0</span></h6>
+                    <h6 class="mb-0 text-success">-Rp<span class="discount-value">{{ number_format($discountAmount, 0, ',', '.') }}</span></h6>
                 </div>
+
                 <hr>
+
                 <div class="d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">Total:</h4>
-                    <h4 class="mb-0 text-primary">Rp<span class="total-value">0</span></h4>
+                    <h4 class="mb-0 text-primary">Rp<span class="total-value">{{ number_format($finalTotal, 0, ',', '.') }}</span></h4>
                 </div>
-                <div class="text-end">
+
+                <div class="text-end mt-2">
                     <button class="checkout-btn" id="checkout-btn">Checkout</button>
                 </div>
             </div>

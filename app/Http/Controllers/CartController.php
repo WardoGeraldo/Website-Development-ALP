@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Cart;
+use App\Models\Promo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -67,6 +69,7 @@ class CartController extends Controller
     
     public function index()
     {
+        // dd(session()->all());
         $userId = Auth::id();
 
         // Fetch cart items from database, including product info
@@ -74,19 +77,24 @@ class CartController extends Controller
             ->where('user_id', $userId)
             ->get();
 
-        $total = 0;
+        // Calculate subtotal
+        $subtotal = 0;
         foreach ($cartItems as $item) {
-            $total += $item->product->price * $item->product_qty;
+            $subtotal += $item->product->price * $item->product_qty;
         }
 
+        // Promo session check
         $promo = session()->get('promo', null);
         $discountRate = $promo['discount'] ?? 0;
         $promoCode = $promo['code'] ?? '';
-        $discountAmount = $total * $discountRate;
-        $finalTotal = $total - $discountAmount;
+
+        // Calculate discount and final total
+        $discountAmount = $subtotal * $discountRate;
+        $finalTotal = $subtotal - $discountAmount;
 
         return view('cart', [
             'cartItems' => $cartItems,
+            'subtotal' => $subtotal,
             'promoCode' => $promoCode,
             'discountRate' => $discountRate,
             'discountAmount' => $discountAmount,
@@ -180,33 +188,26 @@ class CartController extends Controller
 
     public function applyPromo(Request $request)
     {   
-        $validPromo = ['BLACKFRI50', 'NEWYEAR20'];
-        
         $promoCode = strtoupper($request->input('promo'));
-        if ($promoCode == $validPromo[0]) {
-            $discountRate = 0.50;
+        $now = Carbon::now();
+
+        $promo = Promo::where('code', $promoCode)
+            ->where('start_date', '<=', $now)
+            ->where('end_date', '>=', $now)
+            ->first();
+
+        if ($promo) {
             session()->put('promo', [
-                'code' => $promoCode,
-                'discount' => $discountRate,
+                'code' => $promo->code,
+                'discount' => $promo->discount_amount / 100, 
+                'id' => $promo->promo_id,
             ]);
 
-            return redirect()->back()->with([
-                'success' => 'Promo code applied successfully!',
-            ]);
+            return redirect()->route('cart.index')->with('success', 'Promo code applied successfully!');
         }
-        else if ($promoCode == $validPromo[1]) {
-            $discountRate = 0.20;
-            session()->put('promo', [
-                'code' => $promoCode,
-                'discount' => $discountRate,
-            ]);
 
-            return redirect()->back()->with([
-                'success' => 'Promo code applied successfully!',
-            ]);
-        }
         session()->forget('promo'); // Clear invalid promo
-        return redirect()->back()->with('error', 'Invalid promo code.');
+        return redirect()->back()->with('error', 'Invalid or expired promo code.');
     }
 
 
