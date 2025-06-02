@@ -98,12 +98,12 @@ class CartController extends Controller
     // Remove an item from the cart
     public function remove($id, Request $request)
     {
-        $cart = session()->get('cart');
+        $userId = Auth::id();
 
-        // If item exists in the cart, remove it
-        if (isset($cart[$id])) {
-            unset($cart[$id]); // Remove the item from the cart
-            session()->put('cart', $cart); // Save the updated cart back to the session
+        $cartItem = Cart::where('cart_id', $id)->where('user_id', $userId)->first();
+
+        if ($cartItem) {
+            $cartItem->delete();
             return redirect()->route('cart.index')->with('success', 'Item removed from the cart.');
         }
 
@@ -116,14 +116,14 @@ class CartController extends Controller
         $userId = Auth::id();
 
         foreach ($quantities as $cartId => $qty) {
-            $cartItem = Cart::where('product_id', $cartId)->where('user_id', $userId)->first();
+            $cartItem = Cart::where('cart_id', $cartId)->where('user_id', $userId)->first();
             if ($cartItem) {
                 $cartItem->product_qty = max(1, (int) $qty); // prevent 0 or negative qty
                 $cartItem->save();
             }
         }
 
-        return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');;
+        return redirect()->route('cart.index')->with('success', 'Cart updated successfully.');
     }
     
     public function checkout(Request $request)

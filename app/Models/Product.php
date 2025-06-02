@@ -36,8 +36,7 @@ class Product extends Model
     // Product belongs to many carts
     public function carts()
     {
-        return $this->belongsToMany(Cart::class, 'cart_has_product', 'product_id', 'cart_id')
-                    ->withPivot('cart_product_size', 'cart_product_qty');
+        return $this->hasMany(Cart::class, 'product_id', 'product_id');
     }
 
     // Product belongs to many wishlists
