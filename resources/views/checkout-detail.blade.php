@@ -260,6 +260,11 @@
                 <label class="form-label">Phone</label>
                 <input type="tel" class="form-input" value="{{ $user['contact'] ?? '' }}">
             </div>
+
+            <div class="form-group">
+                <label class="form-label">Shipment Date</label>
+                <input type="tel" class="form-input" value="{{ $user['contact'] ?? '' }}">
+            </div>
         </div>
         
         <!-- Order Summary Sidebar -->
@@ -296,7 +301,7 @@
             <div class="summary-row total">
                 <span>Total</span>
                 <span>
-                    <span class="currency">USD</span> 
+                    <span class="currency">IDR</span> 
                     Rp{{ number_format(isset($finalTotal) ? $finalTotal : $total, 0, ',', '.') }}
                 </span>
             </div>

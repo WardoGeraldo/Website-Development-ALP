@@ -170,21 +170,30 @@ class CartController extends Controller
     public function checkout(Request $request)
     {
         $selectedIds = $request->input('selected', []);
-        $cart = session()->get('cart', []);
-        $selectedItems = [];
+        $userId = Auth::id();
 
-        foreach ($selectedIds as $id) {
-            if (isset($cart[$id])) {
-                $selectedItems[$id] = $cart[$id];
-            }
+        // Fetch selected cart items from the database
+        $selectedItems = Cart::with('product')
+            ->where('user_id', $userId)
+            ->whereIn('cart_id', $selectedIds)
+            ->get();
+
+        // Convert to array format for checkout-detail
+        $checkoutItems = [];
+        foreach ($selectedItems as $item) {
+            $checkoutItems[] = [
+                'name' => $item->product->name,
+                'price' => $item->product->price,
+                'quantity' => $item->product_qty,
+            ];
         }
 
-        // Store selected items temporarily for checkout
-        session()->put('checkout_items', $selectedItems);
+        // Store selected items in session
+        session()->put('checkout_items', $checkoutItems);
 
-        // Redirect to the checkout-detail page
         return redirect()->route('cart.checkoutDetail');
     }
+
 
     public function applyPromo(Request $request)
     {   
@@ -211,14 +220,13 @@ class CartController extends Controller
     }
 
 
-    public function checkoutDetail()
+    public function checkoutDetail(Request $request)
     {
+        // dd(session()->all());
         $selectedItems = session()->get('checkout_items', []);
 
         $user = [
-            'email' => 'user@example.com',
-            'address' => 'Jl. Example No. 123, Jakarta',
-            'contact' => '08123456789'
+            'email' => Auth::user()->email,
         ];
 
         $orders = array_map(function ($item) {
@@ -246,7 +254,6 @@ class CartController extends Controller
         }
 
         $finalTotal = $total - $discountAmount;
-
         $orderHistory = session()->get('order_history', []);
 
         $orderHistory[] = [

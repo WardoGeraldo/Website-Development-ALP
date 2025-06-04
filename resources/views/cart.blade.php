@@ -608,10 +608,10 @@
     </div>
 </div>
 
-<!-- Hidden Checkout Form -->
-<form id="checkout-form" action="{{ route('cart.checkout') }}" method="POST" style="display: none;">
+<form id="checkout-form" action="{{ route('cart.checkout') }}" method="POST">
     @csrf
     <div id="selected-inputs"></div>
+    {{-- <button type="submit" class="checkout-btn">Checkout</button> --}}
 </form>
 
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
