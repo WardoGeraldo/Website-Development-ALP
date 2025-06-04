@@ -211,107 +211,107 @@
 
 <div class="checkout-wrapper">
     <div class="checkout-container">
-        <!-- Main Checkout Form -->
-        <div class="checkout-main">
+    <div class="checkout-main">
+        <form action="{{ route('cart.processCheckout') }}" method="POST">
+            @csrf
             <div class="brand-title"></div>
-            
-            <!-- Contact Section -->
-            <div class="section-title">Contact</div>
-            <div class="form-group">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-input" value="{{ $user['email'] ?? '' }}">
-            </div>
-            
-            <!-- Delivery Section -->
-            <div class="section-title">Delivery</div>
-            <div class="form-row">
+                <!-- Contact Section -->
+                <div class="section-title">Contact</div>
                 <div class="form-group">
-                    <label class="form-label">First name (optional)</label>
-                    <input type="text" class="form-input" placeholder="">
+                    <label class="form-label">Email</label>
+                    <input type="email" name="email" class="form-input" value="{{ $user['email'] ?? '' }}">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Last name</label>
-                    <input type="text" class="form-input" placeholder="">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Address</label>
-                <input type="text" class="form-input" value="{{ $user['address'] ?? '' }}" onchange="updateShippingAddress()">
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Apartment, suite, etc. (optional)</label>
-                <input type="text" class="form-input" placeholder="">
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label class="form-label">City</label>
-                    <input type="text" class="form-input" placeholder="">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">ZIP code</label>
-                    <input type="text" class="form-input" placeholder="">
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label class="form-label">Phone</label>
-                <input type="tel" class="form-input" value="{{ $user['contact'] ?? '' }}">
-            </div>
+                
+                <!-- Delivery Section -->
+                <div class="section-title">Delivery</div>
 
-            <div class="form-group">
-                <label class="form-label">Shipment Date</label>
-                <input type="tel" class="form-input" value="{{ $user['contact'] ?? '' }}">
-            </div>
-        </div>
-        
-        <!-- Order Summary Sidebar -->
-        <div class="checkout-sidebar">
-            <!-- Order Items -->
-            @foreach($orders as $order)
-            <div class="order-item">
-                <div class="item-details">
-                    <div class="item-name">{{ $order['name'] }}</div>
-                    <div class="item-meta">Qty: {{ $order['quantity'] }}</div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" name="first_name" class="form-input" value="{{ old('first_name') }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" name="last_name" class="form-input" value="{{ old('last_name') }}">
+                    </div>
                 </div>
-                <div class="item-price">Rp{{ number_format($order['price'] * $order['quantity'], 0, ',', '.') }}</div>
+
+                <div class="form-group">
+                    <label class="form-label">Address (Ship to)</label>
+                    <input type="text" name="address_line1" class="form-input" value="{{ old('address_line1') }}" onchange="updateShippingAddress()">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Apartment, suite, etc.(Optional)</label>
+                    <input type="text" name="address_line2" class="form-input" value="{{ old('address_line2') }}" onchange="updateShippingAddress()">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label">City</label>
+                        <input type="text" name="city" class="form-input" value="{{ old('city') }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">ZIP Code</label>
+                        <input type="text" name="zip_code" class="form-input" value="{{ old('zip_code') }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" name="phone" class="form-input" value="{{ old('phone', $user['contact'] ?? '') }}">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Shipment Date</label>
+                    <input type="date" name="shipment_date" class="form-input" value="{{ old('shipment_date', now()->toDateString()) }}">
+                </div>
             </div>
-            @endforeach
             
-            <!-- Order Summary -->
-            <div class="summary-row">
-                <span>Subtotal</span>
-                <span>Rp{{ number_format($total, 0, ',', '.') }}</span>
-            </div>
-            
-            @if(isset($promoCode) && $discountAmount > 0)
-            <div class="summary-row discount">
-                <span>Discount ({{ $promoCode }})</span>
-                <span>-Rp{{ number_format($discountAmount, 0, ',', '.') }}</span>
-            </div>
-            @endif
-            
-            <div class="summary-row">
-                <span>Shipping</span>
-                <span style="color: #666;" id="shipping-address">Enter shipping address</span>
-            </div>
-            
-            <div class="summary-row total">
-                <span>Total</span>
-                <span>
-                    <span class="currency">IDR</span> 
-                    Rp{{ number_format(isset($finalTotal) ? $finalTotal : $total, 0, ',', '.') }}
-                </span>
-            </div>
-            
-            <button type="button" class="checkout-btn" onclick="confirmCheckout()">
-                Complete Order
-            </button>
-        </div>
+            <!-- Order Summary Sidebar -->
+            <div class="checkout-sidebar">
+                <!-- Order Items -->
+                @foreach($orders as $order)
+                <div class="order-item">
+                    <div class="item-details">
+                        <div class="item-name">{{ $order['name'] }}</div>
+                        <div class="item-meta">Qty: {{ $order['quantity'] }}</div>
+                    </div>
+                    <div class="item-price">Rp{{ number_format($order['price'] * $order['quantity'], 0, ',', '.') }}</div>
+                </div>
+                @endforeach
+                
+                <!-- Order Summary -->
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>Rp{{ number_format($total, 0, ',', '.') }}</span>
+                </div>
+                
+                @if(isset($promoCode) && $discountAmount > 0)
+                <div class="summary-row discount">
+                    <span>Discount ({{ $promoCode }})</span>
+                    <span>-Rp{{ number_format($discountAmount, 0, ',', '.') }}</span>
+                </div>
+                @endif
+                
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span style="color: #666;" id="shipping-address">Enter shipping address</span>
+                </div>
+                
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>
+                        <span class="currency">IDR</span> 
+                        Rp{{ number_format(isset($finalTotal) ? $finalTotal : $total, 0, ',', '.') }}
+                    </span>
+                </div>
+            <button type="submit" class="checkout-btn">Complete Order</button>
+        </form>
+    </div>
     </div>
 </div>
+
 
 <script>
 function updateShippingAddress() {

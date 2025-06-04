@@ -3,11 +3,18 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use Midtrans\Snap;
 use App\Models\Cart;
+use Midtrans\Config;
+use App\Models\Order;
 use App\Models\Promo;
+use App\Models\Shipment;
+use App\Models\OrderDetails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
@@ -270,6 +277,99 @@ class CartController extends Controller
             'user', 'orders', 'total', 'discountRate', 'discountAmount', 'finalTotal', 'promoCode'
         ));
     }
+    public function processCheckout(Request $request)
+    {
+        $user = Auth::user();
+
+        // Dummy or session-based total
+        $selectedItems = session('checkout_items', []);
+        $promo = session('promo');
+        $discountRate = $promo['discount'] ?? 0;
+
+        try {
+            // Calculate total
+            $total = collect($selectedItems)->sum(function ($item) {
+                return $item['price'] * $item['quantity'];
+            });
+
+            $discountAmount = $total * $discountRate;
+            $finalTotal = $total - $discountAmount;
+
+            // Midtrans Config
+            Config::$serverKey = config('midtrans.server_key');
+            Config::$isProduction = config('midtrans.is_production');
+            Config::$isSanitized = true;
+            Config::$is3ds = true;
+
+            // Payload
+            $params = [
+                'transaction_details' => [
+                    'order_id' => 'INV-' . time(),
+                    'gross_amount' => (int) $finalTotal,
+                ],
+                'customer_details' => [
+                    'first_name' => $user->name,
+                    'email' => $user->email,
+                ],
+                'callbacks' => [
+                    'finish' => route('store.show'), // Or wherever you want to redirect after payment
+                ],
+            ];
+
+            $snapUrl = Snap::createTransaction($params)->redirect_url;
+
+            // Optional log for debugging
+            Log::info('Redirecting to Midtrans Snap URL: ' . $snapUrl);
+
+            return redirect($snapUrl);
+
+        } catch (\Exception $e) {
+            Log::error('Midtrans Error: ' . $e->getMessage());
+            return back()->with('error', 'Failed to redirect to payment gateway.');
+        }
+    }
+
+    public function storeShipment(Request $request){
+        $validator = Validator::make($request->all(), [
+        'first_name' => 'nullable|string|max:255',
+        'last_name' => 'nullable|string|max:255',
+        'address_line1' => 'required|string|max:255',
+        'address_line2' => 'nullable|string|max:255',
+        'city' => 'required|string|max:255',
+        'zip_code' => 'required|string|max:20',
+        'phone' => 'required|string|max:20',
+        'shipment_date' => 'required|date',
+    ]);
+
+    if ($validator->fails()) {
+        return back()->withErrors($validator)->withInput();
+    }
+
+    $userId = Auth::id();
+
+    // Get the latest order for the user (ensure this logic matches your real flow)
+    $order = Order::where('user_id', $userId)->latest()->first();
+
+    if (!$order) {
+        return back()->with('error', 'Order not found. Please try again.');
+    }
+
+    // Create the shipment
+    Shipment::create([
+        'order_id' => $order->order_id,
+        'first_name' => $request->input('first_name'),
+        'last_name' => $request->input('last_name'),
+        'address_line1' => $request->input('address_line1'),
+        'address_line2' => $request->input('address_line2'),
+        'city' => $request->input('city'),
+        'zip_code' => $request->input('zip_code'),
+        'phone' => $request->input('phone'),
+        'shipment_date' => $request->input('shipment_date'),
+    ]);
+
+    return redirect()->route('order.history')->with('success', 'Shipment details saved successfully!');
+    }
+
     public function orderHistory()
     {
         $orders = session()->get('order_history', []);

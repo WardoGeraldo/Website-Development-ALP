@@ -63,6 +63,8 @@ Route::middleware('manual_auth')->group(function () {
         Route::post('/cart/apply-promo', [CartController::class, 'applyPromo'])->name('cart.applyPromo');
         Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
         Route::get('/cart/checkout/detail', [CartController::class, 'checkoutDetail'])->name('cart.checkoutDetail');
+        Route::post('/checkout/shipment', [CartController::class, 'storeShipment'])->name('checkout.shipment');
+        Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('cart.processCheckout');
     });
 
     // — Admin area —
