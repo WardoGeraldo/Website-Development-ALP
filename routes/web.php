@@ -9,6 +9,7 @@ use App\Http\Controllers\SalesController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\WishlistController;
@@ -65,6 +66,7 @@ Route::middleware('manual_auth')->group(function () {
         Route::get('/cart/checkout/detail', [CartController::class, 'checkoutDetail'])->name('cart.checkoutDetail');
         Route::post('/checkout/shipment', [CartController::class, 'storeShipment'])->name('checkout.shipment');
         Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('cart.processCheckout');
+        Route::post('/midtrans/notification', [CartController::class, 'handleNotification']);
     });
 
     // — Admin area —

@@ -8,6 +8,7 @@ use App\Models\Cart;
 use Midtrans\Config;
 use App\Models\Order;
 use App\Models\Promo;
+use App\Models\Payment;
 use App\Models\Shipment;
 use App\Models\OrderDetails;
 use Illuminate\Http\Request;
@@ -281,30 +282,37 @@ class CartController extends Controller
     {
         $user = Auth::user();
 
-        // Dummy or session-based total
         $selectedItems = session('checkout_items', []);
         $promo = session('promo');
         $discountRate = $promo['discount'] ?? 0;
 
         try {
-            // Calculate total
-            $total = collect($selectedItems)->sum(function ($item) {
-                return $item['price'] * $item['quantity'];
-            });
-
+            // Calculate total and discount
+            $total = collect($selectedItems)->sum(fn($item) => $item['price'] * $item['quantity']);
             $discountAmount = $total * $discountRate;
             $finalTotal = $total - $discountAmount;
 
-            // Midtrans Config
-            Config::$serverKey = config('midtrans.server_key');
-            Config::$isProduction = config('midtrans.is_production');
-            Config::$isSanitized = true;
-            Config::$is3ds = true;
+            // ✅ Save Order first
+            $order = Order::create([
+                'user_id' => $user->user_id,
+                'promo_id' => $promo['id'] ?? null,
+                'order_status' => 'pending',
+                'total_price' => $finalTotal,
+            ]);
+            // You can also save order details here if needed
 
-            // Payload
+            // ✅ Midtrans Config
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+            
+            $orderId = $order->getKey(); // safer than $order->order_id
+
+            // ✅ Midtrans params
             $params = [
                 'transaction_details' => [
-                    'order_id' => 'INV-' . time(),
+                    'order_id' => $orderId,
                     'gross_amount' => (int) $finalTotal,
                 ],
                 'customer_details' => [
@@ -312,13 +320,11 @@ class CartController extends Controller
                     'email' => $user->email,
                 ],
                 'callbacks' => [
-                    'finish' => route('store.show'), // Or wherever you want to redirect after payment
+                    'finish' => route('store.show'),
                 ],
             ];
-
-            $snapUrl = Snap::createTransaction($params)->redirect_url;
-
-            // Optional log for debugging
+            // dd($params);
+            $snapUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
             Log::info('Redirecting to Midtrans Snap URL: ' . $snapUrl);
 
             return redirect($snapUrl);
@@ -326,6 +332,97 @@ class CartController extends Controller
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to redirect to payment gateway.');
+        }
+    }
+
+    public function handleNotification(Request $request)
+    {
+        try {
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
+            \Midtrans\Config::$isProduction = config('midtrans.is_production');
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $notification = new \Midtrans\Notification();
+
+            $transactionStatus = $notification->transaction_status;
+            $paymentType = $notification->payment_type;
+            $orderId = $notification->order_id;
+            $fraudStatus = $notification->fraud_status ?? null;
+            $amount = $notification->gross_amount;
+            $transactionId = $notification->transaction_id;
+            $pdfUrl = $notification->pdf_url ?? null;
+
+            // Get order
+            $order = \App\Models\Order::find($orderId);
+
+            if (!$order) {
+                Log::warning("❗ Order not found for order_id: {$orderId}");
+                return response()->json(['message' => 'Order not found'], 404);
+            }
+
+            // Check for existing payment to avoid duplicates
+            $existingPayment = Payment::where('order_id', $order->order_id)
+                ->where('transaction_id', $transactionId)
+                ->first();
+            if (!$existingPayment) {
+                // Handle VA or QRIS specifics
+                $vaNumber = null;
+                $bank = null;
+
+                if (isset($notification->va_numbers[0])) {
+                    $vaNumber = $notification->va_numbers[0]->va_number ?? null;
+                    $bank = $notification->va_numbers[0]->bank ?? null;
+                }
+
+                Payment::create([
+                'order_id' => $order->order_id,
+                'transaction_id' => $transactionId,
+                'payment_type' => $paymentType,
+                'transaction_status' => $transactionStatus,
+                'va_number' => $vaNumber,
+                'bank' => $bank,
+                'pdf_url' => $pdfUrl,
+                'amount' => (float) $amount,
+                'payment_date' => now(),
+            ]);
+            Log::info("✅ Payment record created for order_id: {$order->order_id}");
+            } else {
+                Log::info("ℹ️ Payment already exists for order_id: {$order->order_id}");
+            }
+            dd($transactionId);
+            // Update order status
+            switch ($transactionStatus) {
+                case 'capture':
+                case 'settlement':
+                    $order->order_status = 'paid';
+                    break;
+
+                case 'pending':
+                    $order->order_status = 'pending';
+                    break;
+
+                case 'deny':
+                case 'cancel':
+                case 'expire':
+                    $order->order_status = 'cancelled';
+                    break;
+
+                default:
+                    Log::info("🔍 Unknown transaction status: {$transactionStatus}");
+            }
+            dd($transactionStatus); 
+
+            $order->save();
+
+            Log::info("✅ Payment notification processed for order: {$orderId}");
+
+            return response()->json(['message' => 'Notification processed']);
+
+        } catch (\Exception $e) {
+            Log::error('Midtrans Error: ' . $e->getMessage());
+            report($e); // Laravel's global error handler
+            return back()->with('error', 'Checkout failed: ' . $e->getMessage());
         }
     }
 
