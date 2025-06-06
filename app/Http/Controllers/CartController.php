@@ -281,35 +281,33 @@ class CartController extends Controller
     public function processCheckout(Request $request)
     {
         $user = Auth::user();
-
         $selectedItems = session('checkout_items', []);
-        $promo = session('promo');
-        $discountRate = $promo['discount'] ?? 0;
+        $promo = session('promo', []);
+        $discountRate = is_array($promo) && isset($promo['discount']) ? $promo['discount'] : 0;
 
         try {
-            // Calculate total and discount
+            // 1. Calculate total
             $total = collect($selectedItems)->sum(fn($item) => $item['price'] * $item['quantity']);
             $discountAmount = $total * $discountRate;
             $finalTotal = $total - $discountAmount;
 
-            // ✅ Save Order first
+            // 2. Save Order
             $order = Order::create([
                 'user_id' => $user->user_id,
                 'promo_id' => $promo['id'] ?? null,
                 'order_status' => 'pending',
                 'total_price' => $finalTotal,
             ]);
-            // You can also save order details here if needed
 
-            // ✅ Midtrans Config
+            // 3. Midtrans config
             \Midtrans\Config::$serverKey = config('midtrans.server_key');
             \Midtrans\Config::$isProduction = config('midtrans.is_production');
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
-            
-            $orderId = $order->getKey(); // safer than $order->order_id
 
-            // ✅ Midtrans params
+            $orderId = $order->getKey();
+
+            // 4. Midtrans params
             $params = [
                 'transaction_details' => [
                     'order_id' => $orderId,
@@ -323,11 +321,25 @@ class CartController extends Controller
                     'finish' => route('store.show'),
                 ],
             ];
-            // dd($params);
-            $snapUrl = \Midtrans\Snap::createTransaction($params)->redirect_url;
-            Log::info('Redirecting to Midtrans Snap URL: ' . $snapUrl);
 
-            return redirect($snapUrl);
+            // 5. Create Snap URL
+            $snap = \Midtrans\Snap::createTransaction($params);
+
+            // ✅ INSERT PENDING PAYMENT *before* the redirect
+            \App\Models\Payment::create([
+                'order_id' => $order->order_id,
+                'transaction_id' => null, // Will be updated by callback
+                'payment_type' => null,
+                'transaction_status' => 'pending',
+                'amount' => $finalTotal,
+                'payment_date' => null,
+                'va_number' => null,
+                'bank' => null,
+                'pdf_url' => null,
+            ]);
+
+            // 6. Redirect to Midtrans
+            return redirect()->away($snap->redirect_url);
 
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
@@ -335,96 +347,113 @@ class CartController extends Controller
         }
     }
 
-    public function handleNotification(Request $request)
-    {
-        try {
-            \Midtrans\Config::$serverKey = config('midtrans.server_key');
-            \Midtrans\Config::$isProduction = config('midtrans.is_production');
-            \Midtrans\Config::$isSanitized = true;
-            \Midtrans\Config::$is3ds = true;
+    // public function handleNotification(Request $request)
+    // {
+    //     try {
+    //         // 1. Midtrans config
+    //         \Midtrans\Config::$serverKey = config('midtrans.server_key');
+    //         \Midtrans\Config::$isProduction = config('midtrans.is_production');
+    //         \Midtrans\Config::$isSanitized = true;
+    //         \Midtrans\Config::$is3ds = true;
 
-            $notification = new \Midtrans\Notification();
+    //         // 2. Ambil notifikasi dari Midtrans
+    //         $notification = new \Midtrans\Notification();
 
-            $transactionStatus = $notification->transaction_status;
-            $paymentType = $notification->payment_type;
-            $orderId = $notification->order_id;
-            $fraudStatus = $notification->fraud_status ?? null;
-            $amount = $notification->gross_amount;
-            $transactionId = $notification->transaction_id;
-            $pdfUrl = $notification->pdf_url ?? null;
+    //         // 3. Simpan informasi penting ke variabel
+    //         $transactionStatus = $notification->transaction_status;
+    //         $paymentType = $notification->payment_type;
+    //         $orderId = $notification->order_id;
+    //         $fraudStatus = $notification->fraud_status ?? null;
+    //         $amount = $notification->gross_amount;
+    //         $transactionId = $notification->transaction_id;
+    //         $pdfUrl = $notification->pdf_url ?? null;
 
-            // Get order
-            $order = \App\Models\Order::find($orderId);
+    //         // Logging untuk melihat isi notifikasi
+    //         Log::info('📬 Received Midtrans Notification', [
+    //             'order_id' => $orderId,
+    //             'transaction_id' => $transactionId,
+    //             'status' => $transactionStatus,
+    //             'amount' => $amount,
+    //         ]);
 
-            if (!$order) {
-                Log::warning("❗ Order not found for order_id: {$orderId}");
-                return response()->json(['message' => 'Order not found'], 404);
-            }
+    //         // 4. Ambil order berdasarkan order_id
+    //         $order = \App\Models\Order::find($orderId);
 
-            // Check for existing payment to avoid duplicates
-            $existingPayment = Payment::where('order_id', $order->order_id)
-                ->where('transaction_id', $transactionId)
-                ->first();
-            if (!$existingPayment) {
-                // Handle VA or QRIS specifics
-                $vaNumber = null;
-                $bank = null;
+    //         if (!$order) {
+    //             Log::warning("❗ Order not found for order_id: {$orderId}");
+    //             return response()->json(['message' => 'Order not found'], 404);
+    //         }
 
-                if (isset($notification->va_numbers[0])) {
-                    $vaNumber = $notification->va_numbers[0]->va_number ?? null;
-                    $bank = $notification->va_numbers[0]->bank ?? null;
-                }
+    //         // 5. Cek apakah payment untuk order ini sudah ada
+    //         $existingPayment = Payment::where('order_id', $order->order_id)
+    //             ->where('transaction_id', $transactionId)
+    //             ->first();
 
-                Payment::create([
-                'order_id' => $order->order_id,
-                'transaction_id' => $transactionId,
-                'payment_type' => $paymentType,
-                'transaction_status' => $transactionStatus,
-                'va_number' => $vaNumber,
-                'bank' => $bank,
-                'pdf_url' => $pdfUrl,
-                'amount' => (float) $amount,
-                'payment_date' => now(),
-            ]);
-            Log::info("✅ Payment record created for order_id: {$order->order_id}");
-            } else {
-                Log::info("ℹ️ Payment already exists for order_id: {$order->order_id}");
-            }
-            dd($transactionId);
-            // Update order status
-            switch ($transactionStatus) {
-                case 'capture':
-                case 'settlement':
-                    $order->order_status = 'paid';
-                    break;
+    //         if (!$existingPayment) {
+    //             Log::info("💡 No existing payment found. Creating payment record...");
 
-                case 'pending':
-                    $order->order_status = 'pending';
-                    break;
+    //             // 6. Ambil info tambahan jika ada (khusus VA)
+    //             $vaNumber = null;
+    //             $bank = null;
 
-                case 'deny':
-                case 'cancel':
-                case 'expire':
-                    $order->order_status = 'cancelled';
-                    break;
+    //             if (isset($notification->va_numbers[0])) {
+    //                 $vaNumber = $notification->va_numbers[0]->va_number ?? null;
+    //                 $bank = $notification->va_numbers[0]->bank ?? null;
+    //             }
 
-                default:
-                    Log::info("🔍 Unknown transaction status: {$transactionStatus}");
-            }
-            dd($transactionStatus); 
+    //             // 7. Simpan ke tabel payments
+    //             $payment = Payment::updateOrCreate([
+    //                 'order_id' => $order->order_id,
+    //                 'transaction_id' => $transactionId,
+    //                 'payment_type' => $paymentType,
+    //                 'transaction_status' => $transactionStatus,
+    //                 'va_number' => $vaNumber,
+    //                 'bank' => $bank,
+    //                 'pdf_url' => $pdfUrl,
+    //                 'amount' => number_format((float) $amount, 2, '.', ''),
+    //                 'payment_date' => now(),
+    //             ]);
 
-            $order->save();
+    //             if ($payment) {
+    //                 Log::info("✅ Payment berhasil disimpan untuk order_id: {$order->order_id}");
+    //             } else {
+    //                 Log::error("❌ Payment gagal disimpan untuk order_id: {$order->order_id}");
+    //             }
+    //         } else {
+    //             Log::info("ℹ️ Payment already exists for order_id: {$order->order_id}");
+    //         }
 
-            Log::info("✅ Payment notification processed for order: {$orderId}");
+    //         // 8. Update status order berdasarkan status transaksi
+    //         switch ($transactionStatus) {
+    //             case 'capture':
+    //             case 'settlement':
+    //                 $order->order_status = 'paid';
+    //                 break;
 
-            return response()->json(['message' => 'Notification processed']);
+    //             case 'pending':
+    //                 $order->order_status = 'pending';
+    //                 break;
 
-        } catch (\Exception $e) {
-            Log::error('Midtrans Error: ' . $e->getMessage());
-            report($e); // Laravel's global error handler
-            return back()->with('error', 'Checkout failed: ' . $e->getMessage());
-        }
-    }
+    //             case 'deny':
+    //             case 'cancel':
+    //             case 'expire':
+    //                 $order->order_status = 'cancelled';
+    //                 break;
+
+    //             default:
+    //                 Log::info("🔍 Unknown transaction status: {$transactionStatus}");
+    //         }
+
+    //         $order->save();
+    //         Log::info("📦 Order status updated to: {$order->order_status} for order_id: {$order->order_id}");
+
+    //         return response()->json(['message' => 'Notification processed']);
+    //     } catch (\Exception $e) {
+    //         Log::error('❌ Midtrans Notification Handling Error: ' . $e->getMessage());
+    //         report($e); // Laravel's global error handler
+    //         return response()->json(['error' => 'Checkout failed: ' . $e->getMessage()], 500);
+    //     }
+    // }
 
     public function storeShipment(Request $request){
         $validator = Validator::make($request->all(), [

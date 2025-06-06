@@ -13,6 +13,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
 use App\Http\Controllers\WishlistController;
+use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Middleware\CheckRoleMiddleWare; // ⬅️ tambahkan ini
 
 /*
@@ -66,7 +67,8 @@ Route::middleware('manual_auth')->group(function () {
         Route::get('/cart/checkout/detail', [CartController::class, 'checkoutDetail'])->name('cart.checkoutDetail');
         Route::post('/checkout/shipment', [CartController::class, 'storeShipment'])->name('checkout.shipment');
         Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('cart.processCheckout');
-        Route::post('/midtrans/notification', [CartController::class, 'handleNotification']);
+        // Route::get('/midtrans/notification', [CartController::class, 'handleNotification']);
+        Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle']);
     });
 
     // — Admin area —
