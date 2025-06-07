@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Promo extends Model
 {
-    protected $fillable = ['code', 'start_date', 'end_date', 'discount', 'is_used'];
+    protected $primaryKey = 'promo_id'; // tambahkan baris ini
+    protected $fillable = ['code', 'start_date', 'end_date', 'discount_amount'];
 
     protected $casts = [
         'start_date' => 'date',

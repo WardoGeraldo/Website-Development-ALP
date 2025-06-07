@@ -10,11 +10,11 @@ class Order extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     protected $fillable = [
-    'user_id',
-    'promo_id',
-    'order_status',
-    'total_price',
-    'order_date'
+        'user_id',
+        'promo_id',
+        'order_status',
+        'total_price',
+        'order_date'
     ];
     public function user()
     {
@@ -22,7 +22,7 @@ class Order extends Model
     }
 
 
-    public function details()
+    public function orderDetails()
     {
         return $this->hasMany(OrderDetails::class, 'order_id', 'order_id');
     }

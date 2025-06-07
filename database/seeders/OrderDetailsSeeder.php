@@ -9,7 +9,7 @@ class OrderDetailsSeeder extends Seeder
 {
     public function run(): void
     {
-        $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
+        $sizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'];
 
         // Ambil semua order
         $orders = DB::table('orders')->get();

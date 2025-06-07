@@ -56,30 +56,30 @@
 <div class="history-container">
     <h2>Order History</h2>
 
-    @if(count($orders) === 0)
+    @if($orders->isEmpty())
         <p>You have no order history yet.</p>
     @else
-        @foreach(array_reverse($orders) as $order)
+        @foreach($orders as $order)
             <div class="history-entry">
-                <h4>Order on {{ \Carbon\Carbon::parse($order['timestamp'])->format('F j, Y H:i') }}</h4>
+                <h4>Order on {{ $order->created_at->format('F j, Y H:i') }}</h4>
 
-                @foreach($order['orders'] as $item)
+                @foreach($order->orderDetails as $item)
                     <div class="order-item">
-                        <div>{{ $item['name'] }} (x{{ $item['quantity'] }})</div>
-                        <div>Rp{{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}</div>
+                        <div>{{ $item->product->product_name ?? 'Unknown Product' }} (x{{ $item->quantity }})</div>
+                        <div>Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</div>
                     </div>
                 @endforeach
 
-                <div class="total">Subtotal: Rp{{ number_format($order['total'], 0, ',', '.') }}</div>
+                <div class="total">Subtotal: Rp{{ number_format($order->total_price + optional($order->promo)->discount * ($order->total_price), 0, ',', '.') }}</div>
 
-                @if($order['discount'] > 0)
+                @if($order->promo)
                     <div class="total" style="color: green;">
-                        Promo ({{ $order['promo'] }}): -Rp{{ number_format($order['discount'], 0, ',', '.') }}
+                        Promo ({{ $order->promo->code }}): -Rp{{ number_format($order->promo->discount * ($order->total_price + $order->promo->discount * $order->total_price), 0, ',', '.') }}
                     </div>
                 @endif
 
                 <div class="total" style="font-size: 1.2rem;">
-                    Final Total: Rp{{ number_format($order['final_total'], 0, ',', '.') }}
+                    Final Total: Rp{{ number_format($order->total_price, 0, ',', '.') }}
                 </div>
             </div>
         @endforeach

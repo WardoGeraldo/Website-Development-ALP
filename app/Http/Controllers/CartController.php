@@ -190,9 +190,11 @@ class CartController extends Controller
         $checkoutItems = [];
         foreach ($selectedItems as $item) {
             $checkoutItems[] = [
+                'product_id' => $item->product_id,
                 'name' => $item->product->name,
                 'price' => $item->product->price,
                 'quantity' => $item->product_qty,
+                'size' => $item->product_size,
             ];
         }
 
@@ -280,6 +282,14 @@ class CartController extends Controller
     }
     public function processCheckout(Request $request)
     {
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'address_line1' => 'required|string',
+            'city' => 'required|string',
+            'zip_code' => 'required|string',
+            'phone' => 'required|string',
+        ]);
         $user = Auth::user();
         $selectedItems = session('checkout_items', []);
         $promo = session('promo', []);
@@ -298,6 +308,27 @@ class CartController extends Controller
                 'order_status' => 'pending',
                 'total_price' => $finalTotal,
             ]);
+            foreach ($selectedItems as $item) {
+                OrderDetails::create([
+                    'order_id' => $order->order_id,
+                    'product_id' => $item['product_id'],
+                    'product_size' => $item['size'],
+                    'quantity' => $item['quantity'],
+                    'price' => $item['price'],
+                ]);
+            }
+            Shipment::create([
+            'order_id' => $order->order_id,
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'address_line1' => $request->input('address_line1'),
+            'address_line2' => $request->input('address_line2'),
+            'city' => $request->input('city'),
+            'zip_code' => $request->input('zip_code'),
+            'phone' => $request->input('phone'),
+            'shipment_date' => now(),
+            'delivery_status' => 'processing',
+        ]);
 
             // 3. Midtrans config
             \Midtrans\Config::$serverKey = config('midtrans.server_key');
@@ -324,7 +355,6 @@ class CartController extends Controller
 
             // 5. Create Snap URL
             $snap = \Midtrans\Snap::createTransaction($params);
-
             // ✅ INSERT PENDING PAYMENT *before* the redirect
             \App\Models\Payment::create([
                 'order_id' => $order->order_id,
@@ -341,121 +371,16 @@ class CartController extends Controller
             // 6. Redirect to Midtrans
             return redirect()->away($snap->redirect_url);
 
+
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
             return back()->with('error', 'Failed to redirect to payment gateway.');
         }
     }
 
-    // public function handleNotification(Request $request)
-    // {
-    //     try {
-    //         // 1. Midtrans config
-    //         \Midtrans\Config::$serverKey = config('midtrans.server_key');
-    //         \Midtrans\Config::$isProduction = config('midtrans.is_production');
-    //         \Midtrans\Config::$isSanitized = true;
-    //         \Midtrans\Config::$is3ds = true;
-
-    //         // 2. Ambil notifikasi dari Midtrans
-    //         $notification = new \Midtrans\Notification();
-
-    //         // 3. Simpan informasi penting ke variabel
-    //         $transactionStatus = $notification->transaction_status;
-    //         $paymentType = $notification->payment_type;
-    //         $orderId = $notification->order_id;
-    //         $fraudStatus = $notification->fraud_status ?? null;
-    //         $amount = $notification->gross_amount;
-    //         $transactionId = $notification->transaction_id;
-    //         $pdfUrl = $notification->pdf_url ?? null;
-
-    //         // Logging untuk melihat isi notifikasi
-    //         Log::info('📬 Received Midtrans Notification', [
-    //             'order_id' => $orderId,
-    //             'transaction_id' => $transactionId,
-    //             'status' => $transactionStatus,
-    //             'amount' => $amount,
-    //         ]);
-
-    //         // 4. Ambil order berdasarkan order_id
-    //         $order = \App\Models\Order::find($orderId);
-
-    //         if (!$order) {
-    //             Log::warning("❗ Order not found for order_id: {$orderId}");
-    //             return response()->json(['message' => 'Order not found'], 404);
-    //         }
-
-    //         // 5. Cek apakah payment untuk order ini sudah ada
-    //         $existingPayment = Payment::where('order_id', $order->order_id)
-    //             ->where('transaction_id', $transactionId)
-    //             ->first();
-
-    //         if (!$existingPayment) {
-    //             Log::info("💡 No existing payment found. Creating payment record...");
-
-    //             // 6. Ambil info tambahan jika ada (khusus VA)
-    //             $vaNumber = null;
-    //             $bank = null;
-
-    //             if (isset($notification->va_numbers[0])) {
-    //                 $vaNumber = $notification->va_numbers[0]->va_number ?? null;
-    //                 $bank = $notification->va_numbers[0]->bank ?? null;
-    //             }
-
-    //             // 7. Simpan ke tabel payments
-    //             $payment = Payment::updateOrCreate([
-    //                 'order_id' => $order->order_id,
-    //                 'transaction_id' => $transactionId,
-    //                 'payment_type' => $paymentType,
-    //                 'transaction_status' => $transactionStatus,
-    //                 'va_number' => $vaNumber,
-    //                 'bank' => $bank,
-    //                 'pdf_url' => $pdfUrl,
-    //                 'amount' => number_format((float) $amount, 2, '.', ''),
-    //                 'payment_date' => now(),
-    //             ]);
-
-    //             if ($payment) {
-    //                 Log::info("✅ Payment berhasil disimpan untuk order_id: {$order->order_id}");
-    //             } else {
-    //                 Log::error("❌ Payment gagal disimpan untuk order_id: {$order->order_id}");
-    //             }
-    //         } else {
-    //             Log::info("ℹ️ Payment already exists for order_id: {$order->order_id}");
-    //         }
-
-    //         // 8. Update status order berdasarkan status transaksi
-    //         switch ($transactionStatus) {
-    //             case 'capture':
-    //             case 'settlement':
-    //                 $order->order_status = 'paid';
-    //                 break;
-
-    //             case 'pending':
-    //                 $order->order_status = 'pending';
-    //                 break;
-
-    //             case 'deny':
-    //             case 'cancel':
-    //             case 'expire':
-    //                 $order->order_status = 'cancelled';
-    //                 break;
-
-    //             default:
-    //                 Log::info("🔍 Unknown transaction status: {$transactionStatus}");
-    //         }
-
-    //         $order->save();
-    //         Log::info("📦 Order status updated to: {$order->order_status} for order_id: {$order->order_id}");
-
-    //         return response()->json(['message' => 'Notification processed']);
-    //     } catch (\Exception $e) {
-    //         Log::error('❌ Midtrans Notification Handling Error: ' . $e->getMessage());
-    //         report($e); // Laravel's global error handler
-    //         return response()->json(['error' => 'Checkout failed: ' . $e->getMessage()], 500);
-    //     }
-    // }
 
     public function storeShipment(Request $request){
+
         $validator = Validator::make($request->all(), [
         'first_name' => 'nullable|string|max:255',
         'last_name' => 'nullable|string|max:255',
@@ -465,40 +390,53 @@ class CartController extends Controller
         'zip_code' => 'required|string|max:20',
         'phone' => 'required|string|max:20',
         'shipment_date' => 'required|date',
-    ]);
+        ]);
 
-    if ($validator->fails()) {
-        return back()->withErrors($validator)->withInput();
-    }
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
 
-    $userId = Auth::id();
+        $userId = Auth::id();
 
-    // Get the latest order for the user (ensure this logic matches your real flow)
-    $order = Order::where('user_id', $userId)->latest()->first();
+        // Get the latest order for the user (ensure this logic matches your real flow)
+        $order = Order::where('user_id', $userId)->latest()->first();
 
-    if (!$order) {
-        return back()->with('error', 'Order not found. Please try again.');
-    }
+        if (!$order) {
+            return back()->with('error', 'Order not found. Please try again.');
+        }
 
-    // Create the shipment
-    Shipment::create([
-        'order_id' => $order->order_id,
-        'first_name' => $request->input('first_name'),
-        'last_name' => $request->input('last_name'),
-        'address_line1' => $request->input('address_line1'),
-        'address_line2' => $request->input('address_line2'),
-        'city' => $request->input('city'),
-        'zip_code' => $request->input('zip_code'),
-        'phone' => $request->input('phone'),
-        'shipment_date' => $request->input('shipment_date'),
-    ]);
+        // Create the shipment
+        Shipment::create([
+            'order_id' => $order->order_id,
+            'first_name' => $request->input('first_name'),
+            'last_name' => $request->input('last_name'),
+            'address_line1' => $request->input('address_line1'),
+            'address_line2' => $request->input('address_line2'),
+            'city' => $request->input('city'),
+            'zip_code' => $request->input('zip_code'),
+            'phone' => $request->input('phone'),
+            'shipment_date' => $request->input('shipment_date'),
+        ]);
 
-    return redirect()->route('order.history')->with('success', 'Shipment details saved successfully!');
+        return redirect()->route('order.history')->with('success', 'Shipment details saved successfully!');
     }
 
     public function orderHistory()
     {
-        $orders = session()->get('order_history', []);
-        return view('orders-history', compact('orders'));
+        $user = Auth::user();
+
+            if (!$user) {
+                return redirect()->route('login')->with('error', 'You need to log in to view your order history.');
+            }
+
+            $orders = Order::with([
+                'orderDetails.product',  // eager load products through orderDetails
+                'promo'
+            ])
+            ->where('user_id', $user->user_id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+            return view('orders-history', compact('orders'));
     }
 }
