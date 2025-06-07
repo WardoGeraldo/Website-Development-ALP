@@ -317,6 +317,12 @@ class CartController extends Controller
                     'price' => $item['price'],
                 ]);
             }
+            foreach ($selectedItems as $item) { //REMOVE STOCK AFTER CHECKOUT KURANG race-condition stok validation
+                DB::table('product_stocks')
+                    ->where('product_id', $item['product_id'])
+                    ->where('size', $item['size'])
+                    ->decrement('quantity', $item['quantity']);
+            }
             Shipment::create([
             'order_id' => $order->order_id,
             'first_name' => $request->input('first_name'),
@@ -370,7 +376,7 @@ class CartController extends Controller
 
             // 6. Redirect to Midtrans
             return redirect()->away($snap->redirect_url);
-
+        
 
         } catch (\Exception $e) {
             Log::error('Midtrans Error: ' . $e->getMessage());
@@ -379,47 +385,47 @@ class CartController extends Controller
     }
 
 
-    public function storeShipment(Request $request){
+    // public function storeShipment(Request $request){
 
-        $validator = Validator::make($request->all(), [
-        'first_name' => 'nullable|string|max:255',
-        'last_name' => 'nullable|string|max:255',
-        'address_line1' => 'required|string|max:255',
-        'address_line2' => 'nullable|string|max:255',
-        'city' => 'required|string|max:255',
-        'zip_code' => 'required|string|max:20',
-        'phone' => 'required|string|max:20',
-        'shipment_date' => 'required|date',
-        ]);
+    //     $validator = Validator::make($request->all(), [
+    //     'first_name' => 'nullable|string|max:255',
+    //     'last_name' => 'nullable|string|max:255',
+    //     'address_line1' => 'required|string|max:255',
+    //     'address_line2' => 'nullable|string|max:255',
+    //     'city' => 'required|string|max:255',
+    //     'zip_code' => 'required|string|max:20',
+    //     'phone' => 'required|string|max:20',
+    //     'shipment_date' => 'required|date',
+    //     ]);
 
-        if ($validator->fails()) {
-            return back()->withErrors($validator)->withInput();
-        }
+    //     if ($validator->fails()) {
+    //         return back()->withErrors($validator)->withInput();
+    //     }
 
-        $userId = Auth::id();
+    //     $userId = Auth::id();
 
-        // Get the latest order for the user (ensure this logic matches your real flow)
-        $order = Order::where('user_id', $userId)->latest()->first();
+    //     // Get the latest order for the user (ensure this logic matches your real flow)
+    //     $order = Order::where('user_id', $userId)->latest()->first();
 
-        if (!$order) {
-            return back()->with('error', 'Order not found. Please try again.');
-        }
+    //     if (!$order) {
+    //         return back()->with('error', 'Order not found. Please try again.');
+    //     }
 
-        // Create the shipment
-        Shipment::create([
-            'order_id' => $order->order_id,
-            'first_name' => $request->input('first_name'),
-            'last_name' => $request->input('last_name'),
-            'address_line1' => $request->input('address_line1'),
-            'address_line2' => $request->input('address_line2'),
-            'city' => $request->input('city'),
-            'zip_code' => $request->input('zip_code'),
-            'phone' => $request->input('phone'),
-            'shipment_date' => $request->input('shipment_date'),
-        ]);
+    //     // Create the shipment
+    //     Shipment::create([
+    //         'order_id' => $order->order_id,
+    //         'first_name' => $request->input('first_name'),
+    //         'last_name' => $request->input('last_name'),
+    //         'address_line1' => $request->input('address_line1'),
+    //         'address_line2' => $request->input('address_line2'),
+    //         'city' => $request->input('city'),
+    //         'zip_code' => $request->input('zip_code'),
+    //         'phone' => $request->input('phone'),
+    //         'shipment_date' => $request->input('shipment_date'),
+    //     ]);
 
-        return redirect()->route('order.history')->with('success', 'Shipment details saved successfully!');
-    }
+    //     return redirect()->route('order.history')->with('success', 'Shipment details saved successfully!');
+    // }
 
     public function orderHistory()
     {
