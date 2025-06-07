@@ -65,7 +65,7 @@
 
                 @foreach($order->orderDetails as $item)
                     <div class="order-item">
-                        <div>{{ $item->product->product_name ?? 'Unknown Product' }} (x{{ $item->quantity }})</div>
+                        <div>{{ $item->product->name ?? 'Unknown Product' }} (x{{ $item->quantity }})</div>
                         <div>Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</div>
                     </div>
                 @endforeach
