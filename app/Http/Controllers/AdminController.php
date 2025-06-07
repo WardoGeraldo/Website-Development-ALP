@@ -24,7 +24,7 @@ class AdminController extends Controller
 
     public function index()
     {
-       $products = Product::with(['images', 'stock', 'category'])->where('status_del', 0)->get();
+        $products = Product::with(['images', 'stock', 'category'])->where('status_del', 0)->get();
 
 
         $productsData = $products->map(function ($product) {
@@ -507,34 +507,81 @@ class AdminController extends Controller
 
     public function dashboardView()
     {
-        // Dummy data, ganti sesuai logikamu nanti
-        $totalProducts = 100;
-        $totalUsers = 50;
-        $totalSales = 120000000;
-        $totalPromos = 4;
+        // Ambil jumlah total produk yang tidak soft delete (status_del = 0)
+        $totalProducts = \App\Models\Product::where('status_del', 0)->count();
 
-        $todayRevenue = 1250000;
-        $weekRevenue = 8400000;
+        // Ambil jumlah total user
+        $totalUsers = \App\Models\User::count();
 
-        $topProducts = [
-            ['name' => 'Pastel shirt', 'sold' => 40, 'stock' => ['s' => 10, 'm' => 20, 'l' => 5, 'xxl' => 5]],
-            ['name' => 'Denim Baggy Jeans', 'sold' => 32, 'stock' => ['s' => 5, 'm' => 15, 'l' => 8, 'xxl' => 4]],
-            ['name' => 'Sunkist Cap', 'sold' => 32, 'stock' => ['s' => 5, 'm' => 15, 'l' => 8, 'xxl' => 4]],
-            ['name' => 'Brown Leather Bag', 'sold' => 32, 'stock' => ['s' => 5, 'm' => 15, 'l' => 8, 'xxl' => 4]],
-            ['name' => 'Abstract Leather Bag', 'sold' => 32, 'stock' => ['s' => 5, 'm' => 15, 'l' => 8, 'xxl' => 4]],
-        ];
+        // Ambil jumlah total sales dari table orders (anggap total_price field di orders)
+        $totalSales = \App\Models\Order::sum('total_price');
 
-        $topCustomers = [
-            ['name' => 'Nadya Zahra', 'email' => 'nadya@example.com', 'orders' => 8, 'totalSpent' => 1250000],
-            ['name' => 'Dewi Lestari', 'email' => 'dewi@example.com', 'orders' => 7, 'totalSpent' => 900000],
-            ['name' => 'Intan Maharani', 'email' => 'dewi@example.com', 'orders' => 8, 'totalSpent' => 880000],
-        ];
+        // Ambil jumlah promo aktif (anggap promo yang start_date <= today dan end_date >= today)
+        $totalPromos = \App\Models\Promo::whereDate('start_date', '<=', now())
+            ->whereDate('end_date', '>=', now())
+            ->count();
 
-        $salesMonths = ['Jan', 'Feb', 'Mar', 'Apr', 'May'];
-        $salesData = [2000000, 2500000, 1800000, 3000000, 3500000];
+        // Revenue hari ini
+        $todayRevenue = \App\Models\Order::whereDate('created_at', now())->sum('total_price');
 
-        $categoryLabels = ['Top', 'Bottom', 'Accessories'];
-        $categoryData = [40, 30, 30];
+        // Revenue 7 hari terakhir
+        $weekRevenue = \App\Models\Order::whereBetween('created_at', [now()->startOfWeek(), now()->endOfWeek()])->sum('total_price');
+
+        // Top 5 products paling banyak terjual
+        $topProducts = \App\Models\OrderDetails::selectRaw('product_id, SUM(quantity) as sold')
+            ->groupBy('product_id')
+            ->orderByDesc('sold')
+            ->with('product') // Relasi ke Product
+            ->limit(5)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->product->name ?? 'Unknown',
+                    'sold' => $item->sold,
+                    'stock' => $item->product->stock->pluck('quantity', 'size')->toArray() ?? [],
+                ];
+            });
+
+        // Top 5 Customers based on total spending
+        $topCustomers = \App\Models\Order::selectRaw('user_id, SUM(total_price) as totalSpent, COUNT(*) as orders')
+            ->groupBy('user_id')
+            ->orderByDesc('totalSpent')
+            ->with('user')
+            ->limit(5)
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'name' => $item->user->name ?? 'Unknown',
+                    'email' => $item->user->email ?? 'Unknown',
+                    'orders' => $item->orders,
+                    'totalSpent' => $item->totalSpent,
+                ];
+            });
+
+        // Sales Trend (per bulan) — contoh 5 bulan terakhir
+        $salesMonths = [];
+        $salesData = [];
+        for ($i = 4; $i >= 0; $i--) {
+            $month = now()->subMonths($i)->format('M'); // Jan, Feb, etc
+            $salesMonths[] = $month;
+            $total = \App\Models\Order::whereMonth('created_at', now()->subMonths($i)->month)
+                ->whereYear('created_at', now()->subMonths($i)->year)
+                ->sum('total_price');
+            $salesData[] = $total;
+        }
+
+        // Category Distribution
+        $categoryLabels = [];
+        $categoryData = [];
+
+        $categories = ProductCategory::withCount(['products' => function ($query) {
+            $query->where('status_del', 0); // cuma produk aktif
+        }])->get();
+
+        foreach ($categories as $category) {
+            $categoryLabels[] = $category->name;
+            $categoryData[] = $category->products_count;
+        }
 
         return view('admin.dashboard', compact(
             'totalProducts',
