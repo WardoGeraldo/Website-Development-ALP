@@ -2,190 +2,247 @@
 
 @section('content')
     <style>
+        :root {
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #212529;
+            --text-light: #6c757d;
+            --border: #dee2e6;
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --hover-bg: rgba(0, 0, 0, 0.05);
+        }
+
+        body.dark-mode {
+            --bg: #121212;
+            --card: #1e1e1e;
+            --text: #f3f4f6;
+            --text-light: #9ca3af;
+            --border: #2d2d2d;
+            --accent: #818cf8;
+            --accent-hover: #6366f1;
+            --hover-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        /* Container */
         .edit-product-container {
-            max-width: 600px;
+            max-width: 1100px;
             margin: 3rem auto;
             padding: 2rem;
-            border-radius: 10px;
+            background-color: var(--card);
+            color: var(--text);
+            border-radius: 12px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
-            font-family: 'Inter', sans-serif;
-            color: #333;
+            transition: background-color 0.3s, color 0.3s;
         }
 
-        .edit-product-container.dark-mode {
-            background-color: #1c1c1c;
-            color: #f5f5f5;
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
-        }
-
+        /* Heading */
         .edit-product-container h1 {
+            font-size: 2rem;
             font-weight: 600;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1rem;
         }
 
+        /* Form Label */
         form label {
             display: block;
-            margin-bottom: 0.5rem;
             font-weight: 600;
+            margin-bottom: 0.5rem;
             font-size: 1rem;
+            color: var(--text-light);
         }
 
+        /* Form Inputs */
         form input[type="text"],
         form input[type="number"],
         form input[type="file"],
         form textarea {
             width: 100%;
-            padding: 0.6rem 1rem;
+            padding: 0.75rem 1rem;
             margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
             border-radius: 8px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: border-color 0.3s;
         }
 
-        form input[type="text"]:focus,
-        form input[type="number"]:focus,
-        form input[type="file"]:focus,
+        form input:focus,
         form textarea:focus {
-            border-color: #000;
+            border-color: var(--accent);
             outline: none;
         }
 
         form textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
+        /* Button Save */
         .btn-save {
             display: block;
             width: 100%;
-            padding: 0.75rem 1rem;
-            background-color: #000;
-            color: white;
-            font-weight: 700;
+            padding: 1rem;
+            background-color: var(--accent);
+            color: #fff;
+            font-weight: 600;
             border: none;
-            border-radius: 25px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s;
             font-size: 1.1rem;
-            transition: background-color 0.3s ease;
         }
 
         .btn-save:hover {
-            background-color: #e76767;
+            background-color: var(--accent-hover);
         }
 
+        /* Back Link */
         .back-link {
             display: block;
             margin-top: 1.5rem;
             text-align: center;
-            color: #444;
-            font-weight: 500;
+            color: var(--accent);
+            font-weight: 600;
             text-decoration: none;
-            transition: color 0.3s;
         }
 
         .back-link:hover {
-            color: #000;
+            color: var(--accent-hover);
         }
 
-        /* Dark mode styles */
-        body.dark-mode .edit-product-container {
-            background-color: #1c1c1c;
-            color: #ddd;
-            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.1);
+        /* Image Grid Container */
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
         }
 
-        body.dark-mode form input,
-        body.dark-mode form textarea {
-            background-color: #333;
-            border-color: #555;
-            color: #ddd;
-        }
-
-        body.dark-mode form input:focus,
-        body.dark-mode form textarea:focus {
-            border-color: #e76767;
-        }
-
-        body.dark-mode .back-link {
-            color: #bbb;
-        }
-
-        body.dark-mode .back-link:hover {
-            color: #fff;
-        }
-
-        /* Image preview styling */
-        .current-image,
-        .image-preview {
-            display: block;
-            max-width: 250px;
-            max-height: 250px;
-            margin: 0 auto 1.5rem auto;
+        /* Card for each image */
+        .image-card {
+            background: var(--card);
+            border: 1px solid var(--border);
             border-radius: 12px;
-            object-fit: contain;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            text-align: center;
+            transition: transform 0.3s;
+            padding: 10px;
+        }
+
+        /* IMG Styling */
+        .image-card img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            /* <-- THIS makes it square */
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        }
+
+        /* Replace Button */
+        .replace-btn {
+            background-color: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .replace-btn:hover {
+            background-color: var(--accent-hover);
+
+
+        }
+
+        .stock-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 2rem 0;
+        }
+
+        .stock-grid div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stock-grid label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+        }
+
+        .stock-grid input {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background-color: var(--bg);
+            color: var(--text);
+            transition: border-color 0.3s;
+        }
+
+        .stock-grid input:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--accent);
+            outline: none;
+        }
+
+        @media (max-width: 600px) {
+            .stock-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
     </style>
 
-    <div class="edit-product-container" id="editProductContainer">
-        <h1>Edit Product: {{ $product['name'] }}</h1>
+    <div class="edit-product-container">
+        <h1>Edit Product</h1>
 
-        <!-- Current product image -->
-        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;">
+        <div class="image-grid">
             @foreach ($product['images'] as $image)
-                <div style="position: relative; width: 100px; text-align: center;">
-                    <img src="{{ asset($image['url']) }}" alt="Current Image" class="current-image"
-                        style="width: 100px; height: 100px; object-fit: cover; border-radius: 10px;">
+                <div class="image-card">
+                    <img src="{{ asset($image['url']) }}" alt="Product Image">
 
-                    <div style="margin-top: 5px;">
-                        <input type="radio" name="primary_image" value="{{ $image['id'] }}"
-                            {{ $image['is_primary'] ? 'checked' : '' }}> Primary
-                    </div>
-
-                    <form action="{{ route('admin.product.image.delete', ['id' => $product['id']]) }}" method="POST"
-                        style="position: absolute; top: -10px; right: -10px;">
+                    <form
+                        action="{{ route('admin.product.image.replace', ['id' => $product['id'], 'image_id' => $image['product_image_id']]) }}"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('DELETE')
-                        <input type="hidden" name="image_url" value="{{ $image['url'] }}">
-                        <button type="submit"
-                            style="background: red; color: white; border: none; border-radius: 50%; width: 20px; height: 20px; font-size: 14px;">&times;</button>
+                        @method('PUT')
+                        <input type="file" name="new_image" accept="image/*" style="display: none;"
+                            onchange="this.form.submit()">
+                        <button type="button" class="replace-btn" onclick="this.previousElementSibling.click()">
+                            Replace Image
+                        </button>
                     </form>
                 </div>
             @endforeach
         </div>
 
-        <div style="margin-top: 20px; text-align: center;">
-            <label for="images" style="display: block; margin-bottom: 5px;">Change Image:</label>
-            <input type="file" id="images" name="images[]" accept="image/*" multiple>
-        </div>
-
-
-
-
-
-        <script>
-            document.getElementById('images').addEventListener('change', function(event) {
-                const file = event.target.files[0];
-                const currentImage = document.getElementById('currentImage');
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        currentImage.src = e.target.result;
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        </script>
-
         <form action="{{ route('admin.product.update', ['id' => $product['id']]) }}" method="POST"
             enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
-
             @csrf
             @method('PUT')
 
@@ -195,41 +252,75 @@
             <label for="price">Price:</label>
             <input type="number" id="price" name="price" value="{{ $product['price'] }}" required>
 
-            <label for="category">Category:</label>
-            <input type="text" id="category" name="category" value="{{ $product['category'] }}" required>
+            <label for="category_id">Category:</label>
+            <select id="category_id" name="category_id" required>
+                <option value="">-- Select Category --</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->category_id }}"
+                        {{ $category->category_id == $product['category_id'] ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+
 
             <label for="description">Description:</label>
             <textarea id="description" name="description" rows="4">{{ $product['description'] ?? '' }}</textarea>
 
-            <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <div class="stock-grid">
                 @php
                     $sizes = ['one_size', 'xs', 's', 'm', 'l', 'xxl'];
                 @endphp
-
                 @foreach ($sizes as $size)
-                    <div style="flex: 1;">
-                        <label for="stock_{{ $size }}"
-                            style="text-transform: uppercase;">{{ str_replace('_', ' ', $size) }}</label>
+                    <div>
+                        <label for="stock_{{ $size }}">{{ strtoupper(str_replace('_', ' ', $size)) }}</label>
                         <input type="number" id="stock_{{ $size }}" name="stock[{{ $size }}]"
                             min="0" value="{{ $product['stock'][$size] ?? 0 }}" required>
                     </div>
                 @endforeach
-
             </div>
 
 
             <button type="submit" class="btn-save">Save Changes</button>
         </form>
 
-        <a href="{{ route('admin.dashboard') }}" class="back-link">← Back to Dashboard</a>
+        <a href="{{ route('admin.dashboard') }}" class="back-link">← Back to Product List</a>
     </div>
 
+
+    <script>
+        document.getElementById('images').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            const currentImage = document.getElementById('currentImage');
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    currentImage.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+
     @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
-            alert('{{ session('success') }}');
-            window.location.href = "{{ route('admin.dashboard') }}";
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(function() {
+                window.location.href = "{{ route('admin.dashboard') }}";
+            });
         </script>
     @endif
+
+
+
+
+
 
     <script>
         // Preview new image when selected

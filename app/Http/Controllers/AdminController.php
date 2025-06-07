@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\ProductImage;
+use App\Models\ProductStock;
 use Illuminate\Http\Request;
 use App\Models\ProductCategory;
 use Illuminate\Support\Facades\File;
@@ -22,7 +24,8 @@ class AdminController extends Controller
 
     public function index()
     {
-        $products = Product::with(['images', 'stock', 'category'])->where('status_del', 0)->get();
+       $products = Product::with(['images', 'stock', 'category'])->where('status_del', 0)->get();
+
 
         $productsData = $products->map(function ($product) {
             $image = $product->images->where('is_primary', 1)->first();
@@ -50,32 +53,37 @@ class AdminController extends Controller
     {
         $product = Product::with(['stock', 'images'])->where('product_id', $id)->firstOrFail();
 
+        $categories = ProductCategory::all(); // ⬅️ Fetch semua kategori
+
         $productData = [
             'id' => $product->product_id,
             'name' => $product->name,
             'price' => $product->price,
             'description' => $product->description,
-            'category' => $product->category ? $product->category->name : null,
+            'category_id' => $product->category_id, // simpen id bukan name
             'images' => $product->images->map(function ($img) {
                 return [
-                    'id' => $img->id,
+                    'product_image_id' => $img->product_image_id,
                     'url' => $img->url,
                     'is_primary' => $img->is_primary,
                 ];
             })->toArray(),
-
             'stock' => [
                 'xs' => $product->stock->where('size', 'XS')->first()->quantity ?? 0,
                 's' => $product->stock->where('size', 'S')->first()->quantity ?? 0,
                 'm' => $product->stock->where('size', 'M')->first()->quantity ?? 0,
                 'l' => $product->stock->where('size', 'L')->first()->quantity ?? 0,
                 'xxl' => $product->stock->where('size', 'XXL')->first()->quantity ?? 0,
-                'one_size' => $product->stock->where('size', 'ONE SIZE')->first()->quantity ?? 0, // Tambahin
+                'one_size' => $product->stock->where('size', 'ONE SIZE')->first()->quantity ?? 0,
             ],
         ];
 
-        return view('admin.edit-product', ['product' => $productData]);
+        return view('admin.edit-product', [
+            'product' => $productData,
+            'categories' => $categories, // ⬅️ Pass ke view
+        ]);
     }
+
 
     public function deleteImage(Request $request, $id)
     {
@@ -94,60 +102,47 @@ class AdminController extends Controller
 
     public function update(Request $request, $id)
     {
+        // Validasi input
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric',
+            'category_id' => 'required|exists:product_categories,category_id',
+            'description' => 'nullable|string',
             'stock' => 'required|array',
-            'primary_image' => 'nullable|exists:product_images,id',
-            'images' => 'nullable|array|max:4', // Ini nullable
-            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
+            'stock.*' => 'nullable|integer|min:0', // Quantity minimal 0
+        ]);
+
+        // Cari product
+        $product = Product::where('product_id', $id)->firstOrFail();
+
+        // Update data produk
+        $product->update([
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'description' => $validated['description'] ?? null,
+            'category_id' => $validated['category_id'], // 🟢 pakai id dari select
         ]);
 
 
-        $product = Product::with('images')->where('product_id', $id)->firstOrFail();
-        $product->name = $validated['name'];
-        $product->price = $validated['price'];
-        $product->save();
-
-        // Update stock per size
-        foreach ($validated['stock'] as $size => $qty) {
-            $stock = $product->stock()->where('size', $size)->first();
-            if ($stock) {
-                $stock->quantity = $qty;
-                $stock->save();
-            }
+        // Update stock
+        foreach ($validated['stock'] as $size => $quantity) {
+            ProductStock::updateOrCreate(
+                [
+                    'product_id' => $product->product_id,
+                    'size' => strtoupper(str_replace('_', ' ', $size)), // Format size ke UPPER
+                ],
+                [
+                    'quantity' => $quantity ?? 0,
+                    'low_stock_threshold' => 5, // <-- Hardcode 5
+                    'status_del' => 0,          // <-- Hardcode 0
+                ]
+            );
         }
 
-        // Update Primary Image
-        if ($request->filled('primary_image')) {
-            // Reset semua gambar jadi non-primary
-            $product->images()->update(['is_primary' => 0]);
-
-            // Set gambar yang dipilih jadi primary
-            $product->images()->where('id', $request->primary_image)->update(['is_primary' => 1]);
-        }
-
-        // Upload new images (kalau ada)
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $imageFile) {
-                $filename = $imageFile->getClientOriginalName();
-                $destinationPath = public_path('images/products/' . $product->product_id);
-
-                if (!file_exists($destinationPath)) {
-                    mkdir($destinationPath, 0777, true);
-                }
-
-                $imageFile->move($destinationPath, $filename);
-
-                $product->images()->create([
-                    'url' => 'images/products/' . $product->product_id . '/' . $filename,
-                    'is_primary' => 0, // new image not primary by default
-                ]);
-            }
-        }
-
-        return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
+        return redirect()->back()->with('success', 'Product updated successfully!');
     }
+
+
 
     public function updateImage(Request $request, $id)
     {
@@ -175,8 +170,42 @@ class AdminController extends Controller
         return back()->with('success', 'Image updated successfully!');
     }
 
+    public function replaceImage(Request $request, $id, $image_id)
+    {
+        $request->validate([
+            'new_image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048', // Validasi file gambar
+        ]);
 
+        // Cari gambar yang mau direplace
+        $image = ProductImage::where('product_image_id', $image_id)
+            ->where('product_id', $id)
+            ->firstOrFail();
 
+        // Hapus file lama
+        if (file_exists(public_path($image->url))) {
+            unlink(public_path($image->url));
+        }
+
+        // Simpan file baru manual
+        $newImage = $request->file('new_image');
+        $fileName = uniqid() . '.' . $newImage->getClientOriginalExtension(); // Biar random filename
+        $destinationPath = 'images/products/' . $id; // contoh: images/products/12
+
+        // Pastikan foldernya ada
+        if (!file_exists(public_path($destinationPath))) {
+            mkdir(public_path($destinationPath), 0755, true); // recursive mkdir
+        }
+
+        // Move file ke folder tujuan
+        $newImage->move(public_path($destinationPath), $fileName);
+
+        // Update database
+        $image->update([
+            'url' => $destinationPath . '/' . $fileName, // images/products/12/filename.jpg
+        ]);
+
+        return redirect()->back()->with('success', 'Image replaced successfully.');
+    }
 
 
     private function getStockSizes($product)
@@ -253,30 +282,30 @@ class AdminController extends Controller
         $product = Product::create([
             'name' => $validated['name'],
             'price' => $validated['price'],
-            'category_id' => $validated['category_id'], // ✅ Fix
+            'category_id' => $validated['category_id'],
             'description' => $validated['description'] ?? null,
         ]);
 
-
-        // Handle Multiple Images Upload
+        // Upload images
         if ($request->hasFile('images')) {
+            $destinationPath = public_path('images/products/' . $product->product_id); // <-- Ganti ke product_id
+
+            if (!File::exists($destinationPath)) {
+                File::makeDirectory($destinationPath, 0777, true, true);
+            }
+
             foreach ($request->file('images') as $index => $image) {
-                $filename = time() . '_' . $image->getClientOriginalName();
-                $destinationPath = public_path('images/products/' . $product->id);
+                $fileName = 'product_' . $product->product_id . '_' . time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
 
-                if (!File::exists($destinationPath)) {
-                    File::makeDirectory($destinationPath, 0777, true, true);
-                }
+                $image->move($destinationPath, $fileName);
 
-                $image->move($destinationPath, $filename);
-
-                // Save ke database
                 $product->images()->create([
-                    'url' => 'images/products/' . $product->id . '/' . $filename,
-                    'is_primary' => $index == 0 ? 1 : 0, // 🟢 Set primary image buat file pertama
+                    'url' => 'images/products/' . $product->product_id . '/' . $fileName,
+                    'is_primary' => $index == 0 ? 1 : 0,
                 ]);
             }
         }
+
 
         return redirect()->route('admin.dashboard')->with('success', 'Product created successfully!');
     }
@@ -454,27 +483,26 @@ class AdminController extends Controller
         // Redirect back to promo list with success message
         return redirect()->route('admin.promo.list')->with('success', 'Promo created successfully!');
     }
-
     public function destroy($id)
     {
         try {
             $product = Product::findOrFail($id);
 
-            // Delete images
-            $imageFolder = public_path('images/products/' . $product->product_id);
-            if (File::exists($imageFolder)) {
-                File::deleteDirectory($imageFolder);
-            }
+            // Soft delete the product by updating status_del to 1
+            $product->update(['status_del' => 1]);
 
-            $product->images()->delete();
-            $product->stock()->delete();
-            $product->delete();
+            // Soft delete related images
+            $product->images()->update(['status_del' => 1]);
+
+            // Soft delete related stock
+            $product->stock()->update(['status_del' => 1]);
 
             return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully!');
         } catch (\Exception $e) {
             return redirect()->route('admin.dashboard')->with('error', 'Failed to delete product: ' . $e->getMessage());
         }
     }
+
 
 
     public function dashboardView()

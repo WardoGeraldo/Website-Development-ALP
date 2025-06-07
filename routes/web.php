@@ -86,6 +86,9 @@ Route::middleware('manual_auth')->group(function () {
         Route::delete('/product/{id}', [AdminController::class, 'destroy'])->name('admin.product.delete');
         Route::delete('/admin/product/{id}/image', [AdminController::class, 'deleteImage'])->name('admin.product.image.delete');
         Route::put('/admin/product/image/{id}', [AdminController::class, 'updateImage'])->name('admin.product.image.update');
+        Route::put('/admin/product/{id}/image/{image_id}/replace', [AdminController::class, 'replaceImage'])->name('admin.product.image.replace');
+        
+
 
 
 

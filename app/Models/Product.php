@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     protected $primaryKey = 'product_id'; // since your PK is not 'id'
-    
+
     protected $fillable = [
         'name',
         'description',
@@ -28,13 +28,12 @@ class Product extends Model
     // Product has many images
     public function images()
     {
-        return $this->hasMany(ProductImage::class, 'product_id');
+        return $this->hasMany(ProductImage::class, 'product_id', 'product_id')->where('status_del', 0);
     }
 
-    // Product has many stocks
     public function stock()
     {
-        return $this->hasMany(ProductStock::class, 'product_id');
+        return $this->hasMany(ProductStock::class, 'product_id', 'product_id')->where('status_del', 0);
     }
 
     // Product belongs to many carts
