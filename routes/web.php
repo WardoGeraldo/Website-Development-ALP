@@ -12,6 +12,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SupportController;
+use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Middleware\CheckRoleMiddleWare; // ⬅️ tambahkan ini
@@ -69,6 +70,8 @@ Route::middleware('manual_auth')->group(function () {
         Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('cart.processCheckout');
         // Route::get('/midtrans/notification', [CartController::class, 'handleNotification']);
         Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle']);
+        Route::get('/order/shipment-detail', [ShipmentController::class, 'show'])->name('shipment.show');
+
     });
 
     // — Admin area —

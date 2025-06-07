@@ -81,6 +81,11 @@
                 <div class="total" style="font-size: 1.2rem;">
                     Final Total: Rp{{ number_format($order->total_price, 0, ',', '.') }}
                 </div>
+                <div class="total" style="text-align: left; margin-top: 1rem;">
+                    <a href="{{ route('shipment.show', ['order_id' => $order->order_id]) }}" class="btn btn-outline-dark btn-sm">
+                        View Shipment Details
+                    </a>
+                </div>
             </div>
         @endforeach
     @endif
