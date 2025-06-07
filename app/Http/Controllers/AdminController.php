@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use App\Models\ProductCategory;
 use Illuminate\Support\Facades\File;
 
 class AdminController extends Controller
@@ -21,10 +22,9 @@ class AdminController extends Controller
 
     public function index()
     {
-        $products = Product::with(['images', 'stock'])->where('status_del', 0)->get();
+        $products = Product::with(['images', 'stock', 'category'])->where('status_del', 0)->get();
 
         $productsData = $products->map(function ($product) {
-            // Cari gambar primary
             $image = $product->images->where('is_primary', 1)->first();
 
             return [
@@ -34,7 +34,7 @@ class AdminController extends Controller
                 'description' => $product->description,
                 'category' => $product->category ? $product->category->name : null,
                 'image' => $image
-                    ? asset('images/products/' . $product->product_id . '/' . basename($image->url))
+                    ? asset($image->url) // ⬅️ CUKUP pake asset($image->url)
                     : asset('images/default.jpg'),
                 'stock' => $this->getStockSizes($product),
             ];
@@ -44,6 +44,7 @@ class AdminController extends Controller
             'products' => $productsData,
         ]);
     }
+
 
     public function edit($id)
     {
@@ -85,13 +86,10 @@ class AdminController extends Controller
             File::delete($imagePath);
         }
 
-        // Delete record dari database juga kalau ada
         $product->images()->where('url', 'like', '%' . basename($imagePath))->delete();
 
-        return back()->with('success', 'Image deleted successfully!');
+        return redirect()->route('admin.product.edit', ['id' => $id])->with('delete_success', 'Image deleted successfully!');
     }
-
-
 
 
     public function update(Request $request, $id)
@@ -101,7 +99,10 @@ class AdminController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|array',
             'primary_image' => 'nullable|exists:product_images,id',
+            'images' => 'nullable|array|max:4', // Ini nullable
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048',
         ]);
+
 
         $product = Product::with('images')->where('product_id', $id)->firstOrFail();
         $product->name = $validated['name'];
@@ -231,29 +232,56 @@ class AdminController extends Controller
 
     public function create()
     {
-        // Return the view with an empty product data
-        return view('admin.create-product');
+        $categories = ProductCategory::where('status_del', 0)->get();
+        return view('admin.create-product', compact('categories'));
     }
+
 
     // Method to handle the form submission for adding a new product
     public function store(Request $request)
     {
-        // Simulate adding a new product to the dummy data
-        $newProductId = count($this->products) + 1; // Generate a new ID
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric',
+            'category_id' => 'required|exists:product_categories,category_id',
+            'description' => 'nullable|string',
+            'images' => 'required|array|max:4', // Max 4 images
+            'images.*' => 'image|mimes:jpeg,png,jpg,gif,webp|max:2048' // 2MB per image
+        ]);
 
-        // Store the new product data (in a real app, you'd use a database)
-        $this->products[$newProductId] = [
-            'id' => $newProductId,
-            'name' => $request->name,
-            'price' => $request->price,
-            'category' => $request->category,
-            'description' => $request->description,
-            'image' => $this->storeImage($request->file('image'), $newProductId),
-        ];
+        // Simpan produk baru
+        $product = Product::create([
+            'name' => $validated['name'],
+            'price' => $validated['price'],
+            'category_id' => $validated['category_id'], // ✅ Fix
+            'description' => $validated['description'] ?? null,
+        ]);
 
-        // Redirect back with a success message
-        return redirect()->route('admin.product.create')->with('success', 'Product added successfully!');
+
+        // Handle Multiple Images Upload
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $index => $image) {
+                $filename = time() . '_' . $image->getClientOriginalName();
+                $destinationPath = public_path('images/products/' . $product->id);
+
+                if (!File::exists($destinationPath)) {
+                    File::makeDirectory($destinationPath, 0777, true, true);
+                }
+
+                $image->move($destinationPath, $filename);
+
+                // Save ke database
+                $product->images()->create([
+                    'url' => 'images/products/' . $product->id . '/' . $filename,
+                    'is_primary' => $index == 0 ? 1 : 0, // 🟢 Set primary image buat file pertama
+                ]);
+            }
+        }
+
+        return redirect()->route('admin.dashboard')->with('success', 'Product created successfully!');
     }
+
+
 
     // Helper function to store the image
     private function storeImage($image, $productId)
@@ -429,17 +457,25 @@ class AdminController extends Controller
 
     public function destroy($id)
     {
-        if (!isset($this->products[$id])) {
-            abort(404, 'Product not found');
+        try {
+            $product = Product::findOrFail($id);
+
+            // Delete images
+            $imageFolder = public_path('images/products/' . $product->product_id);
+            if (File::exists($imageFolder)) {
+                File::deleteDirectory($imageFolder);
+            }
+
+            $product->images()->delete();
+            $product->stock()->delete();
+            $product->delete();
+
+            return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.dashboard')->with('error', 'Failed to delete product: ' . $e->getMessage());
         }
-
-        // Simulate deletion by unsetting the product from the dummy array
-        unset($this->products[$id]);
-
-        // Since this is dummy data, the deletion won't persist unless you handle persistence differently
-
-        return redirect()->route('admin.dashboard')->with('success', 'Product deleted successfully.');
     }
+
 
     public function dashboardView()
     {
