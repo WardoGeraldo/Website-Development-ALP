@@ -49,8 +49,8 @@
                                             method="POST" style="display:inline;" class="delete-user-form">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="action-btn"
-                                                style="background-color: #ffecec; color: #e63946;">
+                                            <button type="submit" class="action-btn delete"
+                                                >
                                                 <i class="bi bi-trash"></i>
                                                 <span>Delete</span>
                                             </button>
@@ -107,9 +107,13 @@
             --accent-color: #896CFF;
             --accent-light: rgba(137, 108, 255, 0.1);
             --table-header-bg: rgba(0, 0, 0, 0.02);
+
+            /* Tambahan buat DELETE button */
+            --error-color: #e63946;
+            --error-light: rgba(230, 57, 70, 0.1);
+            --error-hover: #e63946;
         }
 
-        /* Dark Mode Variables - Using same class as base template */
         body.dark-mode {
             --bg-color: #121212;
             --text-color: #f1f1f1;
@@ -121,7 +125,13 @@
             --accent-color: #a58bff;
             --accent-light: rgba(137, 108, 255, 0.2);
             --table-header-bg: rgba(255, 255, 255, 0.05);
+
+            /* Dark mode DELETE */
+            --error-color: #f87171;
+            --error-light: rgba(248, 113, 113, 0.2);
+            --error-hover: #f87171;
         }
+
 
         * {
             margin: 0;
@@ -244,6 +254,8 @@
             background-color: transparent;
         }
 
+        
+
         /* Action Button */
         .action-btn {
             display: inline-flex;
@@ -269,6 +281,23 @@
             margin-right: 0.5rem;
             font-size: 1rem;
         }
+
+        /* Delete Button Style */
+.action-btn.delete {
+    background-color: var(--error-light);
+    color: var(--error-color);
+}
+
+.action-btn.delete:hover {
+    background-color: var(--error-color);
+    color: #fff;
+}
+
+/* Optional: Hover naik dikit */
+.action-btn.delete:hover {
+    transform: translateY(-3px);
+}
+
 
         /* Alert styling for theme compatibility */
         .alert-success {

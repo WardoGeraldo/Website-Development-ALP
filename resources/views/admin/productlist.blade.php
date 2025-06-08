@@ -83,28 +83,46 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
         /* Light Mode Variables (Default) */
-        :root {
-            --bg: #f8f9fa;
-            --card: #ffffff;
-            --text: #212529;
-            --text-light: #6c757d;
-            --border: #dee2e6;
-            --accent: #6366f1;
-            --accent-hover: #4f46e5;
-            --hover-bg: rgba(0, 0, 0, 0.05);
-        }
+       :root {
+    --bg: #f8f9fa;
+    --card: #ffffff;
+    --text: #212529;
+    --text-light: #6c757d;
+    --border: #dee2e6;
+    --accent: #6366f1;
+    --accent-hover: #4f46e5;
+    --hover-bg: rgba(0, 0, 0, 0.05);
 
-        /* Dark Mode Variables */
-        body.dark-mode {
-            --bg: #121212;
-            --card: #1e1e1e;
-            --text: #f3f4f6;
-            --text-light: #9ca3af;
-            --border: #2d2d2d;
-            --accent: #818cf8;
-            --accent-hover: #6366f1;
-            --hover-bg: rgba(255, 255, 255, 0.05);
-        }
+    /* Tambahan untuk Button View & Delete */
+    --accent-color: #896CFF; /* View Text */
+    --accent-light: rgba(137, 108, 255, 0.1); /* View Background */
+    
+    --error-color: #e63946; /* Delete Text */
+    --error-light: rgba(230, 57, 70, 0.1); /* Delete Background */
+
+    --button-border: #ccc; /* Default border button */
+}
+
+body.dark-mode {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --text: #f3f4f6;
+    --text-light: #9ca3af;
+    --border: #2d2d2d;
+    --accent: #818cf8;
+    --accent-hover: #6366f1;
+    --hover-bg: rgba(255, 255, 255, 0.05);
+
+    /* Dark Mode Button Colors */
+    --accent-color: #a58bff;
+    --accent-light: rgba(137, 108, 255, 0.2);
+    
+    --error-color: #f87171;
+    --error-light: rgba(248, 113, 113, 0.2);
+
+    --button-border: #666; /* Darker border for dark mode */
+}
+
 
         /* Apply theme variables to elements */
         .dashboard-container {
@@ -159,14 +177,15 @@
 
         /* Product List Styles */
         .product-list-container {
-            max-width: 1100px;
-            margin: 40px auto;
+            width: 100%;
+            margin: 40px 0;
             background: var(--card);
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
+
 
         body.dark-mode .product-list-container {
             box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -292,57 +311,57 @@
         }
 
         .btn-action {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 8px 18px; /* 🔥 Fix padding sama View dan Delete */
-    border-radius: 30px;
-    font-weight: 500;
-    font-size: 0.9rem;
-    border: 2px solid transparent;
-    transition: all 0.3s ease;
-    text-decoration: none;
-    white-space: nowrap; /* 🛡️ Prevent wrap */
-    min-width: 110px; /* 👈 Sama rata View & Delete */
-    height: 40px; /* Sama tinggi semua tombol */
-}
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            white-space: nowrap;
+            min-width: 120px;
+            height: 42px;
+            background-clip: padding-box;
+            box-sizing: border-box;
+        }
 
-.btn-action i {
-    font-size: 1.1rem;
-}
+        .btn-action i {
+            font-size: 1.1rem;
+        }
 
-/* View Button Style */
+        /* View Button */
 .btn-action.view {
-    background-color: rgba(137, 108, 255, 0.1);
-    color: #896CFF;
-    border-color: transparent;
+    background-color: var(--accent-light);
+    color: var(--accent-color);
 }
 
 .btn-action.view:hover {
-    background-color: rgba(137, 108, 255, 0.2);
-    color: #5A3FD9;
+    background-color: var(--accent-color);
+    color: #fff;
 }
 
-/* Delete Button Style */
+/* Delete Button */
 .btn-action.delete {
-    background-color: #ffecec;
-    color: #e63946;
-    border: 2px solid #e63946;
+    background-color: var(--error-light);
+    color: var(--error-color);
 }
 
 .btn-action.delete:hover {
-    background-color: #ffcccc;
-    color: #b71c1c;
-    border-color: #b71c1c;
+    background-color: var(--error-color);
+    color: #fff;
 }
 
-.action-group {
-    display: flex;
-    align-items: center;
-    gap: 12px; /* Lebih longgar antar tombol */
-    justify-content: center;
-}
+
+        .action-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            justify-content: center;
+        }
 
 
 
