@@ -73,24 +73,12 @@
         }
     </style>
 </head>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const savedMode = localStorage.getItem('darkMode');
 
-        // Kalau belum pernah disimpan, tetap dark mode
-        if (!savedMode || savedMode === 'enabled') {
-            document.body.classList.add('dark-mode');
-            document.querySelector('.dark-mode-toggle').textContent = '☀️';
-        } else {
-            document.body.classList.remove('dark-mode');
-            document.querySelector('.dark-mode-toggle').textContent = '🌙';
-        }
-    });
-</script>
 
 <body>
     @if (!isset($__env->getSections()['hide_header_footer']))
-        <button class="dark-mode-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">🌙</button>
+        <button class="dark-mode-toggle d-none d-lg-block" aria-label="Toggle dark mode"
+            title="Toggle dark mode">🌙</button>
     @endif
 
     @if (!isset($__env->getSections()['hide_header_footer']))
