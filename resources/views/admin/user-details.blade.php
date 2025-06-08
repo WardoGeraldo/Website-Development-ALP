@@ -78,99 +78,55 @@
                 radial-gradient(circle at 40% 40%, rgba(165, 139, 255, 0.08) 0%, transparent 50%);
         }
 
-        .dark-mode-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--gradient-primary);
-            color: white;
-            border: none;
-            padding: 0.75rem 1rem;
-            border-radius: 50px;
-            cursor: pointer;
-            z-index: 999;
-            font-size: 1.2rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(137, 108, 255, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .dark-mode-toggle:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 40px rgba(137, 108, 255, 0.4);
-        }
-
         .container {
-            max-width: 800px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
             position: relative;
             z-index: 1;
         }
 
+        /* Updated Header Styles - Now matches product list */
         .store-header {
-            text-align: center;
-            margin-top: 60px;
-            margin-bottom: 3rem;
-            position: relative;
-        }
-
-        .header-content {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .header-icon {
-            width: 60px;
-            height: 60px;
-            background: var(--gradient-primary);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.5rem;
-            box-shadow: 0 8px 32px rgba(137, 108, 255, 0.3);
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0px);
-            }
-
-            50% {
-                transform: translateY(-8px);
-            }
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-color);
         }
 
         .store-header h1 {
-            font-weight: 700;
-            font-size: 2.5rem;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin: 0;
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-color);
             position: relative;
+            margin: 0;
         }
 
         .store-header h1::after {
             content: "";
             position: absolute;
-            bottom: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 4px;
-            background: var(--gradient-primary);
+            bottom: -8px;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, #896CFF, #5A3FD9);
             border-radius: 10px;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .date-display {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            gap: 0.5rem;
         }
 
         .user-details {
@@ -450,18 +406,15 @@
             }
 
             .store-header {
-                margin-top: 40px;
                 margin-bottom: 2rem;
-            }
-
-            .header-content {
                 flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
             }
 
-            .header-icon {
-                width: 50px;
-                height: 50px;
-                font-size: 1.2rem;
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
             }
 
             .store-header h1 {
@@ -497,12 +450,6 @@
             .user-details {
                 padding: 1.5rem 1rem;
             }
-
-            .header-icon {
-                width: 45px;
-                height: 45px;
-                font-size: 1.1rem;
-            }
         }
 
         /* Smooth Theme Transitions */
@@ -511,16 +458,13 @@
         }
     </style>
 
-    <!-- Dark Mode Toggle -->
-    <button class="dark-mode-toggle" id="darkModeToggle">🌙</button>
-
     <div class="container">
         <div class="store-header" data-aos="fade-down">
-            <div class="header-content">
-                <div class="header-icon">
-                    <i class="bi bi-person-gear"></i>
+            <h1>Edit User</h1>
+            <div class="header-controls">
+                <div class="date-display">
+                    <span id="current-date"></span>
                 </div>
-                <h1>Edit User</h1>
             </div>
         </div>
 
@@ -655,7 +599,6 @@
         </form>
     </div>
 
-
     <script>
         AOS.init({
             duration: 800,
@@ -664,21 +607,18 @@
         });
 
         document.addEventListener('DOMContentLoaded', function() {
-            const isDarkMode = localStorage.getItem('darkMode') === 'true';
-            const body = document.body;
-            const toggle = document.getElementById('darkModeToggle');
-
-            if (isDarkMode) {
-                body.classList.add('dark-mode');
-                toggle.textContent = '☀️';
+            // Set current date
+            const dateElement = document.getElementById('current-date');
+            if (dateElement) {
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                };
+                dateElement.textContent = now.toLocaleDateString('en-US', options);
             }
-
-            toggle.addEventListener('click', () => {
-                body.classList.toggle('dark-mode');
-                const isDark = body.classList.contains('dark-mode');
-                localStorage.setItem('darkMode', isDark);
-                toggle.textContent = isDark ? '☀️' : '🌙';
-            });
 
             // Form submission with loading animation
             document.getElementById('editUserForm').addEventListener('submit', function() {
@@ -702,7 +642,7 @@
             });
 
             // Phone number formatting
-            const phoneInput = document.querySelector('input[name="phone"]');
+            const phoneInput = document.querySelector('input[name="phone_number"]');
             if (phoneInput) {
                 phoneInput.addEventListener('input', function(e) {
                     let value = e.target.value.replace(/\D/g, '');
