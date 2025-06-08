@@ -307,13 +307,6 @@
     <h1 class="page-title">Size Chart</h1>
     <p class="page-subtitle">Curated measurements for the discerning individual who appreciates timeless elegance.</p>
     
-    <div class="filter-container">
-        <button class="filter-button active" onclick="filterChart('all')">ALL</button>
-        <button class="filter-button" onclick="filterChart('shirt')">TOP</button>
-        <button class="filter-button" onclick="filterChart('pants')">BOTTOM</button>
-        <button class="filter-button" onclick="filterChart('dress')">BAG</button>
-        <button class="filter-button" onclick="filterChart('accessories')">ACCESSORIES</button>
-    </div>
     
     <div class="size-chart" id="shirt-chart">
         <h3>Top Size Guide</h3>
@@ -360,41 +353,23 @@
     </div>
 
     <div class="size-chart" id="dress-chart">
-        <h3>Bag Size Guide</h3>
+        <h3>Dress Size Guide</h3>
         <table>
             <thead>
                 <tr>
                     <th>Size</th>
-                    <th>Width (cm)</th>
-                    <th>Height (cm)</th>
-                    <th>Depth (cm)</th>
+                    <th>Bust (cm)</th>
+                    <th>Waist (cm)</th>
+                    <th>Hips (cm)</th>
                 </tr>
             </thead>
             <tbody>
-                <tr><td>Small</td><td>25</td><td>20</td><td>10</td></tr>
-                <tr><td>Medium</td><td>30</td><td>25</td><td>12</td></tr>
-                <tr><td>Large</td><td>35</td><td>30</td><td>15</td></tr>
-                <tr><td>X-Large</td><td>40</td><td>35</td><td>18</td></tr>
-            </tbody>
-        </table>
-    </div>
-    
-    <div class="size-chart" id="accessories-chart">
-        <h3>Accessories Size Guide</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Small (cm)</th>
-                    <th>Medium (cm)</th>
-                    <th>Large (cm)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td>Belts</td><td>70-80</td><td>80-90</td><td>90-100</td></tr>
-                <tr><td>Scarves</td><td>50x50</td><td>70x70</td><td>90x90</td></tr>
-                <tr><td>Gloves</td><td>16</td><td>18</td><td>20</td></tr>
-                <tr><td>Hats</td><td>54-56</td><td>56-58</td><td>58-60</td></tr>
+                <tr><td>XS</td><td>28.0</td><td>24.0</td><td>14.5</td></tr>
+                <tr><td>S</td><td>30.0</td><td>26.0</td><td>15.0</td></tr>
+                <tr><td>M</td><td>32.0</td><td>28.0</td><td>15.5</td></tr>
+                <tr><td>L</td><td>34.0</td><td>30.0</td><td>16.0</td></tr>
+                <tr><td>XL</td><td>36.0</td><td>32.0</td><td>16.5</td></tr>
+                <tr><td>XXL</td><td>38.0</td><td>34.0</td><td>17.0</td></tr>
             </tbody>
         </table>
     </div>

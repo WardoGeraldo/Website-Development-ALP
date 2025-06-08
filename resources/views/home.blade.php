@@ -931,6 +931,10 @@
         <div class="logo-item"><img src="fotoLogo4.png" alt="Logo 4"></div>
         <div class="logo-item"><img src="fotoLogo5.png" alt="Logo 5"></div>
         <div class="logo-item"><img src="fotoLogo6.png" alt="Logo 6"></div>
+        <div class="logo-item"><img src="fotoLogo7.png" alt="Logo 7"></div>
+        <div class="logo-item"><img src="fotoLogo8.jpg" alt="Logo 8"></div>
+        <div class="logo-item"><img src="fotoLogo9.png" alt="Logo 9"></div>
+        <div class="logo-item"><img src="fotoLogo10.webp" alt="Logo 10"></div>
     </div>
 </div>
 
