@@ -497,8 +497,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive Design */
@@ -571,14 +576,14 @@
         </div>
 
         <div class="product-form" data-aos="fade-up">
-            
+
             <!-- Current Images Section -->
             <div class="form-section" data-aos="fade-right" data-aos-delay="200">
                 <div class="form-section-title">
                     <i class="bi bi-images"></i>
                     Current Product Images
                 </div>
-                
+
                 <div class="image-grid">
                     @foreach ($product['images'] as $image)
                         <div class="image-card" data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 + 300 }}">
@@ -618,7 +623,7 @@
                             Product Name
                         </label>
                         <div class="input-group">
-                            <input type="text" id="name" name="name" class="form-control with-icon" 
+                            <input type="text" id="name" name="name" class="form-control with-icon"
                                 value="{{ $product['name'] }}" placeholder="Enter product name..." required>
                             <i class="bi bi-tag input-icon"></i>
                         </div>
@@ -632,9 +637,10 @@
                                     Price
                                 </label>
                                 <div class="input-group">
-                                    <input type="number" id="price" name="price" class="form-control with-icon" 
+                                    <input type="number" id="price" name="price" class="form-control with-icon"
                                         value="{{ $product['price'] }}" placeholder="Enter price..." required>
-                                    <span class="input-icon" style="font-weight: bold; color: #555; font-size: 1rem;">Rp</span>
+                                    <span class="input-icon"
+                                        style="font-weight: bold; color: #555; font-size: 1rem;">Rp</span>
                                 </div>
                             </div>
                         </div>
@@ -662,8 +668,8 @@
                             <i class="bi bi-card-text"></i>
                             Description
                         </label>
-                        <textarea id="description" name="description" class="form-control" 
-                            placeholder="Enter product description..." rows="4">{{ $product['description'] ?? '' }}</textarea>
+                        <textarea id="description" name="description" class="form-control" placeholder="Enter product description..."
+                            rows="4">{{ $product['description'] ?? '' }}</textarea>
                     </div>
                 </div>
 
@@ -792,7 +798,11 @@
                 icon: 'success',
                 title: '{{ session('success') }}'
             }).then(function() {
-                window.location.href = "{{ route('admin.dashboard') }}";
+                @if (session('redirect'))
+                    window.location.href = "{{ route('admin.dashboard') }}";
+                @else
+                    window.location.reload();
+                @endif
             });
         </script>
     @endif

@@ -141,7 +141,7 @@ class AdminController extends Controller
             );
         }
 
-        return redirect()->back()->with('success', 'Product updated successfully!');
+        return redirect()->route('admin.dashboard')->with('success', 'Product updated successfully!');
     }
 
 
@@ -206,7 +206,8 @@ class AdminController extends Controller
             'url' => $destinationPath . '/' . $fileName, // images/products/12/filename.jpg
         ]);
 
-        return redirect()->back()->with('success', 'Image replaced successfully.');
+        return redirect()->route('admin.product.edit', ['id' => $id])->with('success', 'Image replaced successfully.');
+
     }
 
 
