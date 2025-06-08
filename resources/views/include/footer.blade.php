@@ -91,16 +91,15 @@
 
             <!-- Quote -->
             <div class="col-md-3 mb-4">
-                <h5 class="fw-bold mb-3">Veravia.<br>The agency for<br>impatient brands<sup>®</sup></h5>
+                <h5 class="fw-bold mb-3">Veravia.<br>The fashion for<br>classy woman<sup>®</sup></h5>
             </div>
 
             <!-- Tentang Kami -->
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Tentang Kami</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-decoration-none">Profil Perusahaan</a></li>
-                    <li><a href="#" class="text-decoration-none">Karier</a></li>
-                    <li><a href="#" class="text-decoration-none">Blog</a></li>
+                    <li><a href="{{ url('/#about-image') }}" rel="noopener" class="text-decoration-none">Profil Perusahaan</a></li>
+                    <li><a href="https://forms.gle/9nFUCtjPS9NkYZVD6" target="_blank" rel="noopener" class="text-decoration-none">Job Recruitment</a></li>
                 </ul>
             </div>
 
@@ -108,22 +107,22 @@
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Bantuan</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-decoration-none">Hubungi Kami</a></li>
-                    <li><a href="#" class="text-decoration-none">Cara Pengembalian</a></li>
-                    <li><a href="#" class="text-decoration-none">FAQ</a></li>
+                    <li><a href="{{ route('contact.show') }}" class="text-decoration-none">Hubungi Kami</a></li>
+                    <li><a href="{{ route('support.show') }}" class="text-decoration-none">FAQ</a></li>
                 </ul>
             </div>
+
 
             <!-- Ikuti Kami -->
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Ikuti Kami</h5>
                 <div class="d-flex gap-3">
-                    <a href="#"><i class="fab fa-facebook fa-lg"></i></a>
-                    <a href="#"><i class="fab fa-instagram fa-lg"></i></a>
-                    <a href="#"><i class="fab fa-twitter fa-lg"></i></a>
-                    <a href="#"><i class="fab fa-youtube fa-lg"></i></a>
+                    <a href="https://www.facebook.com/lilianlamano" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg"></i></a>
+                    <a href="https://www.instagram.com/veravia.id?utm_source=ig_web_button_share_sheet&igsh=MW1qM3Q1NW1iNzExdw==" target="_blank" rel="noopener"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0" target="_blank" rel="noopener"><i class="fab fa-youtube fa-lg"></i></a>
                 </div>
             </div>
+
         </div>
 
         <!-- Copyright -->

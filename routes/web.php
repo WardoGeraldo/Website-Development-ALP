@@ -15,6 +15,8 @@ use App\Http\Controllers\SupportController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\MidtransCallbackController;
+use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Middleware\CheckRoleMiddleWare; // ⬅️ tambahkan ini
 
 /*
@@ -34,6 +36,17 @@ Route::get('/support', [SupportController::class, 'show'])->name('support.show')
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.show');
 Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
 
+
+// Forgot Password Form
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+// Forgot Password Submit (POST)
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+
+// Reset password form
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+
 // — Guest routes (hanya untuk yang belum login) —
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'show'])->name('login');
@@ -42,8 +55,6 @@ Route::middleware('guest')->group(function () {
     Route::get('/register', [AuthController::class, 'auth_register'])->name('register');
     Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store');
 
-    Route::get('/forgot-password', [AuthController::class, 'forgotPassword'])->name('password.request');
-    Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('password.email.custom');
 });
 
 

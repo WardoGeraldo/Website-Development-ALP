@@ -892,11 +892,11 @@
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1200">
-                <div class="about-image">
+                <div id="about-image" class="about-image">
                     <img src="fotoBaju.jpg" alt="About Veravia">
                 </div>
             </div>
-            <div class="col-lg-5 offset-lg-1" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
+            <div id="about-veravia" class="col-lg-5 offset-lg-1" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
                 <div class="about-content">
                     <h3>Tentang Veravia</h3>
                     <p>Veravia hadir untuk wanita modern yang mengutamakan kenyamanan tanpa mengorbankan gaya. Setiap koleksi kami dirancang dengan cermat untuk memperkuat rasa percaya diri, tampil berkelas, dan tetap minimalis dalam setiap kesempatan.</p>

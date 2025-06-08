@@ -551,7 +551,7 @@
         <div class="password-reset-container" id="passwordResetContainer">
             <div class="password-reset-form">
                 <div class="veravia-logo-small">VERAVIA</div>
-                
+
                 <div class="password-reset-header">
                     <h2>Password Recovery</h2>
                     <p>Enter your email to receive a password reset link</p>
@@ -560,8 +560,8 @@
                 @if (session('status'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         <span>{{ session('status') }}</span>
-                        <button type="button" class="btn-close" aria-label="Close" 
-                            onclick="this.parentElement.style.display='none';">×</button>
+                        <button type="button" class="btn-close" aria-label="Close"
+                            onclick="this.parentElement.style.display='none';"></button>
                     </div>
                 @endif
 
@@ -569,25 +569,56 @@
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         <span>{{ $errors->first() }}</span>
                         <button type="button" class="btn-close" aria-label="Close"
-                            onclick="this.parentElement.style.display='none';">×</button>
+                            onclick="this.parentElement.style.display='none';"></button>
                     </div>
                 @endif
 
-                <div class="form-group">
-                    <input type="email" id="email" name="email" 
-                        class="form-input" 
-                        placeholder=" " value="{{ old('email') }}">
-                    <label for="email">Email Address</label>
-                </div>
+                <form method="POST" action="{{ route('password.email') }}">
+                    @csrf
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" class="form-input" placeholder=" "
+                            value="{{ old('email') }}">
+                        <label for="email">Email Address</label>
+                    </div>
 
-                <a href="{{ route('login.show') }}" class="btn btn-reset">Send Reset Link</a>
+                    <button type="submit" class="btn btn-reset">Send Reset Link</button>
 
-                <div class="back-to-login">
-                    <a href="{{ route('login.show') }}">← Back to Login</a>
-                </div>
+                    <div class="back-to-login">
+                        <a href="{{ route('login') }}">← Back to Login</a>
+                    </div>
+                </form>
+
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        @if (session('status'))
+            Swal.fire({
+                icon: 'success',
+                title: '{{ session('status') }}',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+            });
+        @endif
+
+        @if ($errors->any())
+            Swal.fire({
+                icon: 'error',
+                title: '{{ $errors->first() }}',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 4000,
+                timerProgressBar: true,
+            });
+        @endif
+    </script>
+
 
     <script>
         document.addEventListener("DOMContentLoaded", function() {
@@ -605,27 +636,27 @@
 
             // Floating particles effect
             const particlesContainer = document.getElementById('particles');
-            
+
             function createParticle() {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
-                
+
                 // Random size between 2-8px
                 const size = Math.random() * 6 + 2;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-                
+
                 // Random position
                 const posX = Math.random() * 100;
                 const posY = Math.random() * 100;
                 particle.style.left = `${posX}%`;
                 particle.style.top = `${posY}%`;
-                
+
                 // Random opacity
                 particle.style.opacity = Math.random() * 0.1 + 0.05;
-                
+
                 particlesContainer.appendChild(particle);
-                
+
                 // Animate and remove
                 setTimeout(() => {
                     particle.style.opacity = '0';
@@ -634,10 +665,10 @@
                     }, 500);
                 }, 5000);
             }
-            
+
             // Create particles at intervals
             setInterval(createParticle, 500);
-            
+
             // Initial particles
             for (let i = 0; i < 20; i++) {
                 setTimeout(createParticle, i * 200);
@@ -645,7 +676,7 @@
 
             // 3D tilt effect for the container
             const passwordResetContainer = document.getElementById('passwordResetContainer');
-            
+
             document.addEventListener('mousemove', function(e) {
                 const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
                 const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
@@ -658,4 +689,6 @@
             });
         });
     </script>
+
+
 @endsection
