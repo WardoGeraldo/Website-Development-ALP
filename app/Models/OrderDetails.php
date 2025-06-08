@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderDetails extends Model
 {
+
+    protected $primaryKey = 'order_details_id';
+    public $incrementing = true;
+    protected $keyType = 'int';
+
     protected $fillable = [
         'order_details_id',
         'order_id',
@@ -20,7 +25,6 @@ class OrderDetails extends Model
     }
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id', 'product_id');    
+        return $this->belongsTo(Product::class, 'product_id', 'product_id');
     }
-
 }

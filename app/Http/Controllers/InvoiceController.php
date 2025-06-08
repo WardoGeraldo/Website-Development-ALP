@@ -20,7 +20,7 @@ class InvoiceController extends Controller
 
     public function index($sales_id)
     {
-        $order = Order::with('details', 'user')->where('order_id', $sales_id)->firstOrFail();
+        $order = Order::with('orderDetails', 'user')->where('order_id', $sales_id)->firstOrFail();
 
         return view('invoice.index', [
             'order' => $order

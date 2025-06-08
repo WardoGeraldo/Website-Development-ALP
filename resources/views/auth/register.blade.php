@@ -1,7 +1,9 @@
 @extends('base.base')
 @section('hide_header_footer', true)
 @section('content')
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant:wght@300;400;500;600;700&family=Montserrat:wght@200;300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         :root {
@@ -82,9 +84,11 @@
                 transform: translateX(-100%);
                 width: 0;
             }
+
             50% {
                 width: 100%;
             }
+
             100% {
                 transform: translateX(100%);
                 width: 0;
@@ -131,6 +135,7 @@
                 transform: translate(-50%, -50%) scale(1);
                 opacity: 0.5;
             }
+
             100% {
                 transform: translate(-50%, -50%) scale(1.2);
                 opacity: 0.7;
@@ -193,6 +198,7 @@
                 opacity: 0;
                 transform: translateZ(0) perspective(1200px) rotateX(5deg) translateY(30px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateZ(0) perspective(1200px) rotateX(0) translateY(0);
@@ -291,12 +297,29 @@
             flex: 1;
         }
 
-        .form-group:nth-child(1) { animation: fadeInUp 1s ease forwards 1.6s; }
-        .form-group:nth-child(2) { animation: fadeInUp 1s ease forwards 1.7s; }
-        .form-group:nth-child(3) { animation: fadeInUp 1s ease forwards 1.8s; }
-        .form-group:nth-child(4) { animation: fadeInUp 1s ease forwards 1.9s; }
-        .form-group:nth-child(5) { animation: fadeInUp 1s ease forwards 2.0s; }
-        .form-group:nth-child(6) { animation: fadeInUp 1s ease forwards 2.1s; }
+        .form-group:nth-child(1) {
+            animation: fadeInUp 1s ease forwards 1.6s;
+        }
+
+        .form-group:nth-child(2) {
+            animation: fadeInUp 1s ease forwards 1.7s;
+        }
+
+        .form-group:nth-child(3) {
+            animation: fadeInUp 1s ease forwards 1.8s;
+        }
+
+        .form-group:nth-child(4) {
+            animation: fadeInUp 1s ease forwards 1.9s;
+        }
+
+        .form-group:nth-child(5) {
+            animation: fadeInUp 1s ease forwards 2.0s;
+        }
+
+        .form-group:nth-child(6) {
+            animation: fadeInUp 1s ease forwards 2.1s;
+        }
 
         .form-group label {
             display: block;
@@ -332,8 +355,8 @@
             background: rgba(255, 255, 255, 0.07);
         }
 
-        .form-input:focus + label,
-        .form-input:not(:placeholder-shown) + label {
+        .form-input:focus+label,
+        .form-input:not(:placeholder-shown)+label {
             top: 0;
             left: 12px;
             transform: translateY(-50%);
@@ -452,8 +475,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         @keyframes fadeInUp {
@@ -461,6 +489,7 @@
                 opacity: 0;
                 transform: translateY(30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -472,6 +501,7 @@
                 opacity: 0;
                 transform: translateY(-30px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -483,16 +513,20 @@
                 width: 95%;
                 max-width: 480px;
             }
+
             .signup-form {
                 padding: 2.5rem 2rem;
             }
+
             .form-row {
                 flex-direction: column;
                 gap: 0;
             }
+
             .signup-header h2 {
                 font-size: 1.8rem;
             }
+
             .brand-watermark {
                 font-size: 18vw;
             }
@@ -502,9 +536,11 @@
             .signup-form {
                 padding: 2rem 1.5rem;
             }
+
             .signup-header h2 {
                 font-size: 1.6rem;
             }
+
             .form-group {
                 margin-bottom: 1.5rem;
             }
@@ -526,7 +562,7 @@
         <div class="signup-container" id="signupContainer">
             <div class="signup-form">
                 <div class="veravia-logo-small">VERAVIA</div>
-                
+
                 <div class="signup-header">
                     <h2>Create Account</h2>
                     <p>Join our exclusive community</p>
@@ -545,47 +581,52 @@
                 <form method="POST" action="{{ route('register') }}" id="registerForm">
                     @csrf
                     <div class="form-group">
-                        <input type="text" id="name" name="name" class="form-input @error('name') is-invalid @enderror" 
-                               placeholder=" " value="{{ old('name') }}" required autofocus>
+                        <input type="text" id="name" name="name"
+                            class="form-input @error('name') is-invalid @enderror" placeholder=" "
+                            value="{{ old('name') }}" required autofocus>
                         <label for="name">Full Name</label>
                     </div>
 
                     <div class="form-group">
-                        <input type="email" id="email" name="email" class="form-input @error('email') is-invalid @enderror" 
-                               placeholder=" " value="{{ old('email') }}" required>
+                        <input type="email" id="email" name="email"
+                            class="form-input @error('email') is-invalid @enderror" placeholder=" "
+                            value="{{ old('email') }}" required>
                         <label for="email">Email Address</label>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <input type="password" id="password" name="password" class="form-input @error('password') is-invalid @enderror"
-                                   placeholder=" " required>
+                            <input type="password" id="password" name="password"
+                                class="form-input @error('password') is-invalid @enderror" placeholder=" " required>
                             <label for="password">Password</label>
                         </div>
 
                         <div class="form-group">
-                            <input type="password" id="password_confirmation" name="password_confirmation" class="form-input"
-                                   placeholder=" " required>
+                            <input type="password" id="password_confirmation" name="password_confirmation"
+                                class="form-input" placeholder=" " required>
                             <label for="password_confirmation">Confirm Password</label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <input type="text" id="phone_number" name="phone_number" class="form-input @error('phone_number') is-invalid @enderror" 
-                               placeholder=" " value="{{ old('phone_number') }}">
+                        <input type="text" id="phone_number" name="phone_number"
+                            class="form-input @error('phone_number') is-invalid @enderror" placeholder=" "
+                            value="{{ old('phone_number') }}">
                         <label for="phone_number">Phone Number (Optional)</label>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <input type="date" id="birthdate" name="birthdate" class="form-input @error('birthdate') is-invalid @enderror" 
-                                   placeholder=" " value="{{ old('birthdate') }}">
+                            <input type="date" id="birthdate" name="birthdate"
+                                class="form-input @error('birthdate') is-invalid @enderror" placeholder=" "
+                                value="{{ old('birthdate') }}">
                             <label for="birthdate">Birth Date (Optional)</label>
                         </div>
 
                         <div class="form-group">
-                            <input type="text" id="address" name="address" class="form-input @error('address') is-invalid @enderror" 
-                                   placeholder=" " value="{{ old('address') }}">
+                            <input type="text" id="address" name="address"
+                                class="form-input @error('address') is-invalid @enderror" placeholder=" "
+                                value="{{ old('address') }}">
                             <label for="address">Address (Optional)</label>
                         </div>
                     </div>
@@ -615,24 +656,24 @@
 
             // Floating particles effect
             const particlesContainer = document.getElementById('particles');
-            
+
             function createParticle() {
                 const particle = document.createElement('div');
                 particle.classList.add('particle');
-                
+
                 const size = Math.random() * 6 + 2;
                 particle.style.width = `${size}px`;
                 particle.style.height = `${size}px`;
-                
+
                 const posX = Math.random() * 100;
                 const posY = Math.random() * 100;
                 particle.style.left = `${posX}%`;
                 particle.style.top = `${posY}%`;
-                
+
                 particle.style.opacity = Math.random() * 0.1 + 0.05;
-                
+
                 particlesContainer.appendChild(particle);
-                
+
                 setTimeout(() => {
                     particle.style.opacity = '0';
                     setTimeout(() => {
@@ -640,16 +681,16 @@
                     }, 500);
                 }, 5000);
             }
-            
+
             setInterval(createParticle, 500);
-            
+
             for (let i = 0; i < 20; i++) {
                 setTimeout(createParticle, i * 200);
             }
 
             // 3D tilt effect
             const signupContainer = document.getElementById('signupContainer');
-            
+
             document.addEventListener('mousemove', function(e) {
                 const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
                 const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
@@ -662,19 +703,72 @@
 
             // Form handling
             const registerForm = document.getElementById('registerForm');
-            
+
             if (registerForm) {
                 registerForm.addEventListener('submit', function(e) {
                     const password = document.getElementById('password').value;
                     const passwordConfirmation = document.getElementById('password_confirmation').value;
-                    
+                });
+            }
+        });
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const registerForm = document.getElementById('registerForm');
+
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    const password = document.getElementById('password').value;
+                    const passwordConfirmation = document.getElementById('password_confirmation').value;
+
                     if (password !== passwordConfirmation) {
-                        e.preventDefault();
-                        alert('Passwords do not match!');
+                        e.preventDefault(); // stop form submit
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops!',
+                            text: 'Passwords do not match!',
+                            confirmButtonColor: '#d4af7a', // gold button
+                            background: '#0c0c0c',
+                            color: '#fff'
+                        });
                         return false;
                     }
                 });
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                position: 'top-end',
+                toast: true
+            });
+        </script>
+    @endif
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                confirmButtonColor: '#d4af7a',
+                timer: 3000,
+                timerProgressBar: true
+            });
+        </script>
+    @endif
+
+
 @endsection

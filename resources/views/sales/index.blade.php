@@ -46,6 +46,7 @@
                                         <i class="bi bi-eye"></i>
                                         <span>View</span>
                                     </a>
+
                                 </td>
                             </tr>
                         @empty

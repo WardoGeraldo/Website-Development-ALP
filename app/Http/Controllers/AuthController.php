@@ -102,15 +102,8 @@ class AuthController extends Controller
             'status_del'   => 0, // aktif
         ]);
 
-        // Login user
-        Auth::login($user);
-
-        // Simpan user ke session manual
-        $request->session()->regenerate();
-        session(['user' => $user]);
-
         // Redirect
-        return redirect()->route('login');
+        return redirect()->route('login')->with('success', 'Account created successfully!');
     }
 
 

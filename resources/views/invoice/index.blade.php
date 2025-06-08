@@ -4,7 +4,7 @@
     <div class="dashboard-container">
         <!-- Header Section -->
         <div class="dashboard-header">
-            <h1>Invoice #{{ $sales_id }}</h1>
+            <h1>Invoice #{{ $order->order_id }}</h1>
             @if (session('success'))
                 <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
                     {{ session('success') }}
@@ -29,10 +29,11 @@
                     </div>
                     <div class="data-body">
                         <div class="customer-info">
-                            <p><strong>Name:</strong> {{ $customer['name'] }}</p>
-                            <p><strong>Address:</strong> {{ $customer['address'] }}</p>
-                            <p><strong>Phone:</strong> {{ $customer['phone'] }}</p>
-                            <p><strong>Email:</strong> {{ $customer['email'] }}</p>
+                            <p><strong>Name:</strong> {{ $order->user->name }}</p>
+                            <p><strong>Address:</strong> {{ $order->user->address }}</p>
+                            <p><strong>Phone:</strong> {{ $order->user->phone_number }}</p>
+                            <p><strong>Email:</strong> {{ $order->user->email }}</p>
+
                         </div>
                     </div>
                 </div>
@@ -46,13 +47,15 @@
                     </div>
                     <div class="data-body">
                         <div class="payment-info">
-                            <p><strong>Payment Method:</strong> {{ $payment['payment_method'] }}</p>
-                            <p><strong>Status:</strong> 
-                                <span class="status-badge {{ $payment['payment_status'] == 'Paid' ? 'status-paid' : 'status-unpaid' }}">
-                                    {{ $payment['payment_status'] }}
+                            <p><strong>Payment Method:</strong> {{ $order->payment->payment_method }}</p>
+                            <p><strong>Status:</strong>
+                                <span
+                                    class="status-badge {{ $order->payment->payment_status == 'Paid' ? 'status-paid' : 'status-unpaid' }}">
+                                    {{ $order->payment->payment_status }}
                                 </span>
                             </p>
-                            <p><strong>Date:</strong> {{ $payment['payment_date'] }}</p>
+                            <p><strong>Date:</strong>
+                                {{ \Carbon\Carbon::parse($order->payment->payment_date)->format('d M Y H:i') }}</p>
                         </div>
                     </div>
                 </div>
@@ -78,15 +81,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($invoice as $i)
+                        @foreach ($order->orderDetails as $i)
                             <tr>
-                                <td>{{ $i['product_id'] }}</td>
-                                <td>{{ $i['name'] }}</td>
-                                <td>{{ $i['description'] }}</td>
-                                <td>{{ $i['size'] }}</td>
-                                <td>{{ $i['qty'] }}</td>
-                                <td>{{ $i['price'] }}</td>
-                                <td>{{ $i['total'] }}</td>
+                                <td>{{ $i->product_id }}</td>
+                                <td>{{ $i->product->name }}</td>
+                                <td>{{ $i->product->description }}</td>
+                                <td>{{ $i->product_size }}</td>
+                                <td>{{ $i->quantity }}</td>
+                                <td>Rp{{ number_format($i->price, 0, ',', '.') }}</td>
+                                <td>Rp{{ number_format($i->price * $i->quantity, 0, ',', '.') }}</td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -107,7 +110,12 @@
         document.addEventListener('DOMContentLoaded', function() {
             const dateDisplay = document.getElementById('current-date');
             const now = new Date();
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
             dateDisplay.textContent = now.toLocaleDateString('en-US', options);
         });
 
@@ -264,7 +272,8 @@
         }
 
         /* Customer & Payment Info */
-        .customer-info p, .payment-info p {
+        .customer-info p,
+        .payment-info p {
             margin-bottom: 0.75rem;
             font-size: 0.95rem;
             color: var(--text-color);

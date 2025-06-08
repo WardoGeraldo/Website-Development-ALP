@@ -1093,4 +1093,43 @@
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: '{{ session('success') }}',
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 7000,
+                timerProgressBar: true,
+                background: '#0c0c0c',
+                color: '#fff',
+            });
+        </script>
+    @endif
+
+    @if ($errors->any())
+        <script>
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops!',
+                html: `{!! implode('<br>', $errors->all()) !!}`,
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 7000,
+                timerProgressBar: true,
+                background: '#0c0c0c',
+                color: '#fff',
+            });
+        </script>
+    @endif
+
+
 @endsection
