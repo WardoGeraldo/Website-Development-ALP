@@ -18,9 +18,10 @@ class AdminController extends Controller
 
     public function userList()
     {
-        $users = User::all(); // Panggil semua user dari database
+        $users = User::where('status_del', 0)->get(); // Hanya user aktif
         return view('admin.user-list', compact('users'));
     }
+
 
 
     public function index()
@@ -344,6 +345,21 @@ class AdminController extends Controller
 
         // Return a view with user data
         return view('admin.user-details', compact('user'));
+    }
+
+    public function deleteUser($id)
+    {
+        try {
+            $user = User::where('user_id', $id)->firstOrFail();
+
+            $user->update([
+                'status_del' => 1
+            ]);
+
+            return redirect()->route('admin.userlist')->with('success', 'User deleted successfully!');
+        } catch (\Exception $e) {
+            return redirect()->route('admin.userlist')->with('error', 'Failed to delete user: ' . $e->getMessage());
+        }
     }
 
 

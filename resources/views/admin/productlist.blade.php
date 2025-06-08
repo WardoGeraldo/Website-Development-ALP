@@ -46,18 +46,25 @@
                                 {{ $totalStock }}
                             </td>
                             <td>
-                                <i class="bi bi-pencil action-icon" title="Edit"
-                                    onclick="location.href='{{ route('admin.product.edit', ['id' => $product['id']]) }}'"></i>
-                                <form action="{{ route('admin.product.delete', ['id' => $product['id']]) }}" method="POST"
-                                    style="display:inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link p-0 m-0 show-confirm">
-                                        <i class="bi bi-trash action-icon" title="Delete"></i>
-                                    </button>
+                                <div class="action-group">
+                                    <a href="{{ route('admin.product.edit', ['id' => $product['id']]) }}"
+                                        class="btn-action view">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
 
-                                </form>
+                                    <form action="{{ route('admin.product.delete', ['id' => $product['id']]) }}"
+                                        method="POST" class="delete-product-form">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-action delete">
+                                            <i class="bi bi-trash3"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
                             </td>
+
+
+
                         </tr>
                     @endforeach
                 </tbody>
@@ -283,6 +290,62 @@
             padding: 0 !important;
             margin: 0 !important;
         }
+
+        .btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 18px; /* 🔥 Fix padding sama View dan Delete */
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    white-space: nowrap; /* 🛡️ Prevent wrap */
+    min-width: 110px; /* 👈 Sama rata View & Delete */
+    height: 40px; /* Sama tinggi semua tombol */
+}
+
+.btn-action i {
+    font-size: 1.1rem;
+}
+
+/* View Button Style */
+.btn-action.view {
+    background-color: rgba(137, 108, 255, 0.1);
+    color: #896CFF;
+    border-color: transparent;
+}
+
+.btn-action.view:hover {
+    background-color: rgba(137, 108, 255, 0.2);
+    color: #5A3FD9;
+}
+
+/* Delete Button Style */
+.btn-action.delete {
+    background-color: #ffecec;
+    color: #e63946;
+    border: 2px solid #e63946;
+}
+
+.btn-action.delete:hover {
+    background-color: #ffcccc;
+    color: #b71c1c;
+    border-color: #b71c1c;
+}
+
+.action-group {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* Lebih longgar antar tombol */
+    justify-content: center;
+}
+
+
+
 
         @media (max-width: 768px) {
             .dashboard-header {

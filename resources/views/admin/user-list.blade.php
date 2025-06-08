@@ -5,7 +5,7 @@
         <!-- Header Section -->
         <div class="dashboard-header">
             <h1>Admin - Users List</h1>
-           
+
 
             <div class="header-controls">
                 <div class="date-display">
@@ -37,12 +37,27 @@
                                 <td>{{ $user->address }}</td>
                                 <td>{{ $user->phone_number }}</td>
                                 <td>{{ $user->email }}</td>
+
                                 <td>
                                     <a href="{{ route('admin.user.edit', ['id' => $user->user_id]) }}" class="action-btn">
                                         <i class="bi bi-eye"></i>
                                         <span>View</span>
                                     </a>
+
+                                    @if ($user->status_del == 0)
+                                        <form action="{{ route('admin.user.delete', ['id' => $user->user_id]) }}"
+                                            method="POST" style="display:inline;" class="delete-user-form">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="action-btn"
+                                                style="background-color: #ffecec; color: #e63946;">
+                                                <i class="bi bi-trash"></i>
+                                                <span>Delete</span>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </td>
+
                             </tr>
                         @endforeach
 
@@ -337,4 +352,27 @@
             });
         </script>
     @endif
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.querySelectorAll('.delete-user-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "User will be deleted!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection
