@@ -119,65 +119,50 @@
             dateDisplay.textContent = now.toLocaleDateString('en-US', options);
         });
 
-        // Theme management
-        const themeToggleBtn = document.getElementById('theme-toggle');
-
-        // Check for saved theme preference or use system preference
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
-
-        // Set initial theme
-        if (initialTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-        }
-
-        // Toggle theme
-        if (themeToggleBtn) {
-            themeToggleBtn.addEventListener('click', () => {
-                document.body.classList.toggle('dark-theme');
-                const isDark = document.body.classList.contains('dark-theme');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-            });
-        }
+        // No need for separate theme management since base.base handles it
     </script>
 
     <style>
         /* Base Styles with Dark Mode Support */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
+        /* Light mode variables (default) */
         :root {
-            --bg-color: #F8F9FD;
-            --text-color: #333;
-            --text-secondary: #777;
-            --border-color: rgba(0, 0, 0, 0.05);
-            --card-bg: #fff;
+            --bg-color: #f8f9fa;
+            --text-color: #212529;
+            --text-secondary: #6c757d;
+            --border-color: #dee2e6;
+            --card-bg: #ffffff;
             --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
             --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
             --accent-color: #896CFF;
             --accent-light: rgba(137, 108, 255, 0.1);
-            --table-header-bg: rgba(0, 0, 0, 0.02);
-            --table-bg: #fff;
+            --table-header-bg: #f8f9fa;
+            --table-bg: #ffffff;
             --table-row-hover: rgba(0, 0, 0, 0.02);
             --success-color: #28a745;
             --danger-color: #dc3545;
+            --hover-bg: rgba(0, 0, 0, 0.05);
         }
 
-        .dark-theme {
+        /* Dark mode variables */
+        :root.dark-mode,
+        body.dark-mode {
             --bg-color: #121212;
-            --text-color: #f1f1f1;
-            --text-secondary: #c5c5c5;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #f3f4f6;
+            --text-secondary: #9ca3af;
+            --border-color: #2d2d2d;
             --card-bg: #1e1e1e;
-            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            --card-hover-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
             --accent-color: #a58bff;
             --accent-light: rgba(137, 108, 255, 0.2);
-            --table-header-bg: rgba(255, 255, 255, 0.05);
+            --table-header-bg: #2d2d2d;
             --table-bg: #1e1e1e;
             --table-row-hover: rgba(255, 255, 255, 0.05);
             --success-color: #5cb85c;
             --danger-color: #d9534f;
+            --hover-bg: rgba(255, 255, 255, 0.05);
         }
 
         * {
@@ -186,17 +171,47 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            transition: background 0.3s ease, color 0.3s ease;
+        html {
+            background-color: var(--bg-color) !important;
+            transition: background-color 0.3s ease;
         }
 
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--bg-color) !important;
+            color: var(--text-color) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        /* Force Bootstrap container backgrounds to follow theme */
+        .container,
+        .container-fluid,
+        .row,
+        .col,
+        .col-md-6,
+        [class*="col-"] {
+            background-color: transparent !important;
+        }
+
+        /* Main wrapper to ensure full background coverage */
         .dashboard-container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 2rem;
+            background-color: var(--bg-color) !important;
+            color: var(--text-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+            min-height: 100vh;
+        }
+
+        /* Override any potential Bootstrap background utilities */
+        .bg-light {
+            background-color: var(--bg-color) !important;
+        }
+
+        .bg-dark {
+            background-color: var(--bg-color) !important;
         }
 
         /* Header Styles */
@@ -207,6 +222,7 @@
             margin-bottom: 2rem;
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
+            background-color: transparent;
         }
 
         .dashboard-header h1 {
@@ -243,7 +259,7 @@
 
         /* Cards & Containers */
         .data-card {
-            background: var(--card-bg);
+            background: var(--card-bg) !important;
             border-radius: 12px;
             padding: 1.5rem;
             box-shadow: var(--card-shadow);
@@ -263,6 +279,7 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
+            background-color: transparent;
         }
 
         .data-header h2 {
@@ -271,7 +288,16 @@
             color: var(--text-color);
         }
 
+        .data-body {
+            background-color: transparent;
+        }
+
         /* Customer & Payment Info */
+        .customer-info,
+        .payment-info {
+            background-color: transparent;
+        }
+
         .customer-info p,
         .payment-info p {
             margin-bottom: 0.75rem;
@@ -300,13 +326,14 @@
         .luxury-table {
             width: 100%;
             border-collapse: collapse;
-            background-color: var(--table-bg);
+            background-color: var(--table-bg) !important;
             border-radius: 8px;
             overflow: hidden;
+            transition: background-color 0.3s ease;
         }
 
         .luxury-table thead tr {
-            background-color: var(--table-header-bg);
+            background-color: var(--table-header-bg) !important;
         }
 
         .luxury-table th {
@@ -315,6 +342,8 @@
             font-size: 0.9rem;
             font-weight: 500;
             color: var(--text-secondary);
+            background-color: var(--table-header-bg) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .luxury-table td {
@@ -322,25 +351,36 @@
             font-size: 0.95rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-color);
+            background-color: var(--table-bg) !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .luxury-table tbody tr:hover {
-            background-color: var(--table-row-hover);
+            background-color: var(--table-row-hover) !important;
+        }
+
+        .luxury-table tbody tr:hover td {
+            background-color: var(--table-row-hover) !important;
         }
 
         .luxury-table tbody tr:last-child td {
             border-bottom: none;
         }
 
-        /* Glassmorphism Cards */
-        .data-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+        /* Alert styling for theme compatibility */
+        .alert-success {
+            background-color: rgba(40, 167, 69, 0.1) !important;
+            border-color: var(--success-color);
+            color: var(--success-color);
         }
 
-        .dark-theme .data-card {
-            background: rgba(30, 30, 30, 0.2);
+        /* Dark theme button styling if it exists */
+        .btn-close {
+            filter: var(--text-color) == #f3f4f6 ? invert(1) : invert(0);
+        }
+
+        body.dark-mode .btn-close {
+            filter: invert(1);
         }
 
         /* Responsive Adjustments */
@@ -360,6 +400,18 @@
                 display: block;
                 overflow-x: auto;
             }
+
+            .dashboard-container {
+                padding: 1rem;
+            }
+        }
+
+        /* Ensure page wrapper background */
+        .page-wrapper,
+        .main-content,
+        .content-wrapper {
+            background-color: var(--bg-color) !important;
+            transition: background-color 0.3s ease;
         }
     </style>
 @endsection
