@@ -536,7 +536,7 @@
                         class="form-control form-control-sm {{ $errors->has('stock_error_' . $item->cart_id) ? 'is-invalid' : '' }}"
                         style="width: 70px;">
 
-                    <button type="submit" class="btn btn-sm btn-light text-dark btn-update px-2">✔</button>
+                    <button type="submit" class="btn btn-sm btn-light text-white btn-update px-2">✔</button>
                     <a href="{{ route('cart.remove', $item->cart_id) }}" class="btn btn-sm btn-danger btn-remove px-2">×</a>
                 </div>
 

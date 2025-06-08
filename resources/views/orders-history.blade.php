@@ -41,6 +41,14 @@
         margin-top: 1rem;
     }
 
+    .btn-shipment {
+        color: black;
+    }
+
+    .dark-mode .btn-shipment{
+        color: #f0f0f0;
+    }
+
     .dark-mode .history-container{
         background-color: #121212;
         color: #f0f0f0;
@@ -74,15 +82,15 @@
 
                 @if($order->promo)
                     <div class="total" style="color: green;">
-                        Promo ({{ $order->promo->code }}): -Rp{{ number_format($order->promo->discount * ($order->total_price + $order->promo->discount * $order->total_price), 0, ',', '.') }}
+                        Promo ({{ $order->promo->code }})
                     </div>
                 @endif
 
                 <div class="total" style="font-size: 1.2rem;">
                     Final Total: Rp{{ number_format($order->total_price, 0, ',', '.') }}
                 </div>
-                <div class="total" style="text-align: left; margin-top: 1rem;">
-                    <a href="{{ route('shipment.show', ['order_id' => $order->order_id]) }}" class="btn btn-outline-dark btn-sm">
+                <div class="shipment-detail" style="text-align: left; margin-top: 1rem;">
+                    <a href="{{ route('shipment.show', ['order_id' => $order->order_id]) }}" class="btn-shipment btn-outline-dark btn-sm">
                         View Shipment Details
                     </a>
                 </div>

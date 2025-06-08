@@ -162,6 +162,12 @@
         background: #1a1a1a;
     }
     
+    .dark-mode .ship-add{
+        color: white;
+    }
+    .dark-mode .currency{
+        color: white;
+    }
     .dark-mode .checkout-main,
     .dark-mode .checkout-sidebar {
         background: #2d2d2d;
@@ -174,6 +180,11 @@
         color: white;
     }
     
+    .dark-mode .form-label {
+        color: white;
+    }
+    
+
     .dark-mode .form-input {
         background: #3a3a3a;
         border-color: #4a4a4a;
@@ -189,6 +200,12 @@
         background: #3a3a3a;
     }
     
+    .dark-mode .item-meta {
+        color: white;
+    }
+    .dark-mode .item-price {
+        color: white;
+    }
     .checkout-btn {
         width: 100%;
         background: #007bff;
@@ -296,7 +313,7 @@
                 
                 <div class="summary-row">
                     <span>Shipping</span>
-                    <span style="color: #666;" id="shipping-address">Enter shipping address</span>
+                    <span id="shipping-address">Enter shipping address</span>
                 </div>
                 
                 <div class="summary-row total">
@@ -320,10 +337,10 @@ function updateShippingAddress() {
     
     if (address.trim() !== '') {
         shippingElement.textContent = address;
-        shippingElement.style.color = '#1a1a1a';
+        // shippingElement.style.color = '#1a1a1a';
     } else {
         shippingElement.textContent = 'Enter shipping address';
-        shippingElement.style.color = '#666';
+        // shippingElement.style.color = '#666';
     }
 }
 

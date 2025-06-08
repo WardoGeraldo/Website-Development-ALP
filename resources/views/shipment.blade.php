@@ -94,6 +94,17 @@
         font-weight: bold;
     }
 
+    body.dark-mode {
+        background-color: #121212;
+        color: #f5f5f5;
+    }
+
+    .dark-mode .shipment-container{
+        background-color: black;
+    }
+    .dark-mode .shipment-progress{
+        color: white;
+    }
 </style>
 
 <div class="shipment-container">
