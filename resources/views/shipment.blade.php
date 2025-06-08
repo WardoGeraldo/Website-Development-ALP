@@ -156,7 +156,7 @@
         <h4>Products</h4>
         @foreach($order->orderDetails as $item)
         <div class="product-item">
-            <div>{{ $item->product->product_name }} (x{{ $item->quantity }})</div>
+            <div>{{ $item->product->name }} (x{{ $item->quantity }})</div>
             <div>Rp{{ number_format($item->price * $item->quantity, 0, ',', '.') }}</div>
         </div>
         @endforeach

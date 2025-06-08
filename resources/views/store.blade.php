@@ -309,6 +309,7 @@
             z-index: 1;
             font-weight: 500;
             min-width: 80px;
+            text-decoration: none;
         }
 
         .btn-cart::before {
@@ -461,8 +462,9 @@
                         <h4>{{ $product['name'] }}</h4>
                         <div class="product-price-cart">
                             <span>Rp{{ number_format($product['price'], 0, ',', '.') }}</span>
-                            <button class="btn-cart"
-                                onclick="addToCart('{{ $product['id'] }}', '{{ $product['name'] }}')">Add to Cart</button>
+                            <a href="{{ route('product.show', ['id' => $product['id']]) }}" class="btn-cart">
+                                Add to Cart
+                            </a>
                         </div>
                     </div>
                 </div>
