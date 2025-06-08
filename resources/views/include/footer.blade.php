@@ -85,6 +85,7 @@
 </style>
 
 
+@if (session('user_role') !== 'admin')
 <footer class="pt-5 border-top">
     <div class="container">
         <div class="row">
@@ -112,13 +113,12 @@
                 </ul>
             </div>
 
-
             <!-- Ikuti Kami -->
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Ikuti Kami</h5>
                 <div class="d-flex gap-3">
                     <a href="https://www.facebook.com/lilianlamano" target="_blank" rel="noopener"><i class="fab fa-facebook fa-lg"></i></a>
-                    <a href="https://www.instagram.com/veravia.id?utm_source=ig_web_button_share_sheet&igsh=MW1qM3Q1NW1iNzExdw==" target="_blank" rel="noopener"><i class="fab fa-instagram fa-lg"></i></a>
+                    <a href="https://www.instagram.com/veravia.id" target="_blank" rel="noopener"><i class="fab fa-instagram fa-lg"></i></a>
                     <a href="https://www.youtube.com/watch?v=xvFZjo5PgG0" target="_blank" rel="noopener"><i class="fab fa-youtube fa-lg"></i></a>
                 </div>
             </div>
@@ -131,3 +131,4 @@
         </div>
     </div>
 </footer>
+@endif

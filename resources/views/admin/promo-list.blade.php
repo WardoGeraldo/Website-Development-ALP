@@ -5,13 +5,6 @@
         <!-- Header Section -->
         <div class="dashboard-header">
             <h1>Promo List</h1>
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
-
             <div class="header-controls">
                 <div class="date-display">
                     <span id="current-date"></span>
@@ -37,7 +30,6 @@
                     <thead>
                         <tr>
                             <th>Promo Code</th>
-                            <th>Description</th>
                             <th>Discount (%)</th>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -47,13 +39,13 @@
                     <tbody>
                         @foreach ($promos as $promo)
                             <tr>
-                                <td>{{ $promo['promo_code'] }}</td>
-                                <td>{{ $promo['description'] }}</td>
-                                <td>{{ $promo['discount'] }}%</td>
-                                <td>{{ $promo['start_date'] }}</td>
-                                <td>{{ $promo['end_date'] }}</td>
+                                <td>{{ $promo->code }}</td>
+                                <td>{{ $promo->discount_amount }}%</td>
+                                <td>{{ $promo->start_date->format('Y-m-d') }}</td>
+                                <td>{{ $promo->end_date->format('Y-m-d') }}</td>
                                 <td>
-                                    <a href="{{ route('admin.promo.details', ['id' => $promo['id']]) }}" class="action-btn">
+                                    <a href="{{ route('admin.promo.details', ['id' => $promo->promo_id]) }}"
+                                        class="action-btn">
                                         <i class="bi bi-eye"></i>
                                         <span>View</span>
                                     </a>
@@ -367,31 +359,37 @@
         // Set current date and handle dark mode
         document.addEventListener('DOMContentLoaded', function() {
             // Set current date
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
             const currentDate = new Date().toLocaleDateString(undefined, options);
             const dateElement = document.getElementById('current-date');
             if (dateElement) {
                 dateElement.textContent = currentDate;
             }
-            
+
             // Check if dark mode is already enabled from base template
-            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled' || document.body.classList.contains('dark-mode');
-            
+            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled' || document.body.classList
+                .contains('dark-mode');
+
             if (isDarkModeEnabled) {
                 document.body.classList.add('dark-mode');
             }
 
             // Auto-dismiss alert after 5 seconds
             @if (session('success'))
-            setTimeout(function() {
-                const alert = document.querySelector('.alert');
-                if (alert) {
-                    alert.classList.remove('show');
-                    setTimeout(function() {
-                        alert.style.display = 'none';
-                    }, 500);
-                }
-            }, 5000);
+                setTimeout(function() {
+                    const alert = document.querySelector('.alert');
+                    if (alert) {
+                        alert.classList.remove('show');
+                        setTimeout(function() {
+                            alert.style.display = 'none';
+                        }, 500);
+                    }
+                }, 5000);
             @endif
 
             // Handle manual alert dismissal
@@ -409,4 +407,23 @@
             });
         });
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                toast: true,
+                position: 'top-end',
+                icon: 'success',
+                title: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                }
+            });
+        </script>
+    @endif
 @endsection

@@ -95,7 +95,7 @@
             padding-bottom: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
-        
+
 
         .store-header h1 {
             font-size: 2rem;
@@ -257,7 +257,7 @@
             padding-left: 48px;
         }
 
-        .form-control.with-icon:focus + .input-icon {
+        .form-control.with-icon:focus+.input-icon {
             color: var(--accent-color);
         }
 
@@ -445,8 +445,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* Responsive Design */
@@ -526,7 +531,7 @@
         <form action="{{ route('admin.product.store') }}" method="POST" enctype="multipart/form-data" class="product-form"
             data-aos="fade-up" id="productForm">
             @csrf
-            
+
             <!-- Basic Information Section -->
             <div class="form-section" data-aos="fade-right" data-aos-delay="200">
                 <div class="form-section-title">
@@ -540,7 +545,7 @@
                         Product Name
                     </label>
                     <div class="input-group">
-                        <input type="text" name="name" id="name" class="form-control with-icon" 
+                        <input type="text" name="name" id="name" class="form-control with-icon"
                             placeholder="Enter product name..." required>
                         <i class="bi bi-tag input-icon"></i>
                     </div>
@@ -554,10 +559,11 @@
                                 Price
                             </label>
                             <div class="input-group">
-                                <input type="number" name="price" id="price" class="form-control with-icon" 
+                                <input type="number" name="price" id="price" class="form-control with-icon"
                                     placeholder="Enter price..." required>
-                                <i class="bi bi-currency-dollar input-icon"></i>
+                                <span class="input-icon" style="font-weight: bold; color: #555; font-size: 1rem;">Rp</span>
                             </div>
+
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -581,8 +587,8 @@
                         <i class="bi bi-card-text"></i>
                         Description
                     </label>
-                    <textarea name="description" id="description" class="form-control" 
-                        placeholder="Enter product description..." rows="4"></textarea>
+                    <textarea name="description" id="description" class="form-control" placeholder="Enter product description..."
+                        rows="4"></textarea>
                 </div>
             </div>
 
@@ -604,7 +610,7 @@
                                 <i class="bi bi-cloud-upload"></i>
                             </div>
                             <div class="file-upload-text">Click here to upload images</div>
-                            <div class="file-upload-subtext">PNG, JPG, JPEG • Maximum 4 images</div>
+                            <div class="file-upload-subtext">PNG, JPG, JPEG • 4 images</div>
                         </div>
                         <input type="file" name="images[]" id="images" accept="image/*" multiple required>
                     </div>
@@ -673,16 +679,18 @@
         function showPreviews(files) {
             previewContainer.innerHTML = '';
 
-            if (files.length > maxFiles) {
+            // Cek kalau bukan tepat 4 file
+            if (files.length !== 4) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Too Many Files!',
-                    text: `You can only upload up to ${maxFiles} images.`,
+                    title: 'Upload Exactly 4 Images!',
+                    text: 'Please upload exactly 4 images to continue.',
                     confirmButtonColor: '#5a3fd9',
                     background: 'var(--card-bg)',
                     color: 'var(--text-color)'
                 });
-                fileInput.value = '';
+                fileInput.value = ''; // Reset file input
+                previewContainer.style.display = 'none'; // Hide preview
                 return;
             }
 
@@ -704,6 +712,7 @@
                 reader.readAsDataURL(file);
             });
         }
+
 
         fileInput.addEventListener('change', function(event) {
             showPreviews(event.target.files);
