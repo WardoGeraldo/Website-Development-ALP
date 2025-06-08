@@ -877,7 +877,7 @@
                     <div class="card-body d-flex flex-column justify-content-between">
                         <h5 class="card-title">{{ $product['name'] }}</h5>
                         <p class="product-price mb-2">Rp {{ number_format($product['price'], 0, ',', '.') }}</p>
-                        <a href="{{ route('detail.bestSeller', $product['id']) }}" class="btn btn-outline-light mt-auto rounded-pill">LIHAT DETAIL</a>
+                        <a href="{{ route('product.show', ['id' => $product['id']]) }}" class="btn btn-outline-light mt-auto rounded-pill">LIHAT DETAIL</a>
                     </div>
                 </div>
             </div>

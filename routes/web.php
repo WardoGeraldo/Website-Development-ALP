@@ -30,7 +30,6 @@ Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/home', [HomeController::class, 'show']);
 Route::get('/store', [ProductController::class, 'index'])->name('store.show');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
-Route::get('/best-seller/{id}', [ProductController::class, 'showBestSeller'])->name('detail.bestSeller');
 Route::get('/size-chart', fn() => view('size-chart'))->name('size.chart');
 Route::get('/support', [SupportController::class, 'show'])->name('support.show');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.show');

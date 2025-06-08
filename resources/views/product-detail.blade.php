@@ -139,8 +139,8 @@
 <div class="container py-5 position-relative">
 
     <!-- Back Button -->
-    <div class="back-button-top" onclick="window.location.href='{{ route('store.show') }}'">
-        ← Back To Store
+    <div class="back-button-top" onclick="window.location.href='{{ url()->previous() }}'">
+        ← Go Back
     </div>
 
     <div class="product-details" data-aos="fade-up">

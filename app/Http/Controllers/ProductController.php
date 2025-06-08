@@ -105,7 +105,7 @@ class ProductController extends Controller
                 'description' => $product->description,
                 'category' => $this->mapCategoryIdToName($product->category_id),
                 'image' => $this->getFirstImage($product->product_id),
-                'sizes' => ['XS', 'S', 'M', 'L', 'XL', 'XXL'],
+                'sizes' => ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'One Size'],
             ];
         });
 
