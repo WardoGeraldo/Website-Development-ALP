@@ -379,7 +379,7 @@ class CartController extends Controller
                 'order_id' => $order->order_id,
                 'transaction_id' => null, // Will be updated by callback
                 'payment_type' => null,
-                'transaction_status' => 'pending',
+                'transaction_status' => 'paid',
                 'amount' => $finalTotal,
                 'payment_date' => null,
                 'va_number' => null,
@@ -387,6 +387,7 @@ class CartController extends Controller
                 'pdf_url' => null,
             ]);
 
+            // dd($snap);
             // 6. Redirect to Midtrans
             return redirect()->away($snap->redirect_url);
         

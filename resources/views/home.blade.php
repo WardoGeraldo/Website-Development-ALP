@@ -893,7 +893,7 @@
         <div class="row align-items-center">
             <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1200">
                 <div id="about-image" class="about-image">
-                    <img src="fotoBaju.jpg" alt="About Veravia">
+                    <img src="fotoBackgroundHome1.jpg" alt="About Veravia">
                 </div>
             </div>
             <div id="about-veravia" class="col-lg-5 offset-lg-1" data-aos="fade-left" data-aos-duration="1200" data-aos-delay="200">
@@ -911,7 +911,7 @@
 <!-- CTA Banner -->
 <div class="container" data-aos="zoom-in" data-aos-duration="1200">
     <div class="promo-banner">
-        <img src="fotoBaju.jpg" alt="Promo Veravia">
+        <img src="fotoBackgroundHome2.jpg" alt="Promo Veravia">
         <div class="promo-overlay">
             <div class="promo-content">
                 <h2 class="promo-title">Diskon Spesial Musim Ini</h2>
@@ -925,16 +925,12 @@
 <!-- Logo Marquee -->
 <div class="logo-marquee">
     <div class="logo-container">
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 1"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 2"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 3"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 4"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 5"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 1"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 2"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 3"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 4"></div>
-        <div class="logo-item"><img src="fotoBaju.jpg" alt="Logo 5"></div>
+        <div class="logo-item"><img src="fotoLogo1.png" alt="Logo 1"></div>
+        <div class="logo-item"><img src="fotoLogo2.png" alt="Logo 2"></div>
+        <div class="logo-item"><img src="fotoLogo3.png" alt="Logo 3"></div>
+        <div class="logo-item"><img src="fotoLogo4.png" alt="Logo 4"></div>
+        <div class="logo-item"><img src="fotoLogo5.png" alt="Logo 5"></div>
+        <div class="logo-item"><img src="fotoLogo6.png" alt="Logo 6"></div>
     </div>
 </div>
 
