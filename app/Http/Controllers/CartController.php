@@ -333,6 +333,7 @@ class CartController extends Controller
             'zip_code' => $request->input('zip_code'),
             'phone' => $request->input('phone'),
             'shipment_date' => now(),
+            'delivery_date' => now()->addDays(7), // <-- set delivery_date 7days after order
             'delivery_status' => 'processing',
         ]);
 
@@ -384,49 +385,6 @@ class CartController extends Controller
         }
     }
 
-
-    // public function storeShipment(Request $request){
-
-    //     $validator = Validator::make($request->all(), [
-    //     'first_name' => 'nullable|string|max:255',
-    //     'last_name' => 'nullable|string|max:255',
-    //     'address_line1' => 'required|string|max:255',
-    //     'address_line2' => 'nullable|string|max:255',
-    //     'city' => 'required|string|max:255',
-    //     'zip_code' => 'required|string|max:20',
-    //     'phone' => 'required|string|max:20',
-    //     'shipment_date' => 'required|date',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return back()->withErrors($validator)->withInput();
-    //     }
-
-    //     $userId = Auth::id();
-
-    //     // Get the latest order for the user (ensure this logic matches your real flow)
-    //     $order = Order::where('user_id', $userId)->latest()->first();
-
-    //     if (!$order) {
-    //         return back()->with('error', 'Order not found. Please try again.');
-    //     }
-
-    //     // Create the shipment
-    //     Shipment::create([
-    //         'order_id' => $order->order_id,
-    //         'first_name' => $request->input('first_name'),
-    //         'last_name' => $request->input('last_name'),
-    //         'address_line1' => $request->input('address_line1'),
-    //         'address_line2' => $request->input('address_line2'),
-    //         'city' => $request->input('city'),
-    //         'zip_code' => $request->input('zip_code'),
-    //         'phone' => $request->input('phone'),
-    //         'shipment_date' => $request->input('shipment_date'),
-    //     ]);
-
-    //     return redirect()->route('order.history')->with('success', 'Shipment details saved successfully!');
-    // }
-
     public function orderHistory()
     {
         $user = Auth::user();
@@ -444,5 +402,10 @@ class CartController extends Controller
             ->get();
 
             return view('orders-history', compact('orders'));
+    }
+    public function showShipment($order_id)
+    {
+        $order = Order::with(['shipment', 'orderDetails.product'])->findOrFail($order_id);
+        return view('shipment', compact('order'));
     }
 }

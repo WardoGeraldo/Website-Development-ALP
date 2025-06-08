@@ -70,7 +70,8 @@ Route::middleware('manual_auth')->group(function () {
         Route::post('/checkout/process', [CartController::class, 'processCheckout'])->name('cart.processCheckout');
         // Route::get('/midtrans/notification', [CartController::class, 'handleNotification']);
         Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle']);
-        Route::get('/order/shipment-detail', [ShipmentController::class, 'show'])->name('shipment.show');
+        // Route::get('/order/shipment-detail', [ShipmentController::class, 'show'])->name('shipment.show');
+        Route::get('/shipment/{order_id}', [CartController::class, 'showShipment'])->name('shipment.show');
 
     });
 
