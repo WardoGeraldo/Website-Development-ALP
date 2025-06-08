@@ -5,12 +5,7 @@
         <!-- Header Section -->
         <div class="dashboard-header">
             <h1>Admin - Users List</h1>
-            @if (session('success'))
-                <div class="alert alert-success alert-dismissible fade show mt-3" role="alert">
-                    {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            @endif
+           
 
             <div class="header-controls">
                 <div class="date-display">
@@ -327,4 +322,19 @@
             }
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    @if (session('success'))
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: '{{ session('success') }}',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                position: 'top-end',
+                toast: true,
+            });
+        </script>
+    @endif
 @endsection

@@ -104,6 +104,6 @@ Route::middleware('manual_auth')->group(function () {
         Route::get('/users', [AdminController::class, 'userList'])->name('admin.userlist');
         Route::get('/user/{id}', [AdminController::class, 'userDetails'])->name('admin.user.details');
         Route::get('/user/{id}/edit', [AdminController::class, 'editUser'])->name('admin.user.edit');
-        Route::post('/user/{id}/update', [AdminController::class, 'updateUser'])->name('admin.user.update');
+        Route::put('/user/{id}/update', [AdminController::class, 'updateUser'])->name('admin.user.update');
     });
 });

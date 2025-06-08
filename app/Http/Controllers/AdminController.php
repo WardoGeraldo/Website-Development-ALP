@@ -242,7 +242,7 @@ class AdminController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $user->user_id . ',user_id',
             'address' => 'nullable|string|max:255',
-            'phone_number' => 'nullable|string|max:20',
+            'phone' => 'nullable|string|max:20', // <--- ini harus `phone`, sesuai input
             'role' => 'required|in:admin,customer',
         ]);
 
@@ -252,12 +252,13 @@ class AdminController extends Controller
             'address' => $request->address,
             'phone_number' => $request->phone_number,
             'role' => $request->role,
+            // 'gender' => $request->gender, // <-- ini belum ada
+            'birthdate' => $request->dob, // <-- ini juga belum ada
         ]);
+
 
         return redirect()->route('admin.userlist')->with('success', 'User updated successfully!');
     }
-
-
 
     public function create()
     {

@@ -532,7 +532,7 @@
         <form action="{{ route('admin.user.update', ['id' => $user->user_id]) }}" method="POST" class="user-details"
             data-aos="fade-up" id="editUserForm">
             @csrf
-
+            @method('PUT')
             <!-- Personal Information Section -->
             <div class="form-section" data-aos="fade-right" data-aos-delay="200">
                 <div class="form-section-title">
@@ -570,7 +570,7 @@
                         Phone Number
                     </label>
                     <div class="input-group">
-                        <input type="text" name="phone" class="form-control with-icon"
+                        <input type="text" name="phone_number" class="form-control with-icon"
                             value="{{ $user->phone_number }}" placeholder="Enter phone number...">
                         <i class="bi bi-telephone input-icon"></i>
                     </div>
@@ -655,6 +655,7 @@
         </form>
     </div>
 
+
     <script>
         AOS.init({
             duration: 800,
@@ -713,4 +714,22 @@
             }
         });
     </script>
+
+    @if (session('success'))
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script>
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
+            });
+
+            Toast.fire({
+                icon: 'success',
+                title: '{{ session('success') }}'
+            });
+        </script>
+    @endif
 @endsection
