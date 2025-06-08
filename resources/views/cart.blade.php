@@ -704,5 +704,6 @@ document.getElementById('checkout-btn').addEventListener('click', function () {
         }
     });
 });
+
 </script>
 @endsection

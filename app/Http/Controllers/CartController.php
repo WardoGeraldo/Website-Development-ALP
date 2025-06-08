@@ -180,29 +180,41 @@ class CartController extends Controller
         $selectedIds = $request->input('selected', []);
         $userId = Auth::id();
 
-        // Fetch selected cart items from the database
-        $selectedItems = Cart::with('product')
+        $selectedItems = Cart::with('product.stock')
             ->where('user_id', $userId)
             ->whereIn('cart_id', $selectedIds)
             ->get();
 
-        // Convert to array format for checkout-detail
         $checkoutItems = [];
+        $errors = [];
+
         foreach ($selectedItems as $item) {
-            $checkoutItems[] = [
-                'product_id' => $item->product_id,
-                'name' => $item->product->name,
-                'price' => $item->product->price,
-                'quantity' => $item->product_qty,
-                'size' => $item->product_size,
-            ];
+            $availableStock = $item->product->stock
+                ->where('size', $item->product_size)
+                ->sum('quantity');
+
+            if ($item->product_qty > $availableStock) {
+                $errors["stock_error_{$item->cart_id}"] = "Stock not enough for {$item->product->name} size {$item->product_size} (available: {$availableStock}).";
+            } else {
+                $checkoutItems[] = [
+                    'product_id' => $item->product_id,
+                    'name' => $item->product->name,
+                    'price' => $item->product->price,
+                    'quantity' => $item->product_qty,
+                    'size' => $item->product_size,
+                ];
+            }
         }
 
-        // Store selected items in session
+        if (!empty($errors)) {
+            return redirect()->route('cart.index')->withErrors($errors);
+        }
+
         session()->put('checkout_items', $checkoutItems);
 
         return redirect()->route('cart.checkoutDetail');
     }
+
 
 
     public function applyPromo(Request $request)
