@@ -67,6 +67,7 @@ Route::middleware('manual_auth')->group(function () {
     // — Customer area —
     Route::middleware([CheckRoleMiddleWare::class . ':customer'])->group(function () {
         Route::get('/wishlist', [WishlistController::class, 'show'])->name('wishlist.show');
+        Route::post('/wishlist/add', [WishlistController::class, 'add'])->name('wishlist.add');
         Route::get('/order-history', [CartController::class, 'orderHistory'])->name('order.history');
 
         Route::get('/cart', [CartController::class, 'index'])->name('cart.index');

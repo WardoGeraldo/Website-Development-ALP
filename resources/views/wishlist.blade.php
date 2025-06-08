@@ -362,39 +362,57 @@
 
 
 <div class="wishlist-grid">
-    @php
-        $wishlist = [
-            ['id' => 1, 'name' => 'Oversized Tee', 'price' => 299000, 'image' => asset('fotoBaju.jpg')],
-            ['id' => 2, 'name' => 'Minimalist Hoodie', 'price' => 499000, 'image' => asset('fotoBaju.jpg')],
-            ['id' => 3, 'name' => 'Slim Fit Pants', 'price' => 399000, 'image' => asset('fotoBaju.jpg')],
-            ['id' => 4, 'name' => 'Monochrome Cap', 'price' => 149000, 'image' => asset('fotoBaju.jpg')],
-        ];
-    @endphp
+    @forelse($wishlistItems as $index => $item)
+        @php $product = $item->product; @endphp
 
-    @foreach($wishlist as $index => $item)
-    <div class="wishlist-card" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
-        <a href="{{ route('product.show', ['id' => $item['id']]) }}">
-            <img src="{{ $item['image'] }}" alt="{{ $item['name'] }}">
-        </a>
+        @if ($product)
+            <div class="wishlist-card" data-aos="fade-up" data-aos-delay="{{ $index * 100 }}">
+                <a href="{{ route('product.show', ['id' => $product->product_id]) }}">
+                    @php
+                        $imageDir = public_path("images/products/{$item->product->product_id}");
+                        $imageUrl = asset('fotoBaju.jpg'); // fallback
 
-        <div class="wishlist-info">
-            <a href="{{ route('product.show', ['id' => $item['id']]) }}" class="text-decoration-none text-dark">
-                <h4>{{ $item['name'] }}</h4>
-            </a>
-            <span>{{ number_format($item['price'], 0, ',', '.') }}</span>
-            <div class="wishlist-meta">
-                <div><strong>Size:</strong> M</div>
+                        if (File::exists($imageDir)) {
+                            $files = File::files($imageDir);
+                            $image = collect($files)->first(function ($file) {
+                                return in_array(strtolower($file->getExtension()), ['jpg', 'jpeg', 'png', 'webp']);
+                            });
+
+                            if ($image) {
+                                $imageUrl = asset("images/products/{$item->product->product_id}/" . $image->getFilename());
+                            }
+                        }
+                    @endphp
+                    <img src="{{ $imageUrl }}" alt="{{ $item->product->name }}" style="width: 100px;">
+                </a>
+
+                <div class="wishlist-info">
+                    <a href="{{ route('product.show', ['id' => $product->product_id]) }}" class="text-decoration-none text-dark">
+                        <h4>{{ $product->name ?? 'Unnamed Product' }}</h4>
+                    </a>
+                    <span>Rp{{ number_format($product->price, 0, ',', '.') }}</span>
+
+                    
+                </div>
+
+                <div class="wishlist-actions">
+                    <a href="{{ route('product.show', ['id' => $product->product_id]) }}" class="text-decoration-none text-dark">
+                        <button class="btn-add-cart" >Add to Cart</button>
+                    </a>
+                    {{-- <form action="{{ route('wishlist.remove') }}" method="POST" class="d-inline">
+                        @csrf
+                        @method('DELETE')
+                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <button type="submit" class="btn-remove">&times;</button>
+                    </form> --}}
+                </div>
             </div>
-        </div>
-
-        <div class="wishlist-actions">
-            <button class="btn-add-cart" onclick="addToCart('{{ $item['id'] }}', '{{ $item['name'] }}')">Add to Cart</button>
-            <button class="btn-remove" onclick="removeFromWishlist('{{ $item['id'] }}', '{{ $item['name'] }}')">&times;</button>
-        </div>
-    </div>
-    @endforeach
-
+        @endif
+    @empty
+        <p class="text-center w-100">Your wishlist is empty.</p>
+    @endforelse
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 <script>

@@ -198,9 +198,13 @@
                 <button type="submit">Add to Cart</button>
             </form>
 
-            <span class="wishlist-button" onclick="alert('Added to wishlist')">
-                Add to Wishlist <i class="far fa-heart"></i>
-            </span>
+            <form action="{{ route('wishlist.add') }}" method="POST">
+                @csrf
+                <input type="hidden" name="product_id" value="{{ $product['product_id'] }}">
+                <button type="submit" class="wishlist-button">
+                    Add to Wishlist <i class="far fa-heart"></i>
+                </button>
+            </form>
         </div>
     </div>
 </div>
