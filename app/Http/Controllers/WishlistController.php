@@ -46,4 +46,18 @@ class WishlistController extends Controller
         // dd($wishlistItems);
         return view('wishlist', compact('wishlistItems'));    
     }
+
+    public function remove(Request $request)
+    {
+        $userId = Auth::id();
+            logger()->info('Trying to remove from wishlist', [
+            'user_id' => $userId,
+            'product_id' => $request->product_id
+        ]);
+        Wishlist::where('user_id', $userId)
+            ->where('product_id', $request->product_id)
+            ->delete();
+
+        return redirect()->route('wishlist.show')->with('success', 'Product removed from wishlist.');
+    }
 }

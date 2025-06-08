@@ -399,12 +399,12 @@
                     <a href="{{ route('product.show', ['id' => $product->product_id]) }}" class="text-decoration-none text-dark">
                         <button class="btn-add-cart" >Add to Cart</button>
                     </a>
-                    {{-- <form action="{{ route('wishlist.remove') }}" method="POST" class="d-inline">
+                    <form action="{{ route('wishlist.remove') }}" method="POST" class="d-inline">
                         @csrf
                         @method('DELETE')
-                        <input type="hidden" name="product_id" value="{{ $product->id }}">
+                        <input type="hidden" name="product_id" value="{{ $product->product_id }}">
                         <button type="submit" class="btn-remove">&times;</button>
-                    </form> --}}
+                    </form>
                 </div>
             </div>
         @endif
