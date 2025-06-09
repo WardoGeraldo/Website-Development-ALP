@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class ProductController extends Controller
@@ -30,24 +31,35 @@ class ProductController extends Controller
     public function show($id)
     {
         $product = Product::findOrFail($id);
-
         $images = $this->getAllImages($id);
+
+        // Check if the product is already in the wishlist
+        $userId = Auth::id();
+        $alreadyInWishlist = false;
+
+        if ($userId) {
+            $alreadyInWishlist = DB::table('wishlists')
+                ->where('user_id', $userId)
+                ->where('product_id', $id)
+                ->exists();
+        }
 
         return view('product-detail', [
             'product' => [
-                'product_id' => $product->product_id, // supaya product id nyambung
+                'product_id' => $product->product_id,
                 'name' => $product->name,
                 'description' => $product->description,
                 'price' => $product->price,
                 'sizes' => DB::table('product_stocks')
-                ->where('product_id', $id)
-                ->where('quantity', '>', 0)
-                ->pluck('size')
-                ->unique()
-                ->values()
-                ->toArray(),
+                    ->where('product_id', $id)
+                    ->where('quantity', '>', 0)
+                    ->pluck('size')
+                    ->unique()
+                    ->values()
+                    ->toArray(),
                 'images' => $images,
-            ]
+            ],
+            'alreadyInWishlist' => $alreadyInWishlist
         ]);
     }
 

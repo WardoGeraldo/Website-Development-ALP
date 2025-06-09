@@ -113,8 +113,7 @@
 
         <!-- Collapsible Content -->
         <div class="collapse navbar-collapse mt-3 mt-lg-0" id="navbarMain">
-            <!-- Search Bar -->
-            @if (session('user_role') === 'customer')
+            @if (session('user_role') === 'customer' && request()->routeIs('store.show'))
                 <form class="d-flex w-100 my-2 my-lg-0 search-wrapper" onsubmit="filterProductsBySearch(event)">
                     <input id="searchInput" class="form-control rounded-pill ps-3 me-2" type="search"
                         placeholder="Cari produk, tren, dan merek." aria-label="Search">

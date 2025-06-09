@@ -55,7 +55,7 @@ class CartController extends Controller
 
         // If total desired quantity exceeds available stock
         if ($totalQty > $availableStock) {
-            return back()->with('error', 'Insufficient stock available for this size. Only ' . $availableStock . ' left.');
+            return back()->with('error', 'Insufficient stock available size ' . $size .  ' Only ' . $availableStock . ' left.');
         }
 
         // Save or update cart

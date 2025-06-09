@@ -670,7 +670,8 @@
 
     .logo-container {
         display: flex;
-        animation: scroll-left 20s linear infinite;
+        width: max-content;
+        animation: scroll-left 30s linear infinite;
     }
 
     .logo-item {
@@ -925,17 +926,15 @@
 <!-- Logo Marquee -->
 <div class="logo-marquee">
     <div class="logo-container">
+    @for ($i = 0; $i < 2; $i++)
         <div class="logo-item"><img src="fotoLogo1.png" alt="Logo 1"></div>
         <div class="logo-item"><img src="fotoLogo2.png" alt="Logo 2"></div>
         <div class="logo-item"><img src="fotoLogo3.png" alt="Logo 3"></div>
-        <div class="logo-item"><img src="fotoLogo4.png" alt="Logo 4"></div>
-        <div class="logo-item"><img src="fotoLogo5.png" alt="Logo 5"></div>
         <div class="logo-item"><img src="fotoLogo6.png" alt="Logo 6"></div>
-        <div class="logo-item"><img src="fotoLogo7.png" alt="Logo 7"></div>
         <div class="logo-item"><img src="fotoLogo8.jpg" alt="Logo 8"></div>
-        <div class="logo-item"><img src="fotoLogo9.png" alt="Logo 9"></div>
-        <div class="logo-item"><img src="fotoLogo10.webp" alt="Logo 10"></div>
-    </div>
+    @endfor
+</div>
+
 </div>
 
 <!-- AOS JS -->

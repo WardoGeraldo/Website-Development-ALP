@@ -21,6 +21,41 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
+    .image-wrapper {
+        position: relative;
+        display: inline-block;
+    }
+
+    .image-wrapper img {
+        display: block;
+        width: 100%;
+        border-radius: 12px;
+    }
+
+    .image-buttons {
+        position: absolute;
+        bottom: 10px;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 15px;
+    }
+
+    .image-buttons button {
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        border: none;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .image-buttons button:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+
     .product-info {
         max-width: 500px;
     }
@@ -41,6 +76,10 @@
 
     .dark-mode .product-info .description {
         color: white;
+    }
+    .dark-mode .btn-add-cart {
+        background-color: white;
+        color: black;
     }
 
     .product-info .price {
@@ -145,17 +184,19 @@
 
     <div class="product-details" data-aos="fade-up">
         <div class="product-image" id="product-image-slider">
+        <div class="image-wrapper">
             <img id="mainImage"
                 src="{{ $product['images'][0] ?? asset('fotoBaju.jpg') }}"
                 alt="{{ $product['name'] }}"
                 class="img-fluid"
                 onerror="this.onerror=null; this.src='{{ asset('fotoBaju.jpg') }}';" />
             
-            <div style="margin-top: 10px; text-align: center;">
-                <button onclick="changeImage(-1)" style="margin-right: 10px;">← Prev</button>
-                <button onclick="changeImage(1)">Next →</button>
+            <div class="image-buttons">
+                <button onclick="changeImage(-1)">←</button>
+                <button onclick="changeImage(1)">→</button>
             </div>
         </div>
+    </div>
 
 
         <div class="product-info">
@@ -195,16 +236,20 @@
                     @if (session('success'))
                         <div class="text-green-600">{{ session('success') }}</div>
                     @endif
-                <button type="submit">Add to Cart</button>
+                <button class="btn-add-cart" type="submit">Add to Cart</button>
             </form>
 
-            <form action="{{ route('wishlist.add') }}" method="POST">
-                @csrf
-                <input type="hidden" name="product_id" value="{{ $product['product_id'] }}">
-                <button type="submit" class="wishlist-button">
-                    Add to Wishlist <i class="far fa-heart"></i>
-                </button>
-            </form>
+            @if ($alreadyInWishlist)
+                <div class="wishlist-button"><i class="far fa-heart"></i> Product is already in your wishlist</div>
+            @else
+                <form action="{{ route('wishlist.add') }}" method="POST">
+                    @csrf
+                    <input type="hidden" name="product_id" value="{{ $product['product_id'] }}">
+                    <button type="submit" class="wishlist-button">
+                        Add to Wishlist <i class="far fa-heart"></i>
+                    </button>
+                </form>
+            @endif
         </div>
     </div>
 </div>
