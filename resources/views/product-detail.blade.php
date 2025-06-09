@@ -178,7 +178,13 @@
 <div class="container py-5 position-relative">
 
     <!-- Back Button -->
-    <div class="back-button-top" onclick="window.location.href='{{ url()->previous() }}'">
+    @php
+    $previous = url()->previous();
+    $current = url()->current();
+    $fallback = route('store.show'); // or your product listing route
+    @endphp
+
+    <div class="back-button-top" onclick="window.location.href='{{ $previous !== $current ? $previous : $fallback }}'">
         ← Go Back
     </div>
 

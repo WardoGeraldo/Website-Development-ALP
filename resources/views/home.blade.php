@@ -928,7 +928,6 @@
     <div class="logo-container">
     @for ($i = 0; $i < 2; $i++)
         <div class="logo-item"><img src="fotoLogo1.png" alt="Logo 1"></div>
-        <div class="logo-item"><img src="fotoLogo2.png" alt="Logo 2"></div>
         <div class="logo-item"><img src="fotoLogo3.png" alt="Logo 3"></div>
         <div class="logo-item"><img src="fotoLogo6.png" alt="Logo 6"></div>
         <div class="logo-item"><img src="fotoLogo8.jpg" alt="Logo 8"></div>
