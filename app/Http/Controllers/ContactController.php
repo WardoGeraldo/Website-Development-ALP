@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\Contact; // <--- ini yang kamu tambahin
 
 class ContactController extends Controller
 {
@@ -11,24 +12,24 @@ class ContactController extends Controller
      */
     public function index()
     {
-        // resources/views/contact.blade.php
         return view('contact');
-    }   // <----- tutup method index
+    }
 
     /**
      * POST /contact
      */
     public function send(Request $request)
-    {
-        $data = $request->validate([
-            'name'    => 'required|string|max:255',
-            'email'   => 'required|email',
-            'message' => 'required|string',
-        ]);
+{
+    $data = $request->validate([
+        'name'    => 'required|string|max:255',
+        'email'   => 'required|email',
+        'phone'   => 'nullable|string|max:20', // phone optional
+        'message' => 'required|string',
+    ]);
 
-        // contoh aksi: kirim email / simpan DB
-        // Mail::to('support@veravia.id')->send(new ContactMail($data));
+    Contact::create($data);
 
-        return back()->with('success', 'Pesan Anda sudah terkirim! Terima kasih.');
-    }   // <----- tutup method send
-}       // <----- tutup class
+    return back()->with('success', 'Your Message has been Sent! Thank You!');
+}
+
+}

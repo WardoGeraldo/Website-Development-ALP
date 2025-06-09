@@ -32,8 +32,7 @@ Route::get('/store', [ProductController::class, 'index'])->name('store.show');
 Route::get('/product/{id}', [ProductController::class, 'show'])->name('product.show');
 Route::get('/size-chart', fn() => view('size-chart'))->name('size.chart');
 Route::get('/support', [SupportController::class, 'show'])->name('support.show');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact.show');
-Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+
 
 
 // Forgot Password Form
@@ -53,7 +52,6 @@ Route::middleware('guest')->group(function () {
 
     Route::get('/register', [AuthController::class, 'auth_register'])->name('register');
     Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store');
-
 });
 
 
@@ -84,13 +82,15 @@ Route::middleware('manual_auth')->group(function () {
         Route::post('/midtrans/callback', [MidtransCallbackController::class, 'handle']);
         // Route::get('/order/shipment-detail', [ShipmentController::class, 'show'])->name('shipment.show');
         Route::get('/shipment/{order_id}', [CartController::class, 'showShipment'])->name('shipment.show');
-
+        Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+        Route::post('/contact', [ContactController::class, 'send'])->name('contact.send');
+        Route::post('/support', [SupportController::class, 'store'])->name('support.store');
     });
 
     // — Admin area —
     Route::prefix('admin')->middleware([CheckRoleMiddleWare::class . ':admin'])->group(function () {
         Route::get('/', [AdminController::class, 'index'])->name('admin.dashboard');
-       
+
         Route::get('/dashboard', [AdminController::class, 'dashboardView'])->name('admin.dash');
         Route::get('/product/create', [AdminController::class, 'create'])->name('admin.product.create');
         Route::post('/product', [AdminController::class, 'store'])->name('admin.product.store');
@@ -100,7 +100,7 @@ Route::middleware('manual_auth')->group(function () {
         Route::delete('/admin/product/{id}/image', [AdminController::class, 'deleteImage'])->name('admin.product.image.delete');
         Route::put('/admin/product/image/{id}', [AdminController::class, 'updateImage'])->name('admin.product.image.update');
         Route::put('/admin/product/{id}/image/{image_id}/replace', [AdminController::class, 'replaceImage'])->name('admin.product.image.replace');
-        
+
 
 
 
@@ -119,6 +119,5 @@ Route::middleware('manual_auth')->group(function () {
         Route::get('/user/{id}/edit', [AdminController::class, 'editUser'])->name('admin.user.edit');
         Route::put('/user/{id}/update', [AdminController::class, 'updateUser'])->name('admin.user.update');
         Route::delete('/admin/user/delete/{id}', [AdminController::class, 'deleteUser'])->name('admin.user.delete');
-
     });
 });

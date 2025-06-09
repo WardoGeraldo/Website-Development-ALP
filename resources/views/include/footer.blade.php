@@ -108,7 +108,7 @@
             <div class="col-md-3 mb-4">
                 <h5 class="fw-bold mb-3">Bantuan</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{{ route('contact.show') }}" class="text-decoration-none">Hubungi Kami</a></li>
+                    <li><a href="{{ route('contact.index') }}" class="text-decoration-none">Hubungi Kami</a></li>
                     <li><a href="{{ route('support.show') }}" class="text-decoration-none">FAQ</a></li>
                 </ul>
             </div>

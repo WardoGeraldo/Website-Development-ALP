@@ -168,7 +168,7 @@
             <a href="{{ route('store.show') }}" class="text-decoration-none">Store</a>
             <a href="{{ route('size.chart') }}" class="text-decoration-none">Size Chart</a>
             <a href="{{ route('order.history') }}" class="text-decoration-none">My Orders</a>
-            <a href="{{ route('contact.show') }}" class="text-decoration-none">Contact</a>
+            <a href="{{ route('contact.index') }}" class="text-decoration-none">Contact</a>
             <a href="{{ route('support.show') }}" class="text-decoration-none">Support</a>
         </div>
     </nav>
