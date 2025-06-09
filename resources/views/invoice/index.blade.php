@@ -48,9 +48,9 @@
                     <div class="data-body">
                         <div class="payment-info">
                             <p><strong>Payment Method:</strong> {{ $order->payment->payment_method }}</p>
-                            <p><strong>Status:</strong>
+                            <p><strong>Status: </strong>
                                 <span
-                                    class="status-badge {{ $order->payment->payment_status == 'Paid' ? 'status-paid' : 'status-unpaid' }}">
+                                    class="status-badge {{ $order->payment->payment_status == 'Paid' ? 'status-paid' : 'status-unpaid' }}">Paid
                                     {{ $order->payment->payment_status }}
                                 </span>
                             </p>
@@ -96,6 +96,38 @@
                 </table>
             </div>
         </div>
+        @if ($order->shipment)
+            <hr>
+            <h4>Shipment Information</h4>
+            <div>
+                <strong>Status:</strong> {{ ucfirst($order->shipment->delivery_status) }}<br>
+                <strong>Recipient:</strong> {{ $order->shipment->first_name }} {{ $order->shipment->last_name }}<br>
+                <strong>Phone:</strong> {{ $order->shipment->phone }}<br>
+                <strong>Address:</strong> 
+                {{ $order->shipment->address_line1 }}<br>
+                @if($order->shipment->address_line2)
+                    {{ $order->shipment->address_line2 }}<br>
+                @endif
+                {{ $order->shipment->city }}, {{ $order->shipment->zip_code }}<br>
+                <strong>Shipment Date:</strong> {{ \Carbon\Carbon::parse($order->shipment->shipment_date)->format('d M Y') }}<br>
+                <strong>Estimated Delivery:</strong> {{ \Carbon\Carbon::parse($order->shipment->delivery_date)->format('d M Y') }}<br>
+            </div>
+            <form action="{{ route('admin.shipment.update', $order->shipment->shipment_id) }}" method="POST" class="mt-3">
+                @csrf
+                @method('PUT')
+                <div class="form-group">
+                    <label for="delivery_status">Update Shipment Status:</label>
+                    <select name="delivery_status" class="form-control" required>
+                        @foreach(['ordered', 'processing', 'shipped', 'delivered'] as $status)
+                            <option value="{{ $status }}" {{ $order->shipment->delivery_status == $status ? 'selected' : '' }}>
+                                {{ ucfirst($status) }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mt-2">Update Status</button>
+            </form>
+        @endif
     </div>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css" rel="stylesheet">

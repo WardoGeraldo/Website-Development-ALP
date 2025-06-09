@@ -30,7 +30,7 @@ return new class extends Migration
             // Pengiriman status & waktu
             $table->timestamp('shipment_date')->nullable();
             $table->enum('delivery_status', [
-                'processing', 'shipped', 'delivered', 'returned'
+                'ordered', 'processing', 'shipped', 'delivered'
             ])->default('processing');
 
             $table->timestamps(); // created_at & updated_at

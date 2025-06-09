@@ -112,27 +112,17 @@
 
     @php
         $shipment = $order->shipment;
+        $status = strtolower($shipment->delivery_status);
 
-        $shipmentDate = \Carbon\Carbon::parse($shipment->shipment_date);
-        $deliveryDate = \Carbon\Carbon::parse($shipment->delivery_date);
-        $now = \Carbon\Carbon::now();
-
-        $progress = 0;
-        if ($now->gte($deliveryDate)) {
-            $progress = 100; // Delivered
-            $status = 'Delivered';
-        } elseif ($now->gte($shipmentDate->copy()->addDays(5))) {
-            $progress = 75;
-            $status = 'Shipped';
-        } elseif ($now->gte($shipmentDate->copy()->addDays(2))) {
-            $progress = 50;
-            $status = 'Processing';
-        } else {
-            $progress = 25;
-            $status = 'Ordered';
-        }
+        // Set progress value based on actual status
+        $progress = match ($status) {
+            'ordered' => 25,
+            'processing' => 50,
+            'shipped' => 75,
+            'delivered' => 100,
+            default => 0,
+        };
     @endphp
-
 
     <div class="shipment-progress">
         <h4>Order Details #{{ $order->order_id }}</h4>
@@ -148,18 +138,18 @@
         </div>
     </div>
 
-
     {{-- Shipment Info --}}
     <div class="shipment-details mt-3 mb-3">
-        <strong>Recipient:</strong> {{ $order->shipment->first_name }} {{ $order->shipment->last_name }}<br>
-        <strong>Phone:</strong> {{ $order->shipment->phone }}<br>
+        <strong>Shipment Status:</strong> {{ ucfirst($shipment->delivery_status) }}<br>
+        <strong>Recipient:</strong> {{ $shipment->first_name }} {{ $shipment->last_name }}<br>
+        <strong>Phone:</strong> {{ $shipment->phone }}<br>
         <strong>Address:</strong>
-        {{ $order->shipment->address_line1 }},
-        {{ $order->shipment->address_line2 ?? '' }},
-        {{ $order->shipment->city }},
-        {{ $order->shipment->zip_code }}<br>
-        <strong>Estimated Delivery Date:</strong>
-        {{ $order->shipment->delivery_date }}<br>
+        {{ $shipment->address_line1 }},
+        {{ $shipment->address_line2 ?? '' }},
+        {{ $shipment->city }},
+        {{ $shipment->zip_code }}<br>
+        <strong>Shipment Date:</strong> {{ \Carbon\Carbon::parse($shipment->shipment_date)->format('d M Y') }}<br>
+        <strong>Estimated Delivery Date:</strong> {{ \Carbon\Carbon::parse($shipment->delivery_date)->format('d M Y') }}<br>
     </div>
 
     {{-- Product Summary --}}
@@ -173,11 +163,12 @@
         @endforeach
 
         <div class="total">Subtotal: Rp{{ number_format($order->total_price, 0, ',', '.') }}</div>
-        <div class="total">Shipping: Rp{{ number_format($order->shipment->shipping_cost ?? 0, 0, ',', '.') }}</div>
+        <div class="total">Shipping: Rp{{ number_format($shipment->shipping_cost ?? 0, 0, ',', '.') }}</div>
         <div class="total" style="font-size: 1.1rem;">
-            Total: Rp{{ number_format($order->total_price + ($order->shipment->shipping_cost ?? 0), 0, ',', '.') }}
+            Total: Rp{{ number_format($order->total_price + ($shipment->shipping_cost ?? 0), 0, ',', '.') }}
         </div>
     </div>
 </div>
+
 
 @endsection

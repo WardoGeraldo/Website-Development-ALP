@@ -18,6 +18,7 @@ use App\Http\Controllers\MidtransCallbackController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Middleware\CheckRoleMiddleWare; // ⬅️ tambahkan ini
+use Carbon\Cli\Invoker;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,6 +114,7 @@ Route::middleware('manual_auth')->group(function () {
 
         Route::get('/sales', [InvoiceController::class, 'salesList'])->name('admin.sales.index');
         Route::get('/invoice/{sales_id}', [InvoiceController::class, 'index'])->name('admin.invoice.index');
+        Route::put('/admin/shipment/{shipment_id}', [InvoiceController::class, 'updateShipmentStatus'])->name('admin.shipment.update');
 
         Route::get('/users', [AdminController::class, 'userList'])->name('admin.userlist');
         Route::get('/user/{id}', [AdminController::class, 'userDetails'])->name('admin.user.details');
