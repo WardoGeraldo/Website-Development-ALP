@@ -32,13 +32,16 @@
                                 <td>Rp{{ number_format($s->total_price, 0, ',', '.') }}</td>
                                 <td>
                                     @php
-                                        $statusClass = match ($s->order_status) {
-                                            'shipped' => 'status-badge completed',
-                                            'pending' => 'status-badge pending',
+                                        $deliveryStatus = strtolower($s->shipment->delivery_status ?? 'unknown');
+                                        $statusClass = match ($deliveryStatus) {
+                                            'ordered' => 'status-badge pending',
+                                            'processing' => 'status-badge warning',
+                                            'shipped' => 'status-badge pending',
+                                            'delivered' => 'status-badge completed',
                                             default => 'status-badge default',
                                         };
                                     @endphp
-                                    <span class="{{ $statusClass }}">{{ ucfirst($s->order_status) }}</span>
+                                    <span class="{{ $statusClass }}">{{ ucfirst($deliveryStatus) }}</span>
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.invoice.index', ['sales_id' => $s->order_id]) }}"
