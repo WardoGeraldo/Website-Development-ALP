@@ -38,7 +38,8 @@ class InvoiceController extends Controller
         $shipment->delivery_status = $request->input('delivery_status');
         $shipment->save();
 
-        return back()->with('success', 'Shipment status updated successfully.');
+        return redirect()->route('admin.sales.index')->with('success', 'Shipment status updated successfully.');
+
     }
 
 }

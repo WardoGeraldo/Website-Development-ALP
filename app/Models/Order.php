@@ -9,6 +9,7 @@ class Order extends Model
     protected $primaryKey = 'order_id';
     public $incrementing = true;
     protected $keyType = 'int';
+    public $timestamps = true; // 
     protected $fillable = [
         'user_id',
         'promo_id',
@@ -34,9 +35,10 @@ class Order extends Model
     }
 
     public function shipment()
-    {
-        return $this->hasOne(Shipment::class, 'order_id');
-    }
+{
+    return $this->hasOne(Shipment::class, 'order_id', 'order_id');
+}
+
 
     public function promo()
     {

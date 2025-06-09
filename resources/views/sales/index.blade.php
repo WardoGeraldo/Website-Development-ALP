@@ -34,10 +34,10 @@
                                     @php
                                         $deliveryStatus = strtolower($s->shipment->delivery_status ?? 'unknown');
                                         $statusClass = match ($deliveryStatus) {
-                                            'ordered' => 'status-badge pending',
+                                            'ordered' => 'status-badge info',
                                             'processing' => 'status-badge warning',
-                                            'shipped' => 'status-badge pending',
-                                            'delivered' => 'status-badge completed',
+                                            'shipped' => 'status-badge purple',
+                                            'delivered' => 'status-badge success',
                                             default => 'status-badge default',
                                         };
                                     @endphp
@@ -129,6 +129,45 @@
             color: var(--text-color);
             transition: background 0.3s ease, color 0.3s ease;
         }
+
+        /* Status Badges */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.4em 0.8em;
+    font-size: 0.85rem;
+    border-radius: 999px;
+    font-weight: 600;
+    color: #fff;
+}
+
+/* Ordered */
+.status-badge.info {
+    background-color: #3b82f6; /* Blue */
+}
+
+/* Processing */
+.status-badge.warning {
+    background-color: #facc15; /* Yellow */
+    color: #1f2937; /* Dark text for contrast */
+}
+
+/* Shipped */
+.status-badge.purple {
+    background-color: #a855f7; /* Purple */
+}
+
+/* Delivered */
+.status-badge.success {
+    background-color: #22c55e; /* Green */
+}
+
+/* Unknown */
+.status-badge.default {
+    background-color: #9ca3af; /* Gray */
+}
+
 
         .dashboard-container {
             max-width: 1400px;
@@ -332,4 +371,38 @@
             }
         }
     </style>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Initialize AOS
+        AOS.init();
+
+        // Dark mode init
+        document.addEventListener('DOMContentLoaded', function() {
+            const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled' || document.body.classList
+                .contains('dark-mode');
+            if (isDarkModeEnabled) {
+                document.body.classList.add('dark-mode');
+            }
+        });
+    </script>
+
+    @if (session('success'))
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '{{ session('success') }}',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    background: '#fff',
+                    color: '#333'
+                });
+            });
+        </script>
+    @endif
 @endsection

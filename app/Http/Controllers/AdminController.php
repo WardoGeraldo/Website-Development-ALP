@@ -207,7 +207,6 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.product.edit', ['id' => $id])->with('success', 'Image replaced successfully.');
-
     }
 
 
@@ -431,26 +430,28 @@ class AdminController extends Controller
     }
 
     public function storePromo(Request $request)
-    {
-        $request->validate([
-            'promo_code' => 'required|string|max:20',
-            'description' => 'required|string',
-            'discount' => 'required|numeric|min:1|max:100',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+{
+    $request->validate([
+        'promo_code' => 'required|string|max:20',
+        'description' => 'required|string',
+        'discount' => 'required|numeric|min:1|max:100',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+    ]);
 
-        Promo::create([
-            'promo_code' => $request->promo_code,
-            'description' => $request->description,
-            'discount' => $request->discount,
-            'start_date' => $request->start_date,
-            'end_date' => $request->end_date,
-            'status_del' => 0, // default active
-        ]);
+    Promo::create([
+        'code' => $request->promo_code,             
+        'description' => $request->description,
+        'discount_amount' => $request->discount,    
+        'start_date' => $request->start_date,
+        'end_date' => $request->end_date,
+        'status_del' => 0,
+    ]);
 
-        return redirect()->route('admin.promo.list')->with('success', 'Promo created successfully!');
-    }
+    return redirect()->route('admin.promo.list')->with('success', 'Promo created successfully!');
+}
+
+
 
     public function destroy($id)
     {

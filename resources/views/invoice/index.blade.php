@@ -49,10 +49,14 @@
                         <div class="payment-info">
                             <p><strong>Payment Method:</strong> {{ $order->payment->payment_method }}</p>
                             <p><strong>Status: </strong>
-                                <span
-                                    class="status-badge {{ $order->payment->payment_status == 'Paid' ? 'status-paid' : 'status-unpaid' }}">Paid
-                                    {{ $order->payment->payment_status }}
+                                @php
+                                    $status = strtolower($order->payment->transaction_status);
+                                @endphp
+
+                                <span class="status-badge {{ $status == 'paid' ? 'status-paid' : 'status-unpaid' }}">
+                                    {{ ucfirst($status) }}
                                 </span>
+
                             </p>
                             <p><strong>Date:</strong>
                                 {{ \Carbon\Carbon::parse($order->payment->payment_date)->format('d M Y H:i') }}</p>
@@ -101,25 +105,26 @@
             <h4>Shipment Information</h4>
             <div>
                 <strong>Status:</strong> {{ ucfirst($order->shipment->delivery_status) }}<br>
-                <strong>Recipient:</strong> {{ $order->shipment->first_name }} {{ $order->shipment->last_name }}<br>
-                <strong>Phone:</strong> {{ $order->shipment->phone }}<br>
-                <strong>Address:</strong> 
-                {{ $order->shipment->address_line1 }}<br>
-                @if($order->shipment->address_line2)
+    
+                @if ($order->shipment->address_line2)
                     {{ $order->shipment->address_line2 }}<br>
                 @endif
                 {{ $order->shipment->city }}, {{ $order->shipment->zip_code }}<br>
-                <strong>Shipment Date:</strong> {{ \Carbon\Carbon::parse($order->shipment->shipment_date)->format('d M Y') }}<br>
-                <strong>Estimated Delivery:</strong> {{ \Carbon\Carbon::parse($order->shipment->delivery_date)->format('d M Y') }}<br>
+                <strong>Shipment Date:</strong>
+                {{ \Carbon\Carbon::parse($order->shipment->shipment_date)->format('d M Y') }}<br>
+                <strong>Estimated Delivery:</strong>
+                {{ \Carbon\Carbon::parse($order->shipment->delivery_date)->format('d M Y') }}<br>
             </div>
-            <form action="{{ route('admin.shipment.update', $order->shipment->shipment_id) }}" method="POST" class="mt-3">
+            <form action="{{ route('admin.shipment.update', $order->shipment->shipment_id) }}" method="POST"
+                class="mt-3">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
                     <label for="delivery_status">Update Shipment Status:</label>
                     <select name="delivery_status" class="form-control" required>
-                        @foreach(['ordered', 'processing', 'shipped', 'delivered'] as $status)
-                            <option value="{{ $status }}" {{ $order->shipment->delivery_status == $status ? 'selected' : '' }}>
+                        @foreach (['ordered', 'processing', 'shipped', 'delivered'] as $status)
+                            <option value="{{ $status }}"
+                                {{ $order->shipment->delivery_status == $status ? 'selected' : '' }}>
                                 {{ ucfirst($status) }}
                             </option>
                         @endforeach
@@ -408,7 +413,7 @@
 
         /* Dark theme button styling if it exists */
         .btn-close {
-            filter: var(--text-color) == #f3f4f6 ? invert(1) : invert(0);
+            filter: var(--text-color)==#f3f4f6 ? invert(1): invert(0);
         }
 
         body.dark-mode .btn-close {
