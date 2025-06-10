@@ -10,15 +10,13 @@ class CheckAuth
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         if (session()->has('user')) {
-            //dd('test');
             return $next($request);
         }
-        abort(403);
+
+        return redirect()->route('login')->with('error', 'You must log in to access this page.');
     }
 }

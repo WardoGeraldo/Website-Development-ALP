@@ -27,6 +27,36 @@ use Carbon\Cli\Invoker;
 */
 
 // — Public routes (siapa saja) —
+
+
+
+
+
+// — Guest routes (hanya untuk yang belum login) —
+Route::middleware('guest')->group(function () {
+    Route::get('/login', [AuthController::class, 'show'])->name('login');
+    Route::post('/login_auth', [AuthController::class, 'login_auth'])->name('login.auth');
+
+    Route::get('/register', [AuthController::class, 'auth_register'])->name('register');
+    Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store');
+
+
+    // Forgot Password Form
+Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+// Forgot Password Submit (POST)
+Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+
+
+// Reset password form
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
+});
+
+
+
+// — Semua route di sini hanya untuk yang sudah login —
+Route::middleware('manual_auth')->group(function () {
+
 Route::get('/', [ProductController::class, 'home'])->name('home');
 Route::get('/home', [HomeController::class, 'show']);
 Route::get('/store', [ProductController::class, 'index'])->name('store.show');
@@ -36,29 +66,6 @@ Route::get('/support', [SupportController::class, 'show'])->name('support.show')
 
 
 
-// Forgot Password Form
-Route::get('forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-// Forgot Password Submit (POST)
-Route::post('forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-
-
-// Reset password form
-Route::get('reset-password/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-// — Guest routes (hanya untuk yang belum login) —
-Route::middleware('guest')->group(function () {
-    Route::get('/login', [AuthController::class, 'show'])->name('login');
-    Route::post('/login_auth', [AuthController::class, 'login_auth'])->name('login.auth');
-
-    Route::get('/register', [AuthController::class, 'auth_register'])->name('register');
-    Route::post('/register', [AuthController::class, 'storeRegister'])->name('register.store');
-});
-
-
-
-// — Semua route di sini hanya untuk yang sudah login —
-Route::middleware('manual_auth')->group(function () {
     // Logout
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
