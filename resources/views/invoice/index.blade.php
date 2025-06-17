@@ -47,7 +47,7 @@
                     </div>
                     <div class="data-body">
                         <div class="payment-info">
-                            <p><strong>Payment Method:</strong> {{ $order->payment->payment_method }}</p>
+                            {{-- <p><strong>Payment Method:</strong> {{ $order->payment->payment_method }}</p> --}}
                             <p><strong>Status: </strong>
                                 @php
                                     $status = strtolower($order->payment->transaction_status);

@@ -859,7 +859,7 @@
         <span class="hero-badge fade-in">Premium Collection</span>
         <h1 class="fade-in-left">VERAVIA</h1>
         <p class="fade-in-right">Elevate Your Everyday Look</p>
-        <a href="{{ route('store.show') }}" class="btn floating">Belanja Sekarang</a>
+        <a href="{{ route('store.show') }}" class="btn floating">Shop Now</a>
     </div>
 </div>
 
